@@ -5,8 +5,7 @@ export function JCDApiClient() {
 	// Variable pour le "contract" de JCDecaux :
 	const JCD_CONTRACT = 'Nantes';
 
-	// Variable de la liste des stations de la ville :
-	const stations = {};
+
 
 	// Fonction centralisée permettant d'appeler l'API JCDecaux :
 	const getCallApi = function(action, data, callback) {
