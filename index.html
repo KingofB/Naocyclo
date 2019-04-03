@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="img/favicomatic/apple-touch-icon-57x57.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/favicomatic/apple-touch-icon-114x114.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/favicomatic/apple-touch-icon-72x72.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/favicomatic/apple-touch-icon-144x144.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="60x60" href="img/favicomatic/apple-touch-icon-60x60.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="120x120" href="img/favicomatic/apple-touch-icon-120x120.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="76x76" href="img/favicomatic/apple-touch-icon-76x76.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="152x152" href="img/favicomatic/apple-touch-icon-152x152.png" />
+		<link rel="icon" type="image/png" href="img/favicomatic/favicon-196x196.png" sizes="196x196" />
+		<link rel="icon" type="image/png" href="img/favicomatic/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/png" href="img/favicomatic/favicon-32x32.png" sizes="32x32" />
+		<link rel="icon" type="image/png" href="img/favicomatic/favicon-16x16.png" sizes="16x16" />
+		<link rel="icon" type="image/png" href="img/favicomatic/favicon-128.png" sizes="128x128" />
+		<meta name="application-name" content="&nbsp;"/>
+		<meta name="msapplication-TileColor" content="#FFFFFF" />
+		<meta name="msapplication-TileImage" content="mstile-144x144.png" />
+		<meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
+		<meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
+		<meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
+		<meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
+
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+		integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+		crossorigin=""/>
+       	<link href="https://fonts.googleapis.com/css?family=Acme|Exo+2" rel="stylesheet">
+       	<link rel="stylesheet" type="text/css" href="icomoon/style.css">
+        <link rel="stylesheet" type="text/css" href="style.css">
+
+        <title>NaoCyclo</title>
+    </head>
+
+    <body>
+
+        <header>
+        	<img src="img/logo/logo.png" srcset="img/logo/logo.png 1x, img/logo/logo@2x.png 2x" width="32" height="32" alt="logo">
+            <h1>NAOCYCLO</h1>
+            <nav>
+	            <ul>
+					<li><a href="#">Accueil</a></li>
+					<li><a href="#map">Carte</a></li>
+					<li><a href="#form">Réservation</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main>
+	        <section id="carousel">
+	        	<div id="slider">
+		            <div>
+		            	<h2>BIENVENUE sur le site de NAOCYCLO</h2>
+
+		                <img srcset="img/slides/nantes360.jpg 360w, img/slides/nantes480.jpg 480w, img/slides/nantes720.jpg 720w, img/slides/nantes1080.jpg 1080w"
+		                src="img/slides/nantes360w.jpg" alt="Nantes château">
+
+		                <p>
+		                    Vous avez fait le choix de la liberté de mouvement<br>
+		                    tout en respectant l'environnement à Nantes&nbsp;?<br>
+		                    Ce carrousel vous explique comment utiliser NaoCyclo&nbsp;!
+		                </p>
+		            </div>
+
+		            <div>
+		            	<h2>Sélectionnez la station de location</h2>
+
+		                <img srcset="img/slides/bicloo1-360.jpg 360w, img/slides/bicloo1-480.jpg 480w, img/slides/bicloo1-720.jpg 720w, img/slides/bicloo1-1080.jpg 1080w"
+		                src="img/slides/bicloo1-360.jpg" alt="Station NaoCyclo 1">
+
+		                <p>
+		                    Sur la carte, cliquez sur la station où vous désirez réserver un vélo.<br>
+		                    Toute réservation est valable 20 minutes.<br>
+		                    Une nouvelle réservation annulera la précédente.
+		                </p>
+		            </div>
+
+		            <div>
+		            	<h2>Réservez votre vélo</h2>
+
+		                <img srcset="img/slides/bicloo2-360.jpg 360w, img/slides/bicloo2-480.jpg 480w, img/slides/bicloo2-720.jpg 720w, img/slides/bicloo2-1080.jpg 1080w"
+		                src="img/slides/bicloo2-360.jpg" alt="Station NaoCyclo 2">
+
+		                <p>
+		                    Remplissez le formulaire en indiquant votre nom et prénom,
+		                    Signez dans le champ de signature qui apparaît et validez.<br>
+		                    Votre réservation est faite&nbsp;!
+		                </p>
+		            </div>
+
+		            <div>
+		            	<h2>Récupérez votre vélo</h2>
+
+		                <img srcset="img/slides/bicloo3-360.jpg 360w, img/slides/bicloo3-480.jpg 480w, img/slides/bicloo3-720.jpg 720w, img/slides/bicloo3-1080.jpg 1080w"
+		                src="img/slides/bicloo3-360.jpg" alt="Station NaoCyclo 3">
+
+		                <p>
+		                    Saisissez vos nom et prénom sur la borne.<br>
+		                    Prépayez votre location en espèces ou CB.<br>
+		                    La borne vous indiquera le numéro du vélo réservé.
+		                </p>
+		            </div>
+
+		            <div>
+		             	<h2>Profitez de votre réservation</h2>
+
+		                <img srcset="img/slides/anneaux360.jpg 360w, img/slides/anneaux480.jpg 480w, img/slides/anneaux720.jpg 720w, img/slides/anneaux1080.jpg 1080w"
+		                src="img/slides/anneaux360.jpg" alt="Anneaux de l'île de Nantes">
+
+		                <p>
+		                    Une fois votre vélo récupéré, profitez-en à votre guise,<br>
+		                    que ce soit pour le travail ou le loisir.<br>
+		                    NaoCyclo c'est simple et pas cher&nbsp;!
+		                </p>
+		            </div>
+
+		            <div>
+		            	<h2>Rendez votre vélo</h2>
+
+		                <img srcset="img/slides/bicloo5-360.jpg 360w, img/slides/bicloo5-480.jpg 480w, img/slides/bicloo5-720.jpg 720w, img/slides/bicloo5-1080.jpg 1080w"
+		                src="img/slides/bicloo5-360.jpg" alt="Station NaoCyclo 5">
+
+		                <p>
+		                    Votre trajet terminé, ramenez le vélo en station.<br>
+		                    Indiquez vos nom et prénom à la borne.<br>
+		                    Elle ajustera votre paiement selon votre durée de location.<br>
+		                </p>
+		            </div>
+		        </div>
+	        </section>
+
+
+	        <section id="map-form">
+	            <div id="map"></div>
+
+				<form id="form" method="post" action="traitement.php">
+					<fieldset>
+						<legend>Détails de la station</legend>
+							<p>
+								<label>Nom</label> Bénoni-Goullin
+							</p>
+							<p>
+								<label>Adresse</label> 14 boulevard Bénoni-Goullin
+							</p>
+							<p>
+								<label>Vélos</label> 6
+							</p>
+							<p>
+								<label for="lastname">Nom</label>
+								<input type="text" name="lastname" id="lastname" placeholder="Votre nom" autocomplete="family-name">
+							</p>
+							<p>
+								<label for="firstname">Prénom</label>
+								<input type="text" name="firstname" id="firstname" placeholder="Votre prénom" autocomplete="given-name">
+							</p>
+							<p>
+								<button type="submit" data-icon="&#xe94f;">Réserver</button>
+							</p>
+					</fieldset>
+				</form>
+	        </section>
+
+	        <footer>
+	            <ul>
+	            	<li><a href="http://cv-devweb.blanchet-devweb.fr/">&copy; 2019 David Blanchet</a></li>
+	            </ul>
+	        </footer>
+        </main>
+
+        <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+   		integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+   		crossorigin=""></script>
+        <script src="jquery/jquery-prod-3.3.1.min.js"></script>
+        <script src="app.bundle.js"></script>
+    </body>
+</html>
