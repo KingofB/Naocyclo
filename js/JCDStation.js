@@ -1,4 +1,4 @@
-// Fonction de récupération des données des stations lors d'une réservation
+// Classe des stations
 export class JCDStation {
     constructor(data) {
         
@@ -11,6 +11,7 @@ export class JCDStation {
         this.freeBikes = data.available_bikes;
     }
     
+    // Fonction d'ajustement du nombre de vélos disponibles lors d'une réservation
     reserveBike() {
         if (this.freeBikes <= 0) {
             return false;
@@ -20,6 +21,7 @@ export class JCDStation {
         return true;
     }
     
+    // Fonction d'ajustement du nombre de vélos disponibles lors d'une annulation de réservation
     cancelResa() {
         this.freeBikes++;
     }

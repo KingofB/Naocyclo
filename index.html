@@ -139,26 +139,26 @@
 				<form id="form" method="post" action="traitement.php">
 					<fieldset>
 						<legend>Détails de la station</legend>
-							<p>
-								<label>Nom</label> Bénoni-Goullin
-							</p>
-							<p>
-								<label>Adresse</label> 14 boulevard Bénoni-Goullin
-							</p>
-							<p>
-								<label>Vélos</label> 6
-							</p>
-							<p>
+							<div>
+								<label>Nom</label><span id="station-name">Bénoni-Goullin</span>
+							</div>
+							<div>
+								<label>Adresse</label><span id="station-address">14 boulevard Bénoni-Goullin</span>
+							</div>
+							<div>
+								<label>Vélos</label><span id="station-bikes">6</span>
+							</div>
+							<div>
 								<label for="lastname">Nom</label>
 								<input type="text" name="lastname" id="lastname" placeholder="Votre nom" autocomplete="family-name">
-							</p>
-							<p>
+							</div>
+							<div>
 								<label for="firstname">Prénom</label>
 								<input type="text" name="firstname" id="firstname" placeholder="Votre prénom" autocomplete="given-name">
-							</p>
-							<p>
+							</div>
+							<div>
 								<button type="submit" data-icon="&#xe94f;">Réserver</button>
-							</p>
+							</div>
 					</fieldset>
 				</form>
 	        </section>
