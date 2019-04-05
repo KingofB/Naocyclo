@@ -24,7 +24,7 @@ export function Map() {
 	}).addTo(nantesMap);
 
 
-	this.addMarker = function(gps) {
-		L.marker(gps).addTo(nantesMap)
+	this.addMarker = function(gps, options, callback) {
+		L.marker(gps, options).addTo(nantesMap).on('click', callback);
 	};
 };
