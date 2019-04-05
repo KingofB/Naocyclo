@@ -24,18 +24,18 @@ export function JCDManager(map) {
 	
 	const onChooseStation = function(e) {
 		
-		console.log(e);
-
 		const station = stations[e.target.options.stationId];
 		console.log(station);
-		document.getElementById('station-name').innerHTML = station.name;
+
+		for (const property of ['name', 'address', 'freeBikes']) {
+			document.getElementById('station-' + property).innerHTML = station[property];
+		}
+
+		/*document.getElementById('station-name').innerHTML = station.name;
 		document.getElementById('station-address').innerHTML = station.address;
-		document.getElementById('station-freeBikes').innerHTML = station.freeBikes;
+		document.getElementById('station-freeBikes').innerHTML = station.freeBikes;*/
 		document.getElementById('station-id').value = station.id;
 
-		/*for (let valeur of station) {
-			console.log(valeur);
-		}*/
 	};
 	
 
