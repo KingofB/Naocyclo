@@ -136,29 +136,30 @@
 	        <section id="map-form">
 	            <div id="map"></div>
 
-				<form id="form" method="post" action="traitement.php">
+				<form id="form" method="post" action="#">
+					<input type="hidden" name="id" id="station-id">
 					<fieldset>
 						<legend>Détails de la station</legend>
-							<div>
-								<label>Nom</label><span id="station-name">Bénoni-Goullin</span>
-							</div>
-							<div>
-								<label>Adresse</label><span id="station-address">14 boulevard Bénoni-Goullin</span>
-							</div>
-							<div>
-								<label>Vélos</label><span id="station-bikes">6</span>
-							</div>
-							<div>
-								<label for="lastname">Nom</label>
-								<input type="text" name="lastname" id="lastname" placeholder="Votre nom" autocomplete="family-name">
-							</div>
-							<div>
-								<label for="firstname">Prénom</label>
-								<input type="text" name="firstname" id="firstname" placeholder="Votre prénom" autocomplete="given-name">
-							</div>
-							<div>
-								<button type="submit" data-icon="&#xe94f;">Réserver</button>
-							</div>
+						<div>
+							<label>Nom</label><span id="station-name">Bénoni-Goullin</span>
+						</div>
+						<div>
+							<label>Adresse</label><span id="station-address">14 boulevard Bénoni-Goullin</span>
+						</div>
+						<div>
+							<label>Vélos</label><span id="station-freebikes">6</span>
+						</div>
+						<div>
+							<label for="lastname">Nom</label>
+							<input type="text" name="lastname" id="lastname" placeholder="Votre nom" autocomplete="family-name">
+						</div>
+						<div>
+							<label for="firstname">Prénom</label>
+							<input type="text" name="firstname" id="firstname" placeholder="Votre prénom" autocomplete="given-name">
+						</div>
+						<div>
+							<button type="submit" data-icon="&#xe94f;">Réserver</button>
+						</div>
 					</fieldset>
 				</form>
 	        </section>

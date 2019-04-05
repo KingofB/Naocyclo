@@ -23,9 +23,19 @@ export function JCDManager(map) {
 	};
 	
 	const onChooseStation = function(e) {
+		
 		console.log(e);
-		console.log('Station clicked: ', e.target.options.stationId);
-		console.log('Station clicked: ', stations[e.target.options.stationId]);
+
+		const station = stations[e.target.options.stationId];
+		console.log(station);
+		document.getElementById('station-name').innerHTML = station.name;
+		document.getElementById('station-address').innerHTML = station.address;
+		document.getElementById('station-freeBikes').innerHTML = station.freeBikes;
+		document.getElementById('station-id').value = station.id;
+
+		/*for (let valeur of station) {
+			console.log(valeur);
+		}*/
 	};
 	
 
