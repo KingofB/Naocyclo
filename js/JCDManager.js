@@ -27,13 +27,22 @@ export function JCDManager(map) {
 		const station = stations[e.target.options.stationId];
 		console.log(station);
 
+		/**
+		 * Encore + optimisé : combinaison de Object.entries() et de for...of
+		 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries
+		 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of
+		 */
+		//for (const [key, type] of Object.entries({name: 1, address: 1, freeBikes: 1, id: 0}))
+		//	document.getElementById('station-' + key)[type ? 'innerHTML' : 'value'] = station[key];
+		
+		
 		for (const property of ['name', 'address', 'freeBikes']) {
 			document.getElementById('station-' + property).innerHTML = station[property];
 		}
-
 		/*document.getElementById('station-name').innerHTML = station.name;
 		document.getElementById('station-address').innerHTML = station.address;
 		document.getElementById('station-freeBikes').innerHTML = station.freeBikes;*/
+		
 		document.getElementById('station-id').value = station.id;
 
 	};
