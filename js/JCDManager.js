@@ -39,7 +39,7 @@ export function JCDManager(map) {
 				console.log('station', station);
 				const obj = new JCDStation(station);
 				stations[station.number] = obj;
-				map.addMarker(obj.gps, {stationId: station.number}, onChooseStation);
+				map.addMarker(obj.gps, {stationId: obj.id, title: obj.name}, onChooseStation);
 			});
 		});
 	};
