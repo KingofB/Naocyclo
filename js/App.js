@@ -8,11 +8,10 @@ import { JCDResa } from './JCDResa.js'
 
 // Fonction d'initialisation du programme :
 const init = function () {
-	const slider = new Slider();
-	
+	new Slider();
 	
     const map = new Map();
-    const manager = new JCDManager(map);
+    new JCDManager(map);
 };
 
 
