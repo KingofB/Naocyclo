@@ -44,7 +44,6 @@ export function JCDManager(map) {
 		document.getElementById('station-freeBikes').innerHTML = station.freeBikes;*/
 		
 		document.getElementById('station-id').value = station.id;
-
 	};
 	
 
