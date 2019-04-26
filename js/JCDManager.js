@@ -22,10 +22,11 @@ export function JCDManager(map) {
 		$.get('https://api.jcdecaux.com/vls/v1/' + action, data, callback);
 	};
 	
+	// Fonction affichant sur le formulaire les données de la station choisie :
 	const onChooseStation = function(e) {
 		
 		const station = stations[e.target.options.stationId];
-		console.log(station);
+		
 
 		/**
 		 * Encore + optimisé : combinaison de Object.entries() et de for...of
@@ -54,7 +55,6 @@ export function JCDManager(map) {
 
 			// Récup de la liste des stations et leur affichage sur la carte (méthode forEach)
 			response.forEach(function(station) {
-				console.log('station', station);
 				const obj = new JCDStation(station);
 				stations[station.number] = obj;
 				map.addMarker(obj.gps, {stationId: obj.id, title: obj.name}, onChooseStation);
