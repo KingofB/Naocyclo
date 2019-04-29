@@ -26,7 +26,7 @@ export function Slider() {
 		            <span class="icomoon nav-pause"></span>
 		            <span class="icomoon nav-next"></span>
 		            <ul>${'<li></li>'.repeat(nbSlides)}</ul>`);
-        
+
 
     // Variable jquery de la div slider
     const $slider = $('#slider');
@@ -34,7 +34,7 @@ export function Slider() {
     const $slides = $slider.find('> div');
     // Variable jquery de toutes les li de navigation de la div slider
     const $lis = $slider.find('ul li');
-    
+
 
     // Variable du timeout
     let timeoutId = null;
@@ -171,7 +171,7 @@ export function Slider() {
 
 
         // Appel de la fonction de démarrage du carrousel auto
-        this.startShow();
+        //this.startShow();
 
     };
 
