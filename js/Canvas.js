@@ -17,7 +17,7 @@ export function Canvas() {
 	}
 
 	function beginDraw(e) {
-		if (e.buttons == 1 && bDrawing === false)
+		if ((e.buttons & 1) && !bDrawing)
 		{
 			bDrawing = true;
 			ctx.beginPath();
@@ -38,7 +38,7 @@ export function Canvas() {
 
 	canvas.addEventListener("mousedown", beginDraw);
 	canvas.addEventListener("mouseup", e => {
-        if (e.buttons & 1 == 0) {
+        if ((e.buttons & 1) == 0) {
             stopDraw();
         }
     });
