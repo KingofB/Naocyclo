@@ -3,32 +3,20 @@
 export function Canvas() {
 
 	const canvas = document.querySelector("canvas");
-	const canvasStyle = getComputedStyle(canvas.parentElement);
-	const width = canvas.width = parseInt(canvasStyle.width);
-	const height = canvas.height = parseInt(canvasStyle.height);
 	const ctx = canvas.getContext("2d");
-
-	let curX;
-	let curY;
-
-	//ctx.fillStyle = "#fcfacf";
-	//ctx.fillRect(0, 0, width, height);
-
-	console.log('coucou canvas!', canvas, ctx);
 
 	let bDrawing = false;
 
-	function mouseUp() {
+	function stopDraw() {
 		if (bDrawing)
 		{
 			bDrawing = false;
 			ctx.closePath();
-			canvas.removeEventListener("mousemove", mouseMove, false);
+			canvas.removeEventListener("mousemove", mouseMove);
 		}
 	}
 
-	function mouseDown(e) {
-		console.log('down', e);
+	function beginDraw(e) {
 		if (e.buttons == 1)
 		{
 			bDrawing = true;
@@ -48,6 +36,7 @@ export function Canvas() {
 		ctx.stroke();
 	}
 
-	canvas.addEventListener("mousedown", mouseDown);
-	canvas.addEventListener("mouseup", mouseUp);
+	canvas.addEventListener("mousedown", beginDraw);
+	canvas.addEventListener("mouseup", stopDraw);
+	canvas.addEventListener("mouseout", stopDraw);
 };
