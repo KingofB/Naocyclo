@@ -31,4 +31,4 @@ export function Canvas() {
             curY = e.pageY - this.offsetTop;
         }
     });
-}
+};
