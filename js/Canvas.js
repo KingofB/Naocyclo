@@ -12,23 +12,23 @@ export function Canvas() {
 		{
 			bDrawing = false;
 			ctx.closePath();
-			canvas.removeEventListener("mousemove", mouseMove);
+			canvas.removeEventListener("mousemove", draw);
 		}
 	}
 
 	function beginDraw(e) {
-		if (e.buttons == 1)
+		if (e.buttons == 1 && bDrawing === false)
 		{
 			bDrawing = true;
-			canvas.addEventListener("mousemove", mouseMove);
 			ctx.beginPath();
-			ctx.lineWidth = 3;
+			ctx.lineWidth = 2;
 			ctx.strokeStyle = "teal";
-			ctx.moveTo(e.offsetX, e.offsetY);
+            ctx.moveTo(e.offsetX, e.offsetY);
+            canvas.addEventListener("mousemove", draw);
 		}
 	}
 
-	function mouseMove(e) {
+	function draw(e) {
 		if (!bDrawing)
 			return;
 
