@@ -37,6 +37,10 @@ export function Canvas() {
 	}
 
 	canvas.addEventListener("mousedown", beginDraw);
-	canvas.addEventListener("mouseup", stopDraw);
+	canvas.addEventListener("mouseup", e => {
+        if (e.buttons & 1 == 0) {
+            stopDraw();
+        }
+    });
 	canvas.addEventListener("mouseout", stopDraw);
 };
