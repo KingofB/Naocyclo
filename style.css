@@ -171,15 +171,27 @@ nav a:hover {
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
+  z-index: 1000;
 }
 
 #canvas-label {
   display: block;
+  color: teal;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#canvas-div {
+  border: 2px solid teal;
+  border-radius: 2px;
+  text-align: center;
+  padding: 10px 10px;
+  background: #fff;
 }
 
 canvas {
-  width: 300px;
+  width: 290px;
   height: 100px;
   border: 1px solid teal;
   border-radius: 2px;

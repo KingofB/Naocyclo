@@ -2,10 +2,24 @@
 
 export function Canvas() {
 
+	const container = document.getElementById("canvas-container");
+	const submitBtn = document.getElementById("sub-btn");
 	const canvas = document.querySelector("canvas");
 	const ctx = canvas.getContext("2d");
 
 	let bDrawing = false;
+
+	submitBtn.addEventListener("click", function popup() {
+		let w;
+
+		w = window.open("./popup.html", "canvas", "width=300,height=200,toolbar=no,scrollbars=no,resizable=no");
+		
+		function closePopup() {
+			if (w.document) {
+				w.close();
+			}
+		}
+	});
 
 	function stopDraw() {
 		if (bDrawing)
