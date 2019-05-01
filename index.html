@@ -25,7 +25,6 @@
 		<meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
 		<meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
 
-
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
 		integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
 		crossorigin=""/>
@@ -49,6 +48,17 @@
 				</ul>
 			</nav>
 		</header>
+
+		<container id="canvas-container">
+			<div>
+				<label id="canvas-label">Signature</label>
+				<canvas></canvas>
+				<div>
+					<button type="submit" class="canvas-btn" id="close-btn">Annuler</button>
+					<button type="submit" class="canvas-btn" id="validate-btn">Valider</button>
+				</div>
+			</div>
+		</container>
 
 		<main>
 	        <section id="carousel">
@@ -142,13 +152,13 @@
 					<fieldset>
 						<legend>Détails de la station</legend>
 						<div>
-							<label>Nom</label><span id="station-name">Bénoni-Goullin</span>
+							<label>Nom</label><span id="station-name"></span>
 						</div>
 						<div>
-							<label>Adresse</label><span id="station-address">14 boulevard Bénoni-Goullin</span>
+							<label>Adresse</label><span id="station-address"></span>
 						</div>
 						<div>
-							<label>Vélos</label><span id="station-freeBikes">6</span>
+							<label>Vélos</label><span id="station-freeBikes"></span>
 						</div>
 						<div>
 							<label for="lastname">Nom</label>
@@ -157,12 +167,6 @@
 						<div>
 							<label for="firstname">Prénom</label>
 							<input type="text" name="firstname" id="firstname" placeholder="Votre prénom" autocomplete="given-name">
-						</div>
-						<div>
-							<label>Signature</label>
-							<div id="canvas-div">
-								<canvas></canvas>
-							</div>
 						</div>
 						<div>
 							<button type="submit" data-icon="&#xe94f;">Réserver</button>
