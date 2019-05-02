@@ -2,16 +2,13 @@ import { Slider } from './Slider.js'
 import { Map } from './Map.js'
 import { JCDManager } from './JCDManager.js'
 import { JCDResa } from './JCDResa.js'
-import { Canvas } from './Canvas.js'
-
 
 
 
 // Fonction d'initialisation du programme :
 const init = function () {
 	new Slider();
-	new Canvas();
-    const map = new Map();
+	const map = new Map();
     new JCDManager(map);
 };
 

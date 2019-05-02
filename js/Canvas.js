@@ -1,25 +1,20 @@
-
+import { JCDResa } from './JCDResa.js'
 
 export function Canvas() {
 
 	const container = document.getElementById("canvas-container");
-	const submitBtn = document.getElementById("sub-btn");
+	const validateBtn = document.getElementById("validate-btn");
+	const cancelBtn = document.getElementById("cancel-btn");
+	const bookingBtn = document.getElementById("sub-btn");
+	const submitDiv = document.getElementById("submit-div");
+	const bookingSection = document.getElementById("booking");
 	const canvas = document.querySelector("canvas");
 	const ctx = canvas.getContext("2d");
 
 	let bDrawing = false;
 
-	submitBtn.addEventListener("click", function popup() {
-		let w;
+	container.style.display = "flex";
 
-		w = window.open("./popup.html", "canvas", "width=300,height=200,toolbar=no,scrollbars=no,resizable=no");
-		
-		function closePopup() {
-			if (w.document) {
-				w.close();
-			}
-		}
-	});
 
 	function stopDraw() {
 		if (bDrawing)
@@ -57,4 +52,22 @@ export function Canvas() {
         }
     });
 	canvas.addEventListener("mouseout", stopDraw);
+
+
+	validateBtn.addEventListener("click", function() {
+		canvas.toBlob(function(blob) {
+			let newImg = document.createElement("img"), 
+				url = URL.createObjectURL(blob);
+			newImg.onload = function() {
+				URL.revokeObjectURL(url);
+			};
+			newImg.src = url;
+			bookingBtn.style.display = "none";
+			submitDiv.appendChild(newImg);
+		});
+
+		let bookingConfirm = document.createElement("p");
+		bookingConfirm.textContent = "Votre réservation est validée. Elle expirera dans 20 minutes.";
+		bookingSection.appendChild(bookingConfirm);
+	});
 };

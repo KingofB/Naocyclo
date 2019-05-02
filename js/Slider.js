@@ -171,7 +171,7 @@ export function Slider() {
 
 
         // Appel de la fonction de démarrage du carrousel auto
-        //this.startShow();
+        this.startShow();
 
     };
 

@@ -54,7 +54,7 @@
 				<label id="canvas-label">Signature</label>
 				<canvas></canvas>
 				<div>
-					<button type="submit" class="canvas-btn" id="close-btn">Annuler</button>
+					<button type="submit" class="canvas-btn" id="cancel-btn">Annuler</button>
 					<button type="submit" class="canvas-btn" id="validate-btn">Valider</button>
 				</div>
 			</div>
@@ -142,7 +142,8 @@
 		            </div>
 		        </div>
 	        </section>
-
+			
+			<section id="booking"></section>
 
 	        <section id="map-form">
 	            <div id="map"></div>
@@ -162,13 +163,13 @@
 						</div>
 						<div>
 							<label for="lastname">Nom</label>
-							<input type="text" name="lastname" id="lastname" placeholder="Votre nom" autocomplete="family-name">
+							<input type="text" name="lastname" id="lastname" placeholder="Votre nom" autocomplete="family-name" required>
 						</div>
 						<div>
 							<label for="firstname">Prénom</label>
-							<input type="text" name="firstname" id="firstname" placeholder="Votre prénom" autocomplete="given-name">
+							<input type="text" name="firstname" id="firstname" placeholder="Votre prénom" autocomplete="given-name" required>
 						</div>
-						<div>
+						<div id="submit-div">
 							<button type="submit" id="sub-btn" data-icon="&#xe94f;">Réserver</button>
 						</div>
 					</fieldset>
