@@ -19,32 +19,28 @@ export function JCDResa() {
     const btnResa = document.getElementById('sub-btn');
 
 
-    
-    form.addEventListener("submit", function(e) {
-        e.preventDefault();
-    });
-
-    
-    userLastname.addEventListener("change", function() {
+    let lastname = localStorage.getItem("lastname");
+    if (lastname) {
+        userLastname.value = lastname;
+    }
         
-        if (localStorage.getItem("lastname")) {
-            let lastname = localStorage.getItem("lastname");
-        } else {
-            localStorage.setItem("lastname", userLastname.value);
-        }
-        
-        userFirstname.focus();
-    });
-
+    let firstname = localStorage.getItem("firstname");
+    if (firstname) {
+        userFirstname.value = lastname;
+    }
     
     
-    userFirstname.addEventListener("change", function() {
-        localStorage.setItem("firstname", userFirstname.value);
-        btnResa.focus();
-    });
-
-
     btnResa.addEventListener("click", function() {
-		new Canvas();
+        localStorage.setItem("lastname", userLastname.value);
+        localStorage.setItem("firstname", userFirstname.value);
+        const canvas = new Canvas();
+            
+        // Code qui était dans validateCanvas.addEventListener !
+        const canvasImg = canvas.saveCanvas();
+        sessionStorage.setItem("canvasImg", canvasImg);
+        const bookingConfirm = document.createElement("p");
+        bookingConfirm.textContent = "Votre réservation est validée. Elle expirera dans 20 minutes.";
+        bookingSection.appendChild(bookingConfirm);
+        
 	});
 };

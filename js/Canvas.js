@@ -54,20 +54,11 @@ export function Canvas() {
 	canvas.addEventListener("mouseout", stopDraw);
 
 
-	validateBtn.addEventListener("click", function() {
-		canvas.toBlob(function(blob) {
-			let newImg = document.createElement("img"), 
-				url = URL.createObjectURL(blob);
-			newImg.onload = function() {
-				URL.revokeObjectURL(url);
-			};
-			newImg.src = url;
-			bookingBtn.style.display = "none";
-			submitDiv.appendChild(newImg);
-		});
-
-		let bookingConfirm = document.createElement("p");
-		bookingConfirm.textContent = "Votre réservation est validée. Elle expirera dans 20 minutes.";
-		bookingSection.appendChild(bookingConfirm);
-	});
+	this.saveCanvas = function() {
+		return canvas.toDataURL();
+	}
+	
+	this.validateCanvas = function(callback) {
+		validateBtn.addEventListener("click", callback)
+	} 
 };

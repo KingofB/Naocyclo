@@ -10,6 +10,7 @@ const init = function () {
 	new Slider();
 	const map = new Map();
     new JCDManager(map);
+    new JCDResa();
 };
 
 

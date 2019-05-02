@@ -1,0 +1,15 @@
+[
+    {
+        "title": "BIENVENUE sur le site de NAOCYCLO",
+        "image": {
+            "src": "img/slides/nantes360w.jpg",
+            "srcset": "img/slides/nantes360.jpg 360w, img/slides/nantes480.jpg 480w, img/slides/nantes720.jpg 720w, img/slides/nantes1080.jpg 1080w",
+            "alt": "Nantes château"
+        },
+        "description": "Vous avez fait le choix de la liberté de mouvement\ntout en respectant l'environnement à Nantes\nCe carrousel vous explique comment utiliser NaoCyclo"
+    },
+
+    {
+
+    }
+]
