@@ -50,15 +50,23 @@ export function Canvas() {
         if ((e.buttons & 1) == 0) {
             stopDraw();
         }
-    });
+	});
+	
 	canvas.addEventListener("mouseout", stopDraw);
 
+	cancelBtn.addEventListener("click", function() {
+		container.style.display = "none";
+	});
+
+	container.addEventListener("click", function() {
+		container.style.display = "none";
+	});
 
 	this.saveCanvas = function() {
 		return canvas.toDataURL();
 	}
 	
 	this.validateCanvas = function(callback) {
-		validateBtn.addEventListener("click", callback)
+		validateBtn.addEventListener("click", recordBooking)
 	} 
 };

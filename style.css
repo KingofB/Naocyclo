@@ -172,7 +172,8 @@ nav a:hover {
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 2500;
+  background: rgba(0, 0, 0, 0.8);
 }
 
 #canvas-label {
@@ -188,6 +189,7 @@ nav a:hover {
   text-align: center;
   padding: 10px 10px;
   background: #fff;
+  z-index: 2500;
 }
 
 canvas {

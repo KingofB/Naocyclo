@@ -17,6 +17,8 @@ export function JCDResa() {
     const userSignature = document.querySelector('canvas');
     // Variable contenant le bouton submit :
     const btnResa = document.getElementById('sub-btn');
+    // Variable contenant la div map :
+    const mapDiv = document.getElementById("map");
 
 
     let lastname = localStorage.getItem("lastname");
@@ -34,13 +36,13 @@ export function JCDResa() {
         localStorage.setItem("lastname", userLastname.value);
         localStorage.setItem("firstname", userFirstname.value);
         const canvas = new Canvas();
-            
-        // Code qui était dans validateCanvas.addEventListener !
+    });
+
+    function recordBooking() { 
         const canvasImg = canvas.saveCanvas();
         sessionStorage.setItem("canvasImg", canvasImg);
         const bookingConfirm = document.createElement("p");
         bookingConfirm.textContent = "Votre réservation est validée. Elle expirera dans 20 minutes.";
-        bookingSection.appendChild(bookingConfirm);
-        
-	});
+        mapDiv.appendChild(bookingConfirm);
+    }
 };
