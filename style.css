@@ -183,7 +183,7 @@ nav a:hover {
   font-size: 20px;
 }
 
-#canvas-div {
+#canvas-container > div {
   border: 2px solid teal;
   border-radius: 2px;
   text-align: center;
