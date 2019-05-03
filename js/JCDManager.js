@@ -21,12 +21,12 @@ export function JCDManager(map) {
 
 		$.get('https://api.jcdecaux.com/vls/v1/' + action, data, callback);
 	};
-	
+
 	// Fonction affichant sur le formulaire les données de la station choisie :
 	const onChooseStation = function(e) {
-		
+
 		const station = stations[e.target.options.stationId];
-		
+
 
 		/**
 		 * Encore + optimisé : combinaison de Object.entries() et de for...of
@@ -35,18 +35,18 @@ export function JCDManager(map) {
 		 */
 		//for (const [key, type] of Object.entries({name: 1, address: 1, freeBikes: 1, id: 0}))
 		//	document.getElementById('station-' + key)[type ? 'innerHTML' : 'value'] = station[key];
-		
-		
+
+
 		for (const property of ['name', 'address', 'freeBikes']) {
 			document.getElementById('station-' + property).innerHTML = station[property];
 		}
 		/*document.getElementById('station-name').innerHTML = station.name;
 		document.getElementById('station-address').innerHTML = station.address;
 		document.getElementById('station-freeBikes').innerHTML = station.freeBikes;*/
-		
+
 		document.getElementById('station-id').value = station.id;
 	};
-	
+
 
 	this.getStationsAsync = function() {
 		getCallApi('stations', {contract: JCD_CONTRACT}, response => {
@@ -62,6 +62,5 @@ export function JCDManager(map) {
 		});
 	};
 
-
 	this.getStationsAsync();
-};
+}
