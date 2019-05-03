@@ -50,7 +50,6 @@ export function Canvas()
 		{
 			bDrawing = false;
 			ctx.closePath();
-			ctx.scale(1, 1);
 			canvas.removeEventListener('mousemove', draw);
 		}
 	}
