@@ -211,7 +211,7 @@ canvas {
   padding-left: 10px;
 }
 
-#cancel-btn {
+#cancel-btn, #clear-btn {
   background: #fcfacf;
   color: teal;
 }
