@@ -6,48 +6,48 @@
 
 /*Tout en border-box*/
 *, ::before, ::after {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 /*Marges et taille de police du body*/
 body {
-    margin: 0;
-    font-size: 16px;
-    font-family: 'Exo 2', sans-serif;
+	margin: 0;
+	font-size: 16px;
+	font-family: 'Exo 2', sans-serif;
 }
 
 /*Police des titres*/
 h1, h2 {
-  font-family: 'Acme', sans-serif;
+	font-family: 'Acme', sans-serif;
 }
 
 /*Images restreintes dans leurs cadres*/
 img {
-    max-width: 100%;
+	max-width: 100%;
 }
 
 /*Prise en compte du Menu fixé par le reste du contenu*/
 main {
-    margin-top: 150px;
+	margin-top: 150px;
 }
 
 /*Listes sans puces et sans marge ni padding*/
 ul
 {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 
 /*Mettre les listes en ligne et non en colonne*/
 li
 {
-    display: inline-block;
-    font-size: 20px;
+	display: inline-block;
+	font-size: 20px;
 }
 
 input, select, textarea, button {
-  font-family: inherit;
+	font-family: inherit;
 }
 
 
@@ -69,22 +69,22 @@ input, select, textarea, button {
 
 /*Règles de style Icomoon remises sur ma classe d'icônes*/
 .icomoon, [data-icon]::before {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
+	/* use !important to prevent issues with browser extensions that change fonts */
+	font-family: 'icomoon' !important;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
 
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 [data-icon]::before {
-  content: attr(data-icon);
+	content: attr(data-icon);
 }
 
 
@@ -104,48 +104,48 @@ input, select, textarea, button {
 
 /*Contenu centré et marges du header*/
 header {
-    position: fixed;
-    z-index: 2000;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 150px;
-    text-align: center;
-    margin: 0;
-    background: #fcfacf;
-    box-shadow: 0px 2px 1px teal;
+	position: fixed;
+	z-index: 2000;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 150px;
+	text-align: center;
+	margin: 0;
+	background: #fcfacf;
+	box-shadow: 0px 2px 1px teal;
 }
 
 /*Mettre le logo en ligne*/
 header img
 {
-    display: inline-block;
+	display: inline-block;
 }
 
 /*Style et display du Titre*/
 h1 {
-    display: inline-block;
-    color: teal;
-    font-size: 3em;
-    padding: 10px 20px 10px 10px;
-    margin: 0;
+	display: inline-block;
+	color: teal;
+	font-size: 3em;
+	padding: 10px 20px 10px 10px;
+	margin: 0;
 }
 
 /*Enlever l'underline sur les a*/
 nav a {
-    display: block;
-    text-decoration: none;
-    font-weight: bold;
-    color: teal;
-    padding: 10px 10px;
-    border-top: 3px solid transparent;
-    border-bottom: 3px solid transparent;
+	display: block;
+	text-decoration: none;
+	font-weight: bold;
+	color: teal;
+	padding: 10px 10px;
+	border-top: 3px solid transparent;
+	border-bottom: 3px solid transparent;
 }
 
 /*Effet de hover sur les liens de nav*/
 nav a:hover {
-    border-bottom: 3px solid teal;
-    border-top: 3px solid teal;
+	border-bottom: 3px solid teal;
+	border-top: 3px solid teal;
 }
 
 
@@ -159,62 +159,67 @@ nav a:hover {
 
 /***********************
 
-      CANVAS
+      POPUP CANVAS
 
 ************************/
 
+/**
+ * Overlay de notre popup
+ */
 #canvas-container {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 2500;
-  background: rgba(0, 0, 0, 0.8);
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	z-index: 2500;
+	background: rgba(0, 0, 0, 0.8);
 }
 
-#canvas-container h4 {
-  display: block;
-  color: teal;
-  font-weight: bold;
-  font-size: 20px;
-  margin: 5px 0 5px 0;
-}
-
+/**
+ * La popup en elle-même
+ */
 #canvas-container > div {
-  border: 2px solid teal;
-  border-radius: 2px;
-  text-align: center;
-  padding: 10px 10px;
-  background: #fff;
-  z-index: 2500;
+	border: 2px solid teal;
+	border-radius: 2px;
+	text-align: center;
+	padding: 10px 10px;
+	background: #fff;
+	z-index: 2500;
+}
+
+/**
+ * Titre de la popup
+ */
+#canvas-container h4 {
+	display: block;
+	color: teal;
+	font-weight: bold;
+	font-size: 20px;
+	margin: 5px 0 5px 0;
 }
 
 canvas {
-  width: 290px;
-  height: 100px;
-  border: 1px solid teal;
-  border-radius: 2px;
-  background: #fcfacf;
-  margin: 10px auto;
+	/**
+	 * Ici on reset le box-sizing, juste pour être + rigoureux,
+	 * pour ne pas que le padding/border viennent empiéter sur les
+	 * dimensions que l'on définit pour le canvas.
+	 */
+	box-sizing: content-box;
+	width: 290px;
+	height: 100px;
+	border: 1px solid teal;
+	border-radius: 2px;
+	background: #fcfacf;
+	margin: 10px auto;
 }
 
-#canvas-container .buttons {
-  text-align: center
-}
 
-.buttons button {
-  margin: 0 10px;
-  padding-left: 10px;
-}
 
-#cancel-btn, #clear-btn {
-  background: #fcfacf;
-  color: teal;
-}
+
 
 
 
@@ -233,136 +238,136 @@ canvas {
 
 /*Position et style de la div slider*/
 #slider {
-  position: relative;
-  text-align: center;
+	position: relative;
+	text-align: center;
 }
 
 /*Position et style du carousel*/
 #carousel {
-  background-color: #fff;
-  padding-top: 80px;
-  padding-bottom: 50px;
-  border-bottom: 2px solid teal;
+	background-color: #fff;
+	padding-top: 80px;
+	padding-bottom: 50px;
+	border-bottom: 2px solid teal;
 }
 
 /*Marges et hauteur du h2 (à revoir)*/
 #carousel h2 {
- position: absolute;
- left: 0;
- top: -90px;
- line-height: 32px;
- height: 64px;
- width: 100%;
- padding: 0 10px;
- overflow: hidden;
- color: teal;
+	position: absolute;
+	left: 0;
+	top: -90px;
+	line-height: 32px;
+	height: 64px;
+	width: 100%;
+	padding: 0 10px;
+	overflow: hidden;
+	color: teal;
 }
 
 /*Marge du paragraphe (pour laisser de la place aux LI en screen 320px)*/
 #carousel p {
-  position: absolute;
-  background: rgba(252, 250, 207, .8);
-  bottom: 2px;
-  padding: 10px;
-  line-height: 15px;
-  height: 80px;
-  width: 100%;
-  overflow: hidden;
-  margin-bottom: 0;
-  color: teal;
-  font-size: 13px;
-  font-weight: bold;
+	position: absolute;
+	background: rgba(252, 250, 207, .8);
+	bottom: 2px;
+	padding: 10px;
+	line-height: 15px;
+	height: 80px;
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 0;
+	color: teal;
+	font-size: 13px;
+	font-weight: bold;
 }
 
 /*Tous les slides cachés*/
 #slider > div {
-  display: none;
+	display: none;
 }
 
 /*Seul le 1er slide est apparent*/
 #slider > div:first-of-type {
-  display: block;
+	display: block;
 }
 
 /*Bordures de l'image du carousel*/
 #slider > div > img {
-  display: block;
-  border-top: 2px solid teal;
-  border-bottom: 2px solid teal;
+	display: block;
+	border-top: 2px solid teal;
+	border-bottom: 2px solid teal;
 }
 
 /*Position et placement de l'ul*/
 #carousel ul {
-  position: absolute;
-  left: 0;
-  bottom: -30px;
-  z-index: 100;
-  width: 100%;
+	position: absolute;
+	left: 0;
+	bottom: -30px;
+	z-index: 100;
+	width: 100%;
 }
 
 /*Position et style des LI navigation des slides*/
 #carousel li {
-  height: 20px;
-  width: 20px;
-  border: 2px solid teal;
-  border-radius: 5px;
-  margin: 0 3px;
-  cursor: pointer;
+	height: 20px;
+	width: 20px;
+	border: 2px solid teal;
+	border-radius: 5px;
+	margin: 0 3px;
+	cursor: pointer;
 }
 
 /*La LI active distinguée des autres*/
 .active {
-  background: gold;
+	background: gold;
 }
 
 /*Effet de hover sur les LI navigation slides*/
 #carousel li:hover {
-  background: gold;
+	background: gold;
 }
 
 /*Position des 3 icônes*/
 .nav-next, .nav-prev, .nav-pause {
-  position: absolute;
-  display: inline-block;
-  color: teal;
-  font-size: 16px;
-  border-radius: 5px;
-  background-color: gold;
-  top: 50%;
-  margin-top: -12px;
-  z-index: 100;
-  height: 24px;
-  line-height: 24px;
-  width: 24px;
+	position: absolute;
+	display: inline-block;
+	color: teal;
+	font-size: 16px;
+	border-radius: 5px;
+	background-color: gold;
+	top: 50%;
+	margin-top: -12px;
+	z-index: 100;
+	height: 24px;
+	line-height: 24px;
+	width: 24px;
 }
 
 .nav-next {
-  right: 15px;
+	right: 15px;
 }
 
 .nav-prev {
-  left: 15px;
+	left: 15px;
 }
 
 .nav-pause {
-  margin-left: -12px;
+	margin-left: -12px;
 }
 
 /*Contenus des icônes*/
 .nav-prev::before {
-  content: "\e904";
+	content: "\e904";
 }
 
 .nav-pause::before {
-  content: "\ea1d";
+	content: "\ea1d";
 }
 
 .nav-next::before {
-  content: "\e902";
+	content: "\e902";
 }
 
 #slider.paused .nav-pause::before {
-  content: "\ea1c";
+	content: "\ea1c";
 }
 
 
@@ -381,87 +386,127 @@ canvas {
 **********************/
 
 #map {
-  position: relative;
-  height: 280px;
+	position: relative;
+	height: 280px;
 }
 
 form {
-  margin-top: 15px;
-  width: 100%;
-  color: teal;
+	margin-top: 15px;
+	width: 100%;
+	color: teal;
 }
 
 fieldset {
-  border: 2px solid teal;
-  margin-bottom: 5px;
+	border: 2px solid teal;
+	margin-bottom: 5px;
 }
 
 legend {
-  color: teal;
-  font-weight: bold;
-  font-size: 20px;
-  text-align: center;
+	color: teal;
+	font-weight: bold;
+	font-size: 20px;
+	text-align: center;
 }
 
 fieldset > div {
-  margin-bottom: 15px;
+	margin-bottom: 15px;
 }
 
 fieldset div:nth-of-type(1) {
-  margin-top: 20px;
+	margin-top: 20px;
 }
 
 fieldset div:last-child {
-  text-align: center;
+	text-align: center;
 }
 
 fieldset div:nth-of-type(3) {
-  margin-bottom: 35px;
+	margin-bottom: 35px;
 }
 
 fieldset label {
-  font-weight: bold;
-  display: inline-block;
-  left: 0;
-  width: 22%;
+	font-weight: bold;
+	display: inline-block;
+	left: 0;
+	width: 22%;
 }
 
 input {
-  display: inline-block;
-  width: 70%;
-  border: 1px solid teal;
-  border-radius: 2px;
-  background: #fcfacf;
-  padding: 6px 10px;
+	display: inline-block;
+	width: 70%;
+	border: 1px solid teal;
+	border-radius: 2px;
+	background: #fcfacf;
+	padding: 6px 10px;
 }
 
 fieldset div:nth-of-type(6) {
-  margin-top: 25px;
+	margin-top: 25px;
 }
 
-button {
-  display: inline-block;
-  background: teal;
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 16px;
-  color: #fcfacf;
-  margin-top: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 25px;
-  padding-right: 10px;
-  border: 2px solid teal;
-  border-radius: 3px;
-  cursor: pointer;
+button,
+.btn
+{
+	display: inline-block;
+	background: teal;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 16px;
+	color: #fcfacf;
+	margin-top: 10px;
+	padding: 5px 10px;
+	border: 2px solid teal;
+	border-radius: 3px;
+	cursor: pointer;
 }
 
-button::before {
-  float: left;
-  width: 20px;
-  text-align: center;
-  font-size: 18px;
-  margin: 0 10px 0 -20px;
+/**
+ * Type de bouton alternatif, moins visible
+ */
+.btn-light
+{
+	background: #fcfacf;
+	color: teal;
+}
+
+/**
+ * Conteneur de boutons, permet de les centrer et faire joliment
+ */
+.buttons
+{
+	text-align: center
+}
+
+/**
+ * Positionnement des boutons les uns par rapport aux autres dans leur conteneur
+ */
+.buttons button,
+.buttons .btn
+{
+	margin: 0 10px;
+}
+
+/**
+ * Les boutons avec icône ont un padding-left pour permettre d'y afficher l'icône
+ */
+button[data-icon],
+.btn[data-icon]
+{
+	padding-left: 25px;
+}
+
+/**
+ * Ici j'ai rajouté le sélecteur d'attribut (qui s'assure qu'un attribut "data-icon" soit défini)
+ * afin de n'appliquer ce style qu'aux boutons qui en ont réellement besoin
+ */
+button[data-icon]::before,
+.btn[data-icon]::before
+{
+	float: left;
+	width: 20px;
+	text-align: center;
+	font-size: 18px;
+	margin: 0 10px 0 -20px;
 }
 
 
@@ -483,20 +528,20 @@ button::before {
 
 /*Texte aligné au centre*/
 footer {
-  text-align: center;
-  background: teal;
+	text-align: center;
+	background: teal;
 }
 
 /*Pas de soulignement sous les a*/
 footer a {
-  text-decoration: none;
-  color: #fcfacf;
+	text-decoration: none;
+	color: #fcfacf;
 }
 
 /*Style des li*/
 footer li {
-  padding: 10px;
-  font-size: 14px;
+	padding: 10px;
+	font-size: 14px;
 }
 
 
@@ -516,97 +561,97 @@ footer li {
 
 @media all and (min-width: 1024px)
 {
-  h1 {
-    font-size: 3.5em;
-  }
+	h1 {
+		font-size: 3.5em;
+	}
 
-  #carousel {
-    background: url('img/slides/quais.jpg') center / cover;
-  }
+	#carousel {
+		background: url('img/slides/quais.jpg') center / cover;
+	}
 
-  #carousel h2 {
-    font-size: 2em;
-  }
+	#carousel h2 {
+		font-size: 2em;
+	}
 
-  #slider > div > img {
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    left: 0;
-    width: 40%;
-    border: 2px solid gold;
-  }
+	#slider > div > img {
+		position: relative;
+		display: inline-block;
+		vertical-align: middle;
+		left: 0;
+		width: 40%;
+		border: 2px solid gold;
+	}
 
-  #carousel ul {
-    position: relative;
-    top: -10px;
-  }
+	#carousel ul {
+		position: relative;
+		top: -10px;
+	}
 
-  #carousel li {
-    height: 24px;
-    width: 24px;
-    border: 2px solid gold;
-  }
+	#carousel li {
+		height: 24px;
+		width: 24px;
+		border: 2px solid gold;
+	}
 
-  #carousel p {
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    top: 0;
-    width: 30%;
-    padding: 10px;
-    height: auto;
-    overflow: auto;
-    background: #fcfacf;
-    border: 2px solid gold;
-    color: teal;
-    font-size: 18px;
-    line-height: 26px;
-  }
+	#carousel p {
+		position: relative;
+		display: inline-block;
+		vertical-align: middle;
+		top: 0;
+		width: 30%;
+		padding: 10px;
+		height: auto;
+		overflow: auto;
+		background: #fcfacf;
+		border: 2px solid gold;
+		color: teal;
+		font-size: 18px;
+		line-height: 26px;
+	}
 
-  #carousel ul {
-    bottom: 0;
-  }
+	#carousel ul {
+		bottom: 0;
+	}
 
-  .nav-next, .nav-prev, .nav-pause {
-    height: 30px;
-    width: 30px;
-    line-height: 30px;
-    font-size: 24px;
-  }
+	.nav-next, .nav-prev, .nav-pause {
+		height: 30px;
+		width: 30px;
+		line-height: 30px;
+		font-size: 24px;
+	}
 
-  .nav-next {
-    right: 20px;
-  }
+	.nav-next {
+		right: 20px;
+	}
 
-  .nav-prev {
-    left: 20px;
-  }
+	.nav-prev {
+		left: 20px;
+	}
 
-  #map {
-    display: inline-block;
-    width: 60%;
-    height: 490px;
-    vertical-align: middle;
-    margin: 10px;
-    left: 0;
-    border: 2px solid teal;
-  }
+	#map {
+		display: inline-block;
+		width: 60%;
+		height: 490px;
+		vertical-align: middle;
+		margin: 10px;
+		left: 0;
+		border: 2px solid teal;
+	}
 
-  form {
-    position: relative;
-    display: inline-block;
-    width: 35%;
-    max-width: 450px;
-    line-height: 25px;
-    vertical-align: middle;
-    margin-left: 15px;
-  }
+	form {
+		position: relative;
+		display: inline-block;
+		width: 35%;
+		max-width: 450px;
+		line-height: 25px;
+		vertical-align: middle;
+		margin-left: 15px;
+	}
 
-  fieldset {
-    border: 2px solid teal;
-    padding: 0 20px;
-  }
+	fieldset {
+		border: 2px solid teal;
+		padding: 0 20px;
+	}
 
 }
 

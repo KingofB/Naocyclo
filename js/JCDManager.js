@@ -1,20 +1,48 @@
 import { JCDStation } from './JCDStation.js'
 
 
-export function JCDManager(map) {
-	// Variable pour la clé de l'API JC Decaux :
+export function JCDManager(map, canvas) {
+	/**
+	 * Variable pour la clé de l'API JC Decaux :
+	 *
+	 * @private
+	 *
+	 * @type {string}
+	 */
 	const JCD_API_KEY = 'c35cfff362ee5fd3c47c1b8f34a85e02b7067d27';
-	// Variable pour le "contract" de JCDecaux :
+
+	/**
+	 * Variable pour le "contract" de JCDecaux :
+	 *
+	 * @private
+	 *
+	 * @type {string}
+	 */
 	const JCD_CONTRACT = 'Nantes';
 
 
 
-	// Variable de la liste des stations de la ville :
+	/**
+	 * Variable de la liste des stations de la ville :
+	 *
+	 * @private
+	 *
+	 * @type {Object}
+	 */
 	const stations = {};
 
 
 
-	// Fonction centralisée permettant d'appeler l'API JCDecaux :
+	/**
+	 * Fonction centralisée permettant d'appeler l'API JCDecaux :
+	 *
+	 * @private
+	 *
+	 * @param {string} action
+	 * @param {Object} data
+	 * @param {Function} callback
+	 *
+	 */
 	const getCallApi = function(action, data, callback) {
 		data = data || {};
 		data.apiKey = JCD_API_KEY;
@@ -22,7 +50,14 @@ export function JCDManager(map) {
 		$.get('https://api.jcdecaux.com/vls/v1/' + action, data, callback);
 	};
 
-	// Fonction affichant sur le formulaire les données de la station choisie :
+
+	/**
+	 * Fonction affichant sur le formulaire les données de la station choisie :
+	 *
+	 * @private
+	 *
+	 * @param {Event} e
+	 */
 	const onChooseStation = function(e) {
 
 		const station = stations[e.target.options.stationId];
@@ -48,6 +83,9 @@ export function JCDManager(map) {
 	};
 
 
+	/**
+	 * Récupérer la liste des stations JCDecaux et les enregistrer dans des JCDStation
+	 */
 	this.getStationsAsync = function() {
 		getCallApi('stations', {contract: JCD_CONTRACT}, response => {
 			// Récup des 10 premières stations seulement
@@ -61,6 +99,8 @@ export function JCDManager(map) {
 			});
 		});
 	};
+
+
 
 	this.getStationsAsync();
 }

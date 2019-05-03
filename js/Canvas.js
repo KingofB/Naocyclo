@@ -1,34 +1,67 @@
-import { JCDResa } from './JCDResa.js'
+export function Canvas()
+{
+	/**
+	 * Le canvas
+	 *
+	 * @private
+	 *
+	 * @type {HTMLCanvasElement}
+	 */
+	const canvas = document.querySelector('canvas');
 
-export function Canvas() {
+	/**
+	 * Le contexte de dessin (peut être 2D ou 3D, mais ici on utilisera la 2D)
+	 *
+	 * @private
+	 *
+	 * @type {CanvasRenderingContext2D | WebGLRenderingContext}
+	 */
+	const ctx = canvas.getContext('2d');
 
-	const container = document.getElementById("canvas-container");
-	const validateBtn = document.getElementById("validate-btn");
-	const cancelBtn = document.getElementById("cancel-btn");
-	const bookingBtn = document.getElementById("sub-btn");
-	const submitDiv = document.getElementById("submit-div");
-	const bookingSection = document.getElementById("booking");
-	const canvas = document.querySelector("canvas");
-	const ctx = canvas.getContext("2d");
-
-	// Utilisé si jamais le canvas a un boundingClientRect différent de sa taille pseudo-réelle
+	/**
+	 * Utilisé si jamais le canvas a un boundingClientRect différent de sa taille "pseudo-réelle"
+	 *
+	 * @private
+	 *
+	 * @type {{x: number, y: number}}
+	 */
 	const scale = {x: 1, y: 1};
 
+	/**
+	 * Est-on en train de dessiner ?
+	 *
+	 * @private
+	 *
+	 * @type {boolean}
+	 */
 	let bDrawing = false;
 
-	container.style.display = "flex";
 
 
-	function stopDraw() {
+
+	/**
+	 * Arrêter de dessiner
+	 *
+	 * @private
+	 */
+	function stopDraw()
+	{
 		if (bDrawing)
 		{
 			bDrawing = false;
 			ctx.closePath();
 			ctx.scale(1, 1);
-			canvas.removeEventListener("mousemove", draw);
+			canvas.removeEventListener('mousemove', draw);
 		}
 	}
 
+	/**
+	 * Commencer à dessiner
+	 *
+	 * @private
+	 *
+	 * @param {MouseEvent} e
+	 */
 	function beginDraw(e) {
 		if ((e.buttons & 1) && !bDrawing)
 		{
@@ -41,34 +74,73 @@ export function Canvas() {
 			ctx.beginPath();
 			ctx.lineWidth = 2;
 			ctx.strokeStyle = "teal";
-            ctx.moveTo(e.offsetX * scale.x, e.offsetY * scale.y);
-            canvas.addEventListener("mousemove", draw);
+
+			// Utilisation du scale
+			ctx.moveTo(e.offsetX * scale.x, e.offsetY * scale.y);
+			canvas.addEventListener('mousemove', draw);
 		}
 	}
 
-	function draw(e) {
+	/**
+	 * Dessiner
+	 *
+	 * @private
+	 *
+	 * @param {MouseEvent} e
+	 */
+	function draw(e)
+	{
 		if (!bDrawing)
 			return;
 
+		// Utilisation du scale
 		ctx.lineTo(e.offsetX * scale.x, e.offsetY * scale.y);
 		ctx.stroke();
 	}
 
-	canvas.addEventListener("mousedown", beginDraw);
-	canvas.addEventListener("mouseup", e => {
-        if ((e.buttons & 1) == 0) {
-            stopDraw();
-        }
-	});
-
-	canvas.addEventListener("mouseout", stopDraw);
-
-	cancelBtn.addEventListener("click", function() {
-		container.style.display = "none";
-	});
-
-
+	/**
+	 * Enregistrer le contenu du canvas
+	 *
+	 * @public
+	 *
+	 * @returns {string}
+	 */
 	this.saveCanvas = function() {
 		return canvas.toDataURL();
 	};
+
+	/**
+	 * Vider le contenu du canvas
+	 *
+	 * @public
+	 */
+	this.clear = function() {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+	};
+
+
+
+	/**
+	 * Initialiser ce module
+	 *
+	 * @private
+	 */
+	function init()
+	{
+		canvas.addEventListener('mousedown', beginDraw);
+		canvas.addEventListener('mouseup', e => {
+			// Le bouton principal est relâché, on arrête le dessin
+			// Ici on utiliser un opérateur "ET binaire" (en anglais : "binary AND operator")
+			if ((e.buttons & 1) == 0) {
+				stopDraw();
+			}
+		});
+
+		canvas.addEventListener('mouseout', stopDraw);
+	}
+
+
+
+
+	init();
 }
