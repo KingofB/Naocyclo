@@ -1,4 +1,3 @@
-
 export function JCDManager(map, canvas, resa) {
 	/**
 	 * Variable pour la clé de l'API JC Decaux :

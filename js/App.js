@@ -23,8 +23,6 @@ const init = function () {
 
 	// Notre gestionnaire JCDecaux a besoin d'avoir accès à la map et au canvas
 	new JCDManager(map, canvas, resa);
-
-	
 };
 
 
