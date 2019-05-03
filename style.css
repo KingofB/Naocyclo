@@ -176,7 +176,7 @@ nav a:hover {
   background: rgba(0, 0, 0, 0.8);
 }
 
-#canvas-label {
+h4 {
   display: block;
   color: teal;
   font-weight: bold;
@@ -201,8 +201,12 @@ canvas {
   margin: 10px auto;
 }
 
-.canvas-btn {
-  padding-left: 10px;
+#canvas-container .buttons {
+  text-align: center
+}
+
+.buttons button {
+  margin: 0 10px
 }
 
 
