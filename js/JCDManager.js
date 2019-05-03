@@ -1,3 +1,5 @@
+import { JCDStation } from './JCDStation.js'
+
 
 export function JCDManager(map, canvas, resa) {
 	/**
@@ -57,7 +59,9 @@ export function JCDManager(map, canvas, resa) {
 	 * @param {Event} e
 	 */
 	const onChooseStation = function(e) {
+		
 		resa.updateFormForStation(e.target.options.stationId);
+	
 	};
 
 
