@@ -11,6 +11,9 @@ export function Canvas() {
 	const canvas = document.querySelector("canvas");
 	const ctx = canvas.getContext("2d");
 
+	// Utilisé si jamais le canvas a un boundingClientRect différent de sa taille pseudo-réelle
+	const scale = {x: 1, y: 1};
+
 	let bDrawing = false;
 
 	container.style.display = "flex";
@@ -21,6 +24,7 @@ export function Canvas() {
 		{
 			bDrawing = false;
 			ctx.closePath();
+			ctx.scale(1, 1);
 			canvas.removeEventListener("mousemove", draw);
 		}
 	}
@@ -28,11 +32,16 @@ export function Canvas() {
 	function beginDraw(e) {
 		if ((e.buttons & 1) && !bDrawing)
 		{
+			// Mettre à jour le scale à chaque nouveau tracé
+			const rect = canvas.getBoundingClientRect();
+			scale.x = canvas.width / rect.width;
+			scale.y = canvas.height / rect.height;
+
 			bDrawing = true;
 			ctx.beginPath();
 			ctx.lineWidth = 2;
 			ctx.strokeStyle = "teal";
-            ctx.moveTo(e.offsetX, e.offsetY);
+            ctx.moveTo(e.offsetX * scale.x, e.offsetY * scale.y);
             canvas.addEventListener("mousemove", draw);
 		}
 	}
@@ -41,7 +50,7 @@ export function Canvas() {
 		if (!bDrawing)
 			return;
 
-		ctx.lineTo(e.offsetX, e.offsetY);
+		ctx.lineTo(e.offsetX * scale.x, e.offsetY * scale.y);
 		ctx.stroke();
 	}
 
@@ -51,7 +60,7 @@ export function Canvas() {
             stopDraw();
         }
 	});
-	
+
 	canvas.addEventListener("mouseout", stopDraw);
 
 	cancelBtn.addEventListener("click", function() {
@@ -64,9 +73,9 @@ export function Canvas() {
 
 	this.saveCanvas = function() {
 		return canvas.toDataURL();
-	}
-	
+	};
+
 	this.validateCanvas = function(callback) {
 		validateBtn.addEventListener("click", recordBooking)
-	} 
-};
+	};
+}
