@@ -18,11 +18,13 @@ const init = function () {
 	// Notre popup a besoin d'accéder au canvas
 	const popup = new Popup(canvas);
 
-	// Notre gestionnaire JCDecaux a besoin d'avoir accès à la map et au canvas
-	new JCDManager(map, canvas);
-
 	// Notre JCDResa a besoin de la popup
-	new JCDResa(popup);
+	const resa = new JCDResa(popup);
+
+	// Notre gestionnaire JCDecaux a besoin d'avoir accès à la map et au canvas
+	new JCDManager(map, canvas, resa);
+
+	
 };
 
 
