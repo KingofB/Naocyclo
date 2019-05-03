@@ -62,6 +62,10 @@ export function JCDManager(map) {
 		});
 	};
 
-
 	this.getStationsAsync();
+
+
+	cancelBtn.addEventListener("click", function() {
+		container.style.display = "none";
+	});
 };

@@ -28,7 +28,7 @@ export function JCDResa() {
         
     let firstname = localStorage.getItem("firstname");
     if (firstname) {
-        userFirstname.value = lastname;
+        userFirstname.value = firstname;
     }
     
     

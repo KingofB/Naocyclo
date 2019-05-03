@@ -58,10 +58,7 @@ export function Canvas() {
 		container.style.display = "none";
 	});
 
-	/*container.addEventListener("click", function() {
-		container.style.display = "none";
-	});*/
-
+	
 	this.saveCanvas = function() {
 		return canvas.toDataURL();
 	};
