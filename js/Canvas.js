@@ -64,9 +64,9 @@ export function Canvas() {
 
 	this.saveCanvas = function() {
 		return canvas.toDataURL();
-	}
+	};
 	
 	this.validateCanvas = function(callback) {
 		validateBtn.addEventListener("click", recordBooking)
-	} 
+	}; 
 };
