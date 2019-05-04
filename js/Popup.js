@@ -16,7 +16,30 @@ export function Popup(canvas)
 	 */
 	const _container = document.getElementById('canvas-container');
 
+	/**
+	 * Callback à appeler lorsqu'on sauvegarde la popup
+	 *
+	 * @type {Function}
+	 *
+	 * @private
+	 */
+	let _saveCallback = null;
 
+
+
+
+
+	/**
+	 * Met à jour le callback lorsqu'on enregistre le contenu de la popup
+	 *
+	 * @public
+	 *
+	 * @param {Function} cb
+	 */
+	this.setSaveCallback = function(cb)
+	{
+		_saveCallback = cb;
+	};
 
 	/**
 	 * Afficher la popup
@@ -46,7 +69,11 @@ export function Popup(canvas)
 	 */
 	const _onValidate = function()
 	{
+		canvas.storeImage();
 		_hidePopup();
+
+		if (_saveCallback)
+			_saveCallback();
 	};
 
 	/**

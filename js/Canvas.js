@@ -139,6 +139,38 @@ export function Canvas()
 	};
 
 	/**
+	 * Récupère le pourcentage de remplissage de l'image
+	 *
+	 * @public
+	 *
+	 * @returns {number}
+	 */
+	this.getImageFilledPercent = function()
+	{
+		const len = _signature.data.length;
+		let i = 0, nb = 0, total = 0;
+
+		// const t1 = performance.now();
+		while (true)
+		{
+			if (_signature.data.slice(i, i + 4).reduce((r, c) => r + c, 0) > 0)
+				nb++;
+			total++;
+			i += 4;
+			if (i >= len)
+				break;
+		}
+		// const t2 = performance.now();
+
+		// console.warn('nb', nb, total, t2 - t1);
+
+		if (total <= 0)
+			return 0;
+
+		return (nb / total) * 100;
+	};
+
+	/**
 	 * Vider le contenu du canvas
 	 *
 	 * @public

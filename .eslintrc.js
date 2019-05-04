@@ -20,7 +20,7 @@ module.exports = {
             {
                 allow: ["warn", "error"]
             }
-        ]
-
+        ],
+        "no-constant-condition": 0
     }
 };

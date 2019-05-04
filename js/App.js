@@ -19,7 +19,7 @@ const init = function () {
 	const popup = new Popup(canvas);
 
 	// Notre JCDResa a besoin de la popup
-	const resa = new JCDResa(popup);
+	const resa = new JCDResa(popup, canvas);
 
 	// Notre gestionnaire JCDecaux a besoin d'avoir accès à la map et au canvas
 	new JCDManager(map, canvas, resa);
