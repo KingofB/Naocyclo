@@ -26,7 +26,20 @@ export function JCDResa(popup)
 		userFirstname.value = firstname;
 	}
 
-	this.updateFormForStation = function(station) {
+	/**
+	 * Mettre à jour le formulaire avec les données issues de la station choisie
+	 *
+	 * @public
+	 *
+	 * @param {Array} station
+	 */
+	this.updateFormForStation = function(station)
+	{
+		// Masquer l'empty state
+		$('#station-details').show();
+		$('#empty-state').hide();
+
+
 		/**
 		 * Encore + optimisé : combinaison de Object.entries() et de for...of
 		 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries

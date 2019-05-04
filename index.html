@@ -62,25 +62,32 @@
 					<input type="hidden" name="id" id="station-id">
 					<fieldset>
 						<legend>Détails de la station</legend>
-						<div>
-							<label>Nom</label><span id="station-name"></span>
+
+						<div id="empty-state">
+							<img src="img/silhouette.png" srcset="img/silhouette.png 1x, img/silhouette@2x.png 2x" alt="silhouette velo" width="280" height="260">
+							<h3>Choisissez une station sur la carte</h3>
 						</div>
-						<div>
-							<label>Adresse</label><span id="station-address"></span>
-						</div>
-						<div>
-							<label>Vélos</label><span id="station-freeBikes"></span>
-						</div>
-						<div>
-							<label for="lastname">Nom</label>
-							<input type="text" name="lastname" id="lastname" placeholder="Votre nom" autocomplete="family-name" required>
-						</div>
-						<div>
-							<label for="firstname">Prénom</label>
-							<input type="text" name="firstname" id="firstname" placeholder="Votre prénom" autocomplete="given-name" required>
-						</div>
-						<div class="buttons">
-							<span class="btn" id="sub-btn" data-icon="&#xe94f;">Réserver</span>
+						<div id="station-details">
+							<div>
+								<label>Nom</label><span id="station-name"></span>
+							</div>
+							<div>
+								<label>Adresse</label><span id="station-address"></span>
+							</div>
+							<div>
+								<label>Vélos</label><span id="station-freeBikes"></span>
+							</div>
+							<div>
+								<label for="lastname">Nom</label>
+								<input type="text" name="lastname" id="lastname" placeholder="Votre nom" autocomplete="family-name" required>
+							</div>
+							<div>
+								<label for="firstname">Prénom</label>
+								<input type="text" name="firstname" id="firstname" placeholder="Votre prénom" autocomplete="given-name" required>
+							</div>
+							<div class="buttons">
+								<span class="btn" id="sub-btn" data-icon="&#xe94f;">Réserver</span>
+							</div>
 						</div>
 					</fieldset>
 				</form>

@@ -1,6 +1,14 @@
 import { JCDStation } from './JCDStation.js';
 
 
+/**
+ * Classe de gestion JC Decaux
+ *
+ * @param {Map} map
+ * @param {Canvas} canvas
+ * @param {JCDResa} resa
+ * @constructor
+ */
 export function JCDManager(map, canvas, resa) {
 	/**
 	 * Variable pour la clé de l'API JC Decaux :
@@ -58,15 +66,15 @@ export function JCDManager(map, canvas, resa) {
 	 *
 	 * @param {Event} e
 	 */
-	const onChooseStation = function(e) {
-
-		resa.updateFormForStation(e.target.options.stationId);
-
+	const onChooseStation = e => {
+		resa.updateFormForStation(stations[e.target.options.stationId]);
 	};
 
 
 	/**
 	 * Récupérer la liste des stations JCDecaux et les enregistrer dans des JCDStation
+	 *
+	 * @public
 	 */
 	this.getStationsAsync = function() {
 		getCallApi('stations', {contract: JCD_CONTRACT}, response => {
@@ -77,6 +85,8 @@ export function JCDManager(map, canvas, resa) {
 			response.forEach(function(station) {
 				const obj = new JCDStation(station);
 				stations[station.number] = obj;
+
+				// Ajouter un marqueur sur la carte
 				map.addMarker(obj.gps, {stationId: obj.id, title: obj.name}, onChooseStation);
 			});
 		});
