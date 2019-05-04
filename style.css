@@ -436,6 +436,11 @@ legend {
 	width: 22%;
 }
 
+#station-details label + *
+{
+	width: 76%;
+}
+
 input {
 	display: inline-block;
 	width: 70%;
