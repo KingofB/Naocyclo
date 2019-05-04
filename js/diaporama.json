@@ -10,6 +10,52 @@
     },
 
     {
+        "title": "Sélectionnez la station de location",
+        "image": {
+            "src": "img/slides/bicloo1-360.jpg",
+            "srcset": "img/slides/bicloo1-360.jpg 360w, img/slides/bicloo1-480.jpg 480w, img/slides/bicloo1-720.jpg 720w, img/slides/bicloo1-1080.jpg 1080w",
+            "alt": "Station NaoCyclo 1"
+        },
+        "description": "Sur la carte, cliquez sur la station où vous désirez réserver un vélo.\nToute réservation est valable 20 minutes.\nUne nouvelle réservation annulera la précédente."
+    },
 
+    {
+        "title": "Réservez votre vélo",
+        "image": {
+            "src": "img/slides/bicloo2-360.jpg",
+            "srcset": "img/slides/bicloo2-360.jpg 360w, img/slides/bicloo2-480.jpg 480w, img/slides/bicloo2-720.jpg 720w, img/slides/bicloo2-1080.jpg 1080w",
+            "alt": "Station NaoCyclo 2"
+        },
+        "description": "Remplissez le formulaire en indiquant votre nom et prénom,\nSignez dans le champ de signature qui apparaît et validez.\nVotre réservation est faite !"
+    },
+
+    {
+        "title": "Récupérez votre vélo",
+        "image": {
+            "src": "img/slides/bicloo3-360.jpg",
+            "srcset": "img/slides/bicloo3-360.jpg 360w, img/slides/bicloo3-480.jpg 480w, img/slides/bicloo3-720.jpg 720w, img/slides/bicloo3-1080.jpg 1080w",
+            "alt": "Station NaoCyclo 3"
+        },
+        "description": "Saisissez vos nom et prénom sur la borne.\nPrépayez votre location en espèces ou CB.\nLa borne vous indiquera le numéro du vélo réservé."
+    },
+
+    {
+        "title": "Profitez de votre réservation",
+        "image": {
+            "src": "img/slides/anneaux360.jpg",
+            "srcset": "img/slides/anneaux360.jpg 360w, img/slides/anneaux480.jpg 480w, img/slides/anneaux720.jpg 720w, img/slides/anneaux1080.jpg 1080w",
+            "alt": "Anneaux de l'île de Nantes"
+        },
+        "description": "Une fois votre vélo récupéré, profitez-en à votre guise,\nque ce soit pour le travail ou le loisir.\nNaoCyclo c'est simple et pas cher !"
+    },
+
+    {
+        "title": "Rendez votre vélo",
+        "image": {
+            "src": "img/slides/bicloo5-360.jpg",
+            "srcset": "img/slides/bicloo5-360.jpg 360w, img/slides/bicloo5-480.jpg 480w, img/slides/bicloo5-720.jpg 720w, img/slides/bicloo5-1080.jpg 1080w",
+            "alt": "Station NaoCyclo 5"
+        },
+        "description": "Votre trajet terminé, ramenez le vélo en station.\nIndiquez vos nom et prénom à la borne.\nElle ajustera votre paiement selon votre durée de location."
     }
 ]
