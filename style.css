@@ -209,8 +209,8 @@ canvas {
 	 * dimensions que l'on définit pour le canvas.
 	 */
 	box-sizing: content-box;
-	width: 290px;
-	height: 100px;
+	width: 320px;
+	height: 160px;
 	border: 1px solid teal;
 	border-radius: 2px;
 	background: #fcfacf;

@@ -8,10 +8,6 @@ export function Popup(canvas) {
 	 */
 	const container = document.getElementById("canvas-container");
 
-	const bookingBtn = document.getElementById("sub-btn");
-	const submitDiv = document.getElementById("submit-div");
-	const bookingSection = document.getElementById("booking");
-
 
 
 	/**
@@ -22,6 +18,7 @@ export function Popup(canvas) {
 	this.showPopup = function()
 	{
 		container.style.display = 'flex';
+		canvas.storeImage();
 	};
 
 	/**
@@ -39,14 +36,24 @@ export function Popup(canvas) {
 	 *
 	 * @private
 	 */
-	const validate = function()
+	const onValidate = function()
 	{
-		// FIXME
+		hidePopup();
+	};
+
+	/**
+	 * Clic sur le bouton "annuler" de la popup
+	 *
+	 * @private
+	 */
+	const onCancel = () => {
+		canvas.restoreImage();
+		hidePopup();
 	};
 
 
 
-	document.getElementById('validate-btn').addEventListener('click', validate);
-	document.getElementById('cancel-btn').addEventListener("click", hidePopup);
+	document.getElementById('validate-btn').addEventListener('click', onValidate);
+	document.getElementById('cancel-btn').addEventListener("click", onCancel);
 	document.getElementById('clear-btn').addEventListener("click", canvas.clear);
 }

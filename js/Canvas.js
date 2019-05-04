@@ -1,6 +1,24 @@
 export function Canvas()
 {
 	/**
+	 * Epaisseur du trait de signature
+	 *
+	 * @private
+	 *
+	 * @type {number}
+	 */
+	const LINE_WIDTH = 1.5;
+
+	/**
+	 * Couleur du trait de signature
+	 *
+	 * @private
+	 *
+	 * @type {string}
+	 */
+	const LINE_COLOR = 'teal';
+
+	/**
 	 * Le canvas
 	 *
 	 * @private
@@ -35,6 +53,15 @@ export function Canvas()
 	 * @type {boolean}
 	 */
 	let bDrawing = false;
+
+	/**
+	 * La signature (format ImageData)
+	 *
+	 * @private
+	 *
+	 * @type {ImageData}
+	 */
+	let signature = null;
 
 
 
@@ -71,8 +98,8 @@ export function Canvas()
 
 			bDrawing = true;
 			ctx.beginPath();
-			ctx.lineWidth = 2;
-			ctx.strokeStyle = "teal";
+			ctx.lineWidth = LINE_WIDTH;
+			ctx.strokeStyle = LINE_COLOR;
 
 			// Utilisation du scale
 			ctx.moveTo(e.offsetX * scale.x, e.offsetY * scale.y);
@@ -91,6 +118,9 @@ export function Canvas()
 	{
 		if (!bDrawing)
 			return;
+
+		if ((e.buttons & 1) == 0)
+			return stopDraw();
 
 		// Utilisation du scale
 		ctx.lineTo(e.offsetX * scale.x, e.offsetY * scale.y);
@@ -117,6 +147,25 @@ export function Canvas()
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	};
 
+	/**
+	 * Sauvegarde la signature telle qu'elle est actuellement
+	 *
+	 * @public
+	 */
+	this.storeImage = () => {
+		signature = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	};
+
+	/**
+	 * Réinitialise la signature telle qu'elle était avant
+	 *
+	 * @public
+	 */
+	this.restoreImage = () => {
+		ctx.putImageData(signature, 0, 0);
+	};
+
+
 
 
 	/**
@@ -135,7 +184,8 @@ export function Canvas()
 			}
 		});
 
-		canvas.addEventListener('mouseout', stopDraw);
+		// Peut-être que de continuer à dessiner si on sort du cadre et qu'on revient est une bonne idée en fait...
+		// canvas.addEventListener('mouseout', stopDraw);
 	}
 
 

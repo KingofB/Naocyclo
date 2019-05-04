@@ -1,19 +1,19 @@
 export function JCDResa(popup)
 {
 	// Variable contenant le span de l'adresse de la station
-	const stationAddress = document.getElementById('station-address');
+	// const stationAddress = document.getElementById('station-address');
 	// Variable contenant le span du nombre de vélos libres de la station
-	const stationBikes = document.getElementById('station-freeBikes');
+	// const stationBikes = document.getElementById('station-freeBikes');
 	// Variable contenant le nom de l'utilisateur :
 	const userLastname = document.getElementById('lastname');
 	// Variable contenant le prénom de l'utilisateur :
 	const userFirstname = document.getElementById('firstname');
 	// Variable contenant le formulaire :
-	const form = document.querySelector("form");
+	// const form = document.querySelector("form");
 	// Variable contenant le canvas :
-	const userSignature = document.querySelector('canvas');
+	// const userSignature = document.querySelector('canvas');
 	// Variable contenant la div map :
-	const mapDiv = document.getElementById("map");
+	// const mapDiv = document.getElementById("map");
 
 
 	let lastname = localStorage.getItem("lastname");
@@ -44,7 +44,7 @@ export function JCDResa(popup)
 
 		document.getElementById('station-id').value = station.id;
 	};
-	
+
 	document.getElementById('sub-btn').addEventListener('click', function()
 	{
 		localStorage.setItem('lastname', userLastname.value);
@@ -52,11 +52,11 @@ export function JCDResa(popup)
 		popup.showPopup();
 	});
 
-	function recordBooking() {
-		const canvasImg = canvas.saveCanvas();
-		sessionStorage.setItem("canvasImg", canvasImg);
-		const bookingConfirm = document.createElement("p");
-		bookingConfirm.textContent = "Votre réservation est validée. Elle expirera dans 20 minutes.";
-		mapDiv.appendChild(bookingConfirm);
-	}
+	// function recordBooking() {
+	// 	const canvasImg = canvas.saveCanvas();
+	// 	sessionStorage.setItem("canvasImg", canvasImg);
+	// 	const bookingConfirm = document.createElement("p");
+	// 	bookingConfirm.textContent = "Votre réservation est validée. Elle expirera dans 20 minutes.";
+	// 	mapDiv.appendChild(bookingConfirm);
+	// }
 }
