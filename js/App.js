@@ -1,16 +1,16 @@
-import { Slider } from './Slider.js'
-import { Map } from './Map.js'
-import { JCDManager } from './JCDManager.js'
-import { JCDResa } from './JCDResa.js'
-import { Canvas } from './Canvas.js'
-import { Popup } from './Popup.js'
+import { Slider } from './Slider.js';
+import { Map } from './Map.js';
+import { JCDManager } from './JCDManager.js';
+import { JCDResa } from './JCDResa.js';
+import { Canvas } from './Canvas.js';
+import { Popup } from './Popup.js';
 
 
 
 // Fonction d'initialisation du programme :
 const init = function () {
 	// Ne sera pas utilisé ailleurs, pas besoin de le sauvegarder dans une variable
-	new Slider();
+	new Slider(document.getElementById('slider'), '/js/diaporama.json');
 
 	const map = new Map();
 	const canvas = new Canvas();
@@ -23,6 +23,7 @@ const init = function () {
 
 	// Notre gestionnaire JCDecaux a besoin d'avoir accès à la map et au canvas
 	new JCDManager(map, canvas, resa);
+	// totoxsdsdsdsd
 };
 
 

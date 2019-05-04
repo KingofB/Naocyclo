@@ -1,4 +1,4 @@
-import { JCDStation } from './JCDStation.js'
+import { JCDStation } from './JCDStation.js';
 
 
 export function JCDManager(map, canvas, resa) {
