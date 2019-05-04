@@ -27,7 +27,7 @@ export function Slider(container, slides)
 	 *
 	 * @type {HTMLElement}
 	 */
-	const slider = container;
+	const _slider = container;
 
 	/**
 	 * Variable JS des divs enfants de la div slider
@@ -36,7 +36,7 @@ export function Slider(container, slides)
 	 *
 	 * @type {NodeListOf<HTMLElementTagNameMap[string]> | NodeListOf<Element> | NodeListOf<SVGElementTagNameMap[string]> | null}
 	 */
-	let slidesList = null;
+	let _slidesList = null;
 
 	/**
 	 * Variable du nombre de slides
@@ -45,7 +45,7 @@ export function Slider(container, slides)
 	 *
 	 * @type {number}
 	 */
-	let nbSlides = 0;
+	let _nbSlides = 0;
 
 
 	/**
@@ -55,7 +55,7 @@ export function Slider(container, slides)
 	 *
 	 * @type {jQuery}
 	 */
-	const $slider = $(slider);
+	const _$slider = $(_slider);
 
 	/**
 	 * Variable jquery de toutes les divs enfants de la div slider
@@ -64,7 +64,7 @@ export function Slider(container, slides)
 	 *
 	 * @type {jQuery|null}
 	 */
-	let $slides = null;
+	let _$slides = null;
 
 	/**
 	 * Variable jquery de toutes les li de navigation de la div slider
@@ -73,7 +73,7 @@ export function Slider(container, slides)
 	 *
 	 * @type {jQuery|null}
 	 */
-	let $lis = null;
+	let _$lis = null;
 
 
 	/**
@@ -83,7 +83,7 @@ export function Slider(container, slides)
 	 *
 	 * @type {number|null}
 	 */
-	let timeoutId = null;
+	let _timeoutId = null;
 
 	/**
 	 * Variable de la diapo actuelle
@@ -92,7 +92,7 @@ export function Slider(container, slides)
 	 *
 	 * @type {number}
 	 */
-	let currentSlide = 0;
+	let _currentSlide = 0;
 
 
 
@@ -104,17 +104,17 @@ export function Slider(container, slides)
 	 *
 	 * @param {number} slideIdx
 	 */
-	const changeSlide = (slideIdx) => {
-		if (nbSlides <= 1)
+	const _changeSlide = (slideIdx) => {
+		if (_nbSlides <= 1)
 			return;
 
 		// Mise à jour du numéro de la slide actuelle
-		currentSlide = slideIdx;
+		_currentSlide = slideIdx;
 		// Vérification des cas extrêmes
-		if (currentSlide < 0) {
-			currentSlide = nbSlides - 1;
-		} else if (currentSlide >= nbSlides) {
-			currentSlide = 0;
+		if (_currentSlide < 0) {
+			_currentSlide = _nbSlides - 1;
+		} else if (_currentSlide >= _nbSlides) {
+			_currentSlide = 0;
 		}
 
 		/**
@@ -127,32 +127,32 @@ export function Slider(container, slides)
 		 * 2. Donner une hauteur au slider (mais attention au redimensionnement etc.)
 		 */
 		// On récupère la slide sélectionnée par son index grâce à "eq"
-		$slides.eq(currentSlide).show();
+		_$slides.eq(_currentSlide).show();
 		// On cache toutes les slides
-		$slides.not(':eq(' + currentSlide + ')').hide();
+		_$slides.not(':eq(' + _currentSlide + ')').hide();
 		// Changement du LI actif
-		$lis.removeClass('active').eq(currentSlide).addClass('active');
+		_$lis.removeClass('active').eq(_currentSlide).addClass('active');
 
 
 
 
 
 		// Démarrage du diaporama auto :
-		if ($slider.hasClass('paused')) {
-			stopShow();
+		if (_$slider.hasClass('paused')) {
+			_stopShow();
 		}
 		else {
-			startShow();
+			_startShow();
 		}
 
 		/**
 		 * Pour faire le kéké, on pourrait écrire les lignes ci-dessus en "one-liner" de plusieurs manières :
 		 *
-		 * 1. toggleShow($slider.hasClass('paused')); // Il faudrait alors créer cette fonction (meilleure solution)
+		 * 1. toggleShow(_$slider.hasClass('paused')); // Il faudrait alors créer cette fonction (meilleure solution)
 		 *
-		 * 2. [startShow, stopShow][+$slider.hasClass('paused')](); // Relativement illisible, mais correct
+		 * 2. [_startShow, _stopShow][+_$slider.hasClass('paused')](); // Relativement illisible, mais correct
 		 *
-		 * 3. return $slider.hasClass('paused') ? stopShow() : startShow(); // Solution intermédiaire
+		 * 3. return _$slider.hasClass('paused') ? _stopShow() : _startShow(); // Solution intermédiaire
 		 */
 	};
 
@@ -161,8 +161,8 @@ export function Slider(container, slides)
 	 *
 	 * @private
 	 */
-	const nextSlide = () => {
-		changeSlide(currentSlide + 1);
+	const _nextSlide = () => {
+		_changeSlide(_currentSlide + 1);
 	};
 
 	/**
@@ -170,8 +170,8 @@ export function Slider(container, slides)
 	 *
 	 * @private
 	 */
-	const prevSlide = () => {
-		changeSlide(currentSlide - 1);
+	const _prevSlide = () => {
+		_changeSlide(_currentSlide - 1);
 	};
 
 	/**
@@ -179,12 +179,12 @@ export function Slider(container, slides)
 	 *
 	 * @private
 	 */
-	const startShow = () => {
-		if (nbSlides <= 1)
+	const _startShow = () => {
+		if (_nbSlides <= 1)
 			return;
 
-		stopShow();
-		timeoutId = setTimeout(nextSlide, 5000);
+		_stopShow();
+		_timeoutId = setTimeout(_nextSlide, 5000);
 	};
 
 	/**
@@ -192,9 +192,9 @@ export function Slider(container, slides)
 	 *
 	 * @private
 	 */
-	const stopShow = () => {
-		clearTimeout(timeoutId);
-		timeoutId = null;
+	const _stopShow = () => {
+		clearTimeout(_timeoutId);
+		_timeoutId = null;
 	};
 
 	/**
@@ -203,15 +203,15 @@ export function Slider(container, slides)
 	 * @private
 	 */
 	const playPause = () => {
-		if (nbSlides <= 1)
+		if (_nbSlides <= 1)
 			return;
 
-		$slider.toggleClass('paused');
-		if ($slider.hasClass('paused')) {
-			stopShow();
+		_$slider.toggleClass('paused');
+		if (_$slider.hasClass('paused')) {
+			_stopShow();
 		}
 		else {
-			startShow();
+			_startShow();
 		}
 	};
 
@@ -225,10 +225,10 @@ export function Slider(container, slides)
 	 *
 	 * @param {Array} aSlides
 	 */
-	const initSlides = aSlides => {
+	const _initSlides = aSlides => {
 		// On remplit notre slider avec les slides générées.
 		// Pour ce faire, on utilise Array.reduce, qui réduit tous les éléments d'un tableau en une seule valeur.
-		slider.innerHTML = (aSlides || []).reduce((result, current) => {
+		_slider.innerHTML = (aSlides || []).reduce((result, current) => {
 			return result + `
 				<div>
 					<h2>${current.title}</h2>
@@ -240,39 +240,39 @@ export function Slider(container, slides)
 		}, '');
 
 		// On récupère la liste des slides pour plus tard
-		slidesList = slider.querySelectorAll(':scope > div');
+		_slidesList = _slider.querySelectorAll(':scope > div');
 
 		// On compte le nombre de slides
-		nbSlides = slidesList.length;
+		_nbSlides = _slidesList.length;
 
-		// Même chose que "slidesList", mais en jQuery...
-		$slides = $slider.find('> div');
+		// Même chose que "_slidesList", mais en jQuery...
+		_$slides = _$slider.find('> div');
 
 		// Création des boutons et LI de navigation
-		if (nbSlides > 1)
+		if (_nbSlides > 1)
 		{
 			// Pas besoin de navigation si on a 1 ou 0 slides
-			slider.insertAdjacentHTML('afterbegin', `<span class="icomoon nav-prev"></span>
+			_slider.insertAdjacentHTML('afterbegin', `<span class="icomoon nav-prev"></span>
 				<span class="icomoon nav-pause"></span>
 				<span class="icomoon nav-next"></span>
-				<ul>${'<li></li>'.repeat(nbSlides)}</ul>`);
+				<ul>${'<li></li>'.repeat(_nbSlides)}</ul>`);
 		}
 
 		// On récupère les "puces" de navigation des slides
-		$lis = $slider.find('ul li');
+		_$lis = _$slider.find('ul li');
 
 		// Attribution de la classe active au 1er LI de navigation
-		$lis.first().addClass('active');
+		_$lis.first().addClass('active');
 
 
 		// Ajout des listeners
 		$('body')
 			// Changement de slide par la liste de boutons
-			.on('click', '#slider li', e => changeSlide($lis.index(e.currentTarget)))
+			.on('click', '#slider li', e => _changeSlide(_$lis.index(e.currentTarget)))
 			// Au clic sur nav-next, on affiche le slide suivant
-			.on('click', '.nav-next', nextSlide)
+			.on('click', '.nav-next', _nextSlide)
 			// Au clic sur nav-prev, on affiche le slide précédent
-			.on('click', '.nav-nav-prev', prevSlide)
+			.on('click', '.nav-nav-prev', _prevSlide)
 			// Au clic sur bouton pause, on arrête le carousel auto
 			.on('click', '.nav-nav-pause', playPause)
 			// Vérification que la cible est bien sur le body, et pas sur un input par exemple
@@ -284,11 +284,11 @@ export function Slider(container, slides)
 				// Switch des différentes touches utilisées :
 				switch (e.keyCode) {
 					case 37:
-						prevSlide();
+						_prevSlide();
 						break;
 
 					case 39:
-						nextSlide();
+						_nextSlide();
 						break;
 				}
 			})
@@ -307,7 +307,7 @@ export function Slider(container, slides)
 
 
 		// Appel de la fonction de démarrage du carrousel auto
-		startShow();
+		_startShow();
 	};
 
 	/**
@@ -315,8 +315,8 @@ export function Slider(container, slides)
 	 *
 	 * @private
 	 */
-	const init = () => {
-		if ($slider.length === 0)
+	const _init = () => {
+		if (_$slider.length === 0)
 		{
 			console.warn('Impossible de trouver le conteneur pour afficher le carrousel : ', container);
 			return;
@@ -330,7 +330,7 @@ export function Slider(container, slides)
 		if (Array.isArray(slides))
 		{
 			// Cas le plus simple : on fournit en paramètre un tableau de slides...
-			initSlides(slides);
+			_initSlides(slides);
 		}
 		else if (typeof slides === 'string' && slides.length > 0)
 		{
@@ -348,7 +348,7 @@ export function Slider(container, slides)
 					// transformer le corps de la réponse en objet JSON.
 					return response.json();
 				})
-				.then(json => initSlides(json)) // Si tout s'est bien passé, on peut initialiser notre module
+				.then(json => _initSlides(json)) // Si tout s'est bien passé, on peut initialiser notre module
 				.catch(e => {
 					// S'il y a une erreur, on l'affiche dans la console
 					console.warn(e);
@@ -358,12 +358,12 @@ export function Slider(container, slides)
 		else
 		{
 			// Dans tous les autres cas, on initialise avec 0 slides
-			initSlides([]);
+			_initSlides([]);
 		}
 	};
 
 
 
 	// Appel de la fonction d'initialisation de la gestion de la navigation du carrousel
-	init();
+	_init();
 }

@@ -37,7 +37,7 @@ export function JCDManager(map, canvas, resa) {
 	 *
 	 * @type {Object}
 	 */
-	const stations = {};
+	const _stations = {};
 
 
 
@@ -51,7 +51,7 @@ export function JCDManager(map, canvas, resa) {
 	 * @param {Function} callback
 	 *
 	 */
-	const getCallApi = function(action, data, callback) {
+	const _getCallApi = function(action, data, callback) {
 		data = data || {};
 		data.apiKey = JCD_API_KEY;
 
@@ -66,33 +66,34 @@ export function JCDManager(map, canvas, resa) {
 	 *
 	 * @param {Event} e
 	 */
-	const onChooseStation = e => {
-		resa.updateFormForStation(stations[e.target.options.stationId]);
+	const _onChooseStation = e => {
+		resa.updateFormForStation(_stations[e.target.options.stationId]);
 	};
 
 
 	/**
+	 * Initialiser le module :
 	 * Récupérer la liste des stations JCDecaux et les enregistrer dans des JCDStation
 	 *
-	 * @public
+	 * @private
 	 */
-	this.getStationsAsync = function() {
-		getCallApi('stations', {contract: JCD_CONTRACT}, response => {
+	function _init() {
+		_getCallApi('stations', {contract: JCD_CONTRACT}, response => {
 			// Récup des 10 premières stations seulement
 			response = response.slice(0, 10);
 
 			// Récup de la liste des stations et leur affichage sur la carte (méthode forEach)
 			response.forEach(function(station) {
 				const obj = new JCDStation(station);
-				stations[station.number] = obj;
+				_stations[station.number] = obj;
 
 				// Ajouter un marqueur sur la carte
-				map.addMarker(obj.gps, {stationId: obj.id, title: obj.name}, onChooseStation);
+				map.addMarker(obj.gps, {stationId: obj.id, title: obj.name}, _onChooseStation);
 			});
 		});
-	};
+	}
 
 
 
-	this.getStationsAsync();
+	_init();
 }

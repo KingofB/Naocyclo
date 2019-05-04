@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?7ds7dg');
-  src:  url('fonts/icomoon.eot?7ds7dg#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?7ds7dg') format('truetype'),
-    url('fonts/icomoon.woff?7ds7dg') format('woff'),
-    url('fonts/icomoon.svg?7ds7dg#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?6b07c9');
+  src:  url('fonts/icomoon.eot?6b07c9#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?6b07c9') format('truetype'),
+    url('fonts/icomoon.woff?6b07c9') format('woff'),
+    url('fonts/icomoon.svg?6b07c9#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,24 +24,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-bicycle:before {
+.icon-signature:before {
   content: "\e900";
+}
+.icon-clock:before {
+  content: "\e94f";
+}
+.icon-play:before {
+  content: "\ea1c";
+}
+.icon-pause:before {
+  content: "\ea1d";
 }
 .icon-chevron-right:before {
   content: "\e902";
 }
 .icon-chevron-left:before {
   content: "\e904";
-}
-.icon-clock2:before {
-  content: "\e94f";
-}
-.icon-play3:before {
-  content: "\ea1c";
-}
-.icon-pause2:before {
-  content: "\ea1d";
-}
-.icon-checkbox-checked:before {
-  content: "\ea52";
 }

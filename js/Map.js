@@ -25,7 +25,7 @@ export function Map() {
 	 *
 	 * @private
 	 */
-	const nantesMap = L.map('map').setView([47.2175, -1.5577], 14);
+	const _nantesMap = L.map('map').setView([47.2175, -1.5577], 14);
 
 
 
@@ -39,7 +39,7 @@ export function Map() {
 	 * @param {Function} callback
 	 */
 	this.addMarker = function(gps, options, callback) {
-		L.marker(gps, options).addTo(nantesMap).on('click', callback);
+		L.marker(gps, options).addTo(_nantesMap).on('click', callback);
 	};
 
 
@@ -48,7 +48,7 @@ export function Map() {
 	 *
 	 * @private
 	 */
-	function init()
+	function _init()
 	{
 		// Code issu de l'API Mapbox permettant d'afficher la carte sur le site :
 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + MAP_BOX_TOKEN, {
@@ -56,10 +56,10 @@ export function Map() {
 			maxZoom: 18,
 			id: 'mapbox.streets',
 			accessToken: MAP_BOX_TOKEN
-		}).addTo(nantesMap);
+		}).addTo(_nantesMap);
 	}
 
 
 
-	init();
+	_init();
 }

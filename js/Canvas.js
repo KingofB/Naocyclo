@@ -25,7 +25,7 @@ export function Canvas()
 	 *
 	 * @type {HTMLCanvasElement}
 	 */
-	const canvas = document.querySelector('canvas');
+	const _canvas = document.querySelector('canvas');
 
 	/**
 	 * Le contexte de dessin (peut être 2D ou 3D, mais ici on utilisera la 2D)
@@ -34,7 +34,7 @@ export function Canvas()
 	 *
 	 * @type {CanvasRenderingContext2D | WebGLRenderingContext}
 	 */
-	const ctx = canvas.getContext('2d');
+	const _ctx = _canvas.getContext('2d');
 
 	/**
 	 * Utilisé si jamais le canvas a un boundingClientRect différent de sa taille "pseudo-réelle"
@@ -43,7 +43,7 @@ export function Canvas()
 	 *
 	 * @type {{x: number, y: number}}
 	 */
-	const scale = {x: 1, y: 1};
+	const _scale = {x: 1, y: 1};
 
 	/**
 	 * Est-on en train de dessiner ?
@@ -52,7 +52,7 @@ export function Canvas()
 	 *
 	 * @type {boolean}
 	 */
-	let bDrawing = false;
+	let _bDrawing = false;
 
 	/**
 	 * La signature (format ImageData)
@@ -61,7 +61,7 @@ export function Canvas()
 	 *
 	 * @type {ImageData}
 	 */
-	let signature = null;
+	let _signature = null;
 
 
 
@@ -71,13 +71,13 @@ export function Canvas()
 	 *
 	 * @private
 	 */
-	function stopDraw()
+	function _stopDraw()
 	{
-		if (bDrawing)
+		if (_bDrawing)
 		{
-			bDrawing = false;
-			ctx.closePath();
-			canvas.removeEventListener('mousemove', draw);
+			_bDrawing = false;
+			_ctx.closePath();
+			_canvas.removeEventListener('mousemove', _draw);
 		}
 	}
 
@@ -88,22 +88,22 @@ export function Canvas()
 	 *
 	 * @param {MouseEvent} e
 	 */
-	function beginDraw(e) {
-		if ((e.buttons & 1) && !bDrawing)
+	function _beginDraw(e) {
+		if ((e.buttons & 1) && !_bDrawing)
 		{
 			// Mettre à jour le scale à chaque nouveau tracé
-			const rect = canvas.getBoundingClientRect();
-			scale.x = canvas.width / rect.width;
-			scale.y = canvas.height / rect.height;
+			const rect = _canvas.getBoundingClientRect();
+			_scale.x = _canvas.width / rect.width;
+			_scale.y = _canvas.height / rect.height;
 
-			bDrawing = true;
-			ctx.beginPath();
-			ctx.lineWidth = LINE_WIDTH;
-			ctx.strokeStyle = LINE_COLOR;
+			_bDrawing = true;
+			_ctx.beginPath();
+			_ctx.lineWidth = LINE_WIDTH;
+			_ctx.strokeStyle = LINE_COLOR;
 
 			// Utilisation du scale
-			ctx.moveTo(e.offsetX * scale.x, e.offsetY * scale.y);
-			canvas.addEventListener('mousemove', draw);
+			_ctx.moveTo(e.offsetX * _scale.x, e.offsetY * _scale.y);
+			_canvas.addEventListener('mousemove', _draw);
 		}
 	}
 
@@ -114,17 +114,17 @@ export function Canvas()
 	 *
 	 * @param {MouseEvent} e
 	 */
-	function draw(e)
+	function _draw(e)
 	{
-		if (!bDrawing)
+		if (!_bDrawing)
 			return;
 
 		if ((e.buttons & 1) == 0)
-			return stopDraw();
+			return _stopDraw();
 
 		// Utilisation du scale
-		ctx.lineTo(e.offsetX * scale.x, e.offsetY * scale.y);
-		ctx.stroke();
+		_ctx.lineTo(e.offsetX * _scale.x, e.offsetY * _scale.y);
+		_ctx.stroke();
 	}
 
 	/**
@@ -135,7 +135,7 @@ export function Canvas()
 	 * @returns {string}
 	 */
 	this.saveCanvas = function() {
-		return canvas.toDataURL();
+		return _canvas.toDataURL();
 	};
 
 	/**
@@ -144,7 +144,7 @@ export function Canvas()
 	 * @public
 	 */
 	this.clear = function() {
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		_ctx.clearRect(0, 0, _canvas.width, _canvas.height);
 	};
 
 	/**
@@ -153,7 +153,7 @@ export function Canvas()
 	 * @public
 	 */
 	this.storeImage = () => {
-		signature = ctx.getImageData(0, 0, canvas.width, canvas.height);
+		_signature = _ctx.getImageData(0, 0, _canvas.width, _canvas.height);
 	};
 
 	/**
@@ -162,7 +162,7 @@ export function Canvas()
 	 * @public
 	 */
 	this.restoreImage = () => {
-		ctx.putImageData(signature, 0, 0);
+		_ctx.putImageData(_signature, 0, 0);
 	};
 
 
@@ -173,23 +173,22 @@ export function Canvas()
 	 *
 	 * @private
 	 */
-	function init()
+	function _init()
 	{
-		canvas.addEventListener('mousedown', beginDraw);
-		canvas.addEventListener('mouseup', e => {
+		_canvas.addEventListener('mousedown', _beginDraw);
+		_canvas.addEventListener('mouseup', e => {
 			// Le bouton principal est relâché, on arrête le dessin
 			// Ici on utiliser un opérateur "ET binaire" (en anglais : "binary AND operator")
-			if ((e.buttons & 1) == 0) {
-				stopDraw();
-			}
+			if ((e.buttons & 1) == 0)
+				_stopDraw();
 		});
 
 		// Peut-être que de continuer à dessiner si on sort du cadre et qu'on revient est une bonne idée en fait...
-		// canvas.addEventListener('mouseout', stopDraw);
+		// _canvas.addEventListener('mouseout', _stopDraw);
 	}
 
 
 
 
-	init();
+	_init();
 }

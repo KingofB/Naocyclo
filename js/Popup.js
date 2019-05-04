@@ -1,4 +1,12 @@
-export function Popup(canvas) {
+/**
+ * Module de gestion de la popup
+ *
+ * @param {Canvas} canvas
+ *
+ * @constructor
+ */
+export function Popup(canvas)
+{
 	/**
 	 * Popup
 	 *
@@ -6,7 +14,7 @@ export function Popup(canvas) {
 	 *
 	 * @type {HTMLElement}
 	 */
-	const container = document.getElementById("canvas-container");
+	const _container = document.getElementById('canvas-container');
 
 
 
@@ -17,7 +25,7 @@ export function Popup(canvas) {
 	 */
 	this.showPopup = function()
 	{
-		container.style.display = 'flex';
+		_container.style.display = 'flex';
 		canvas.storeImage();
 	};
 
@@ -26,9 +34,9 @@ export function Popup(canvas) {
 	 *
 	 * @private
 	 */
-	const hidePopup = function()
+	const _hidePopup = function()
 	{
-		container.style.display = 'none';
+		_container.style.display = 'none';
 	};
 
 	/**
@@ -36,9 +44,9 @@ export function Popup(canvas) {
 	 *
 	 * @private
 	 */
-	const onValidate = function()
+	const _onValidate = function()
 	{
-		hidePopup();
+		_hidePopup();
 	};
 
 	/**
@@ -46,14 +54,14 @@ export function Popup(canvas) {
 	 *
 	 * @private
 	 */
-	const onCancel = () => {
+	const _onCancel = () => {
 		canvas.restoreImage();
-		hidePopup();
+		_hidePopup();
 	};
 
 
 
-	document.getElementById('validate-btn').addEventListener('click', onValidate);
-	document.getElementById('cancel-btn').addEventListener("click", onCancel);
+	document.getElementById('validate-btn').addEventListener('click', _onValidate);
+	document.getElementById('cancel-btn').addEventListener("click", _onCancel);
 	document.getElementById('clear-btn').addEventListener("click", canvas.clear);
 }

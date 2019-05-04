@@ -412,6 +412,12 @@ legend {
 	margin-bottom: 15px;
 }
 
+#station-details > div > *
+{
+	display: inline-block;
+	vertical-align: middle;
+}
+
 #station-details div:nth-of-type(1) {
 	margin-top: 20px;
 }
@@ -426,7 +432,6 @@ legend {
 
 #station-details label {
 	font-weight: bold;
-	display: inline-block;
 	left: 0;
 	width: 22%;
 }
@@ -463,6 +468,30 @@ button,
 {
 	background: #fcfacf;
 	color: teal;
+}
+
+button[disabled],
+.btn[disabled]
+{
+	background: #777;
+	border-color: #777;
+	color: #DDD;
+	cursor: default;
+	pointer-events: none;
+}
+
+button.ico-btn,
+.btn.ico-btn
+{
+	width: 32px;
+	padding: 5px 0 !important;
+}
+
+button.ico-btn::before,
+.btn.ico-btn::before
+{
+	width: 32px !important;
+	margin: 0 !important;
 }
 
 /**
