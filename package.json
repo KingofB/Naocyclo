@@ -13,12 +13,15 @@
     "clean-webpack-plugin": "^2.0.1",
     "eslint": "^5.16.0",
     "eslint-loader": "^2.1.2",
+    "nodemon": "^1.19.0",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1"
   },
   "scripts": {
+    "concat-css": "cat icomoon/style.css css/style.css > css/app.bundle.v%npm_package_version%.css",
     "lint": "eslint js/",
+    "watch-css": "nodemon --watch icomoon/style.css --watch css/style.css -x \"npm run concat-css\"",
     "dev": "webpack-dev-server",
     "build": "webpack"
   },
