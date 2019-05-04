@@ -1,32 +1,76 @@
-export function JCDResa(popup)
+/**
+ * Module du formulaire de réservation
+ *
+ * @param {Popup} popup
+ * @param {Canvas} canvas
+ *
+ * @constructor
+ */
+export function JCDResa(popup, canvas)
 {
-	// Variable contenant le span de l'adresse de la station
-	const stationAddress = document.getElementById('station-address');
-	// Variable contenant le span du nombre de vélos libres de la station
-	const stationBikes = document.getElementById('station-freeBikes');
-	// Variable contenant le nom de l'utilisateur :
-	const userLastname = document.getElementById('lastname');
-	// Variable contenant le prénom de l'utilisateur :
-	const userFirstname = document.getElementById('firstname');
-	// Variable contenant le formulaire :
-	const form = document.querySelector("form");
-	// Variable contenant le canvas :
-	const userSignature = document.querySelector('canvas');
-	// Variable contenant la div map :
-	const mapDiv = document.getElementById("map");
+	/**
+	 * Pourcentage minimum de remplissage de la zone par la signature
+	 *
+	 * @private
+	 *
+	 * @type {number}
+	 */
+	const MIN_SIGNATURE_PERCENT_FILLED = 2;
+
+	/**
+	 * Nombre de lettres minimum du prénom et du nom
+	 *
+	 * @private
+	 *
+	 * @type {number}
+	 */
+	const MIN_NAME_LENGTH = 2;
 
 
-	let lastname = localStorage.getItem("lastname");
-	if (lastname) {
-		userLastname.value = lastname;
-	}
+	/**
+	 * Contenu du formulaire
+	 *
+	 * @type {jQuery}
+	 *
+	 * @private
+	 */
+	const _$details = $('#station-details');
 
-	let firstname = localStorage.getItem("firstname");
-	if (firstname) {
-		userFirstname.value = firstname;
-	}
+	/**
+	 * Prénom (jQuery)
+	 *
+	 * @type {jQuery}
+	 *
+	 * @private
+	 */
+	const _$firstN = $('#firstname', _$details);
 
-	this.updateFormForStation = function(station) {
+	/**
+	 * Nom (jQuery)
+	 *
+	 * @type {jQuery}
+	 *
+	 * @private
+	 */
+	const _$lastN = $('#lastname', _$details);
+
+
+
+
+	/**
+	 * Mettre à jour le formulaire avec les données issues de la station choisie
+	 *
+	 * @public
+	 *
+	 * @param {Array} station
+	 */
+	this.updateFormForStation = function(station)
+	{
+		// Masquer l'empty state
+		_$details.show();
+		$('#empty-state').hide();
+
+
 		/**
 		 * Encore + optimisé : combinaison de Object.entries() et de for...of
 		 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries
@@ -36,27 +80,115 @@ export function JCDResa(popup)
 		//	document.getElementById('station-' + key)[type ? 'innerHTML' : 'value'] = station[key];
 
 		for (const property of ['name', 'address', 'freeBikes']) {
-			document.getElementById('station-' + property).innerHTML = station[property];
+			_$details[0].querySelector('#station-' + property).innerHTML = station[property];
 		}
-		/*document.getElementById('station-name').innerHTML = station.name;
-		document.getElementById('station-address').innerHTML = station.address;
-		document.getElementById('station-freeBikes').innerHTML = station.freeBikes;*/
 
-		document.getElementById('station-id').value = station.id;
+		_$details[0].querySelector('#station-id').value = station.id;
 	};
-	
-	document.getElementById('sub-btn').addEventListener('click', function()
-	{
-		localStorage.setItem('lastname', userLastname.value);
-		localStorage.setItem('firstname', userFirstname.value);
-		popup.showPopup();
-	});
 
-	function recordBooking() {
-		const canvasImg = canvas.saveCanvas();
-		sessionStorage.setItem("canvasImg", canvasImg);
-		const bookingConfirm = document.createElement("p");
-		bookingConfirm.textContent = "Votre réservation est validée. Elle expirera dans 20 minutes.";
-		mapDiv.appendChild(bookingConfirm);
+	/**
+	 * Effectuer la réservation
+	 *
+	 * @private
+	 */
+	function _makeReservation()
+	{
+		// Etape 1 : demande de confirmation (fonction "confirm()")
+		// Etape 2 : vérifications
+		// Etape 3 : mises à jour
+
+
+
+
+		// FIXME : vérifier que tout est bien défini dans le formulaire
+		// FIXME       (normalement c'est déjà fait en amont... mais on n'est jamais trop prudents !)
+
+		// FIXME : vérifier que la signature n'est pas vide
+		// FIXME       (normalement c'est déjà fait en amont... mais on n'est jamais trop prudents !)
+
+
+
+
+
+		// FIXME : enregistrer prénom et nom dans localStorage
+		// localStorage.setItem('lastname', _$lastN.val().trim());
+		// localStorage.setItem('firstname', _$firstN.val().trim());
+
+		// FIXME : enregistrer la signature... où ça ? Que disent les specs ??
+
+		// FIXME : enregistrer la réservation ! (appeler la station, et lui dire de décrémenter les vélos dispos)
+		// FIXME : peut-être avoir un objet global de réservations stocké dans sessionStorage/localStorage
+
+		// Je remets ton ancien code ici. A voir où il faut le mettre exactement, et vérifier qu'il est correct (pas regardé encore)
+		/**
+		 // 	const canvasImg = canvas.saveCanvas();
+		 // 	sessionStorage.setItem("canvasImg", canvasImg);
+		 // 	const bookingConfirm = document.createElement("p");
+		 // 	bookingConfirm.textContent = "Votre réservation est validée. Elle expirera dans 20 minutes.";
+		 // 	mapDiv.appendChild(bookingConfirm);
+		 */
 	}
+
+	/**
+	 * Callback appelé lorsqu'on enregistre le contenu de la popup de signature
+	 *
+	 * @private
+	 */
+	function _onSignatureUpdated()
+	{
+		_updateReservationBtn();
+	}
+
+	/**
+	 * Met à jour le statut (actif/inactif) du bouton de validation du formulaire de réservation
+	 *
+	 * @private
+	 */
+	const _updateReservationBtn = () => {
+		let ok = true;
+
+		// Attention aux leading/trailing spaces, on utilise trim() pour les enlever
+		const firstN = _$firstN.val().trim();
+		const lastN = _$lastN.val().trim();
+
+		// On vérifie que les prénom et nom ont une longueur suffisante
+		if (firstN.length < MIN_NAME_LENGTH || lastN.length < MIN_NAME_LENGTH)
+			ok = false;
+
+		// La signature doit couvrir au moins 2% (cf constante) de la surface de dessin
+		if (canvas.getImageFilledPercent() < MIN_SIGNATURE_PERCENT_FILLED)
+		{
+			ok = false;
+			alert('Votre signature est trop petite');
+		}
+
+		console.warn('update resa btn', canvas.getImageFilledPercent(), ok);
+
+		$('#btn-reserve', _$details).attr('disabled', !ok);
+	};
+
+	/**
+	 * Initialiser le module
+	 *
+	 * @private
+	 */
+	function _init()
+	{
+		// Prévenir la popup qu'on souhaite être avertis lorsque le contenu de la popup est enregistré
+		popup.setSaveCallback(_onSignatureUpdated);
+
+		// On désactive le bouton de réservation dès le début
+		$('#btn-reserve', _$details).attr('disabled', true)
+
+		// Quelques listeners...
+		$('body')
+			.on('click', '#signature .btn', popup.showPopup)
+			.on('click', '#btn-reserve', _makeReservation)
+			.on('input', '#firstname, #lastname', _updateReservationBtn)
+		;
+	}
+
+
+
+	_init();
 }

@@ -209,8 +209,8 @@ canvas {
 	 * dimensions que l'on définit pour le canvas.
 	 */
 	box-sizing: content-box;
-	width: 290px;
-	height: 100px;
+	width: 320px;
+	height: 160px;
 	border: 1px solid teal;
 	border-radius: 2px;
 	background: #fcfacf;
@@ -408,27 +408,37 @@ legend {
 	text-align: center;
 }
 
-fieldset > div {
+#station-details > div {
 	margin-bottom: 15px;
 }
 
-fieldset div:nth-of-type(1) {
+#station-details > div > *
+{
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#station-details div:nth-of-type(1) {
 	margin-top: 20px;
 }
 
-fieldset div:last-child {
-	text-align: center;
-}
-
-fieldset div:nth-of-type(3) {
+#station-details div:nth-of-type(3) {
 	margin-bottom: 35px;
 }
 
-fieldset label {
+#station-details div:nth-of-type(6) {
+	margin-top: 25px;
+}
+
+#station-details label {
 	font-weight: bold;
-	display: inline-block;
 	left: 0;
 	width: 22%;
+}
+
+#station-details label + *
+{
+	width: 76%;
 }
 
 input {
@@ -438,10 +448,6 @@ input {
 	border-radius: 2px;
 	background: #fcfacf;
 	padding: 6px 10px;
-}
-
-fieldset div:nth-of-type(6) {
-	margin-top: 25px;
 }
 
 button,
@@ -467,6 +473,30 @@ button,
 {
 	background: #fcfacf;
 	color: teal;
+}
+
+button[disabled],
+.btn[disabled]
+{
+	background: #777;
+	border-color: #777;
+	color: #DDD;
+	cursor: default;
+	pointer-events: none;
+}
+
+button.ico-btn,
+.btn.ico-btn
+{
+	width: 32px;
+	padding: 5px 0 !important;
+}
+
+button.ico-btn::before,
+.btn.ico-btn::before
+{
+	width: 32px !important;
+	margin: 0 !important;
 }
 
 /**
@@ -507,6 +537,16 @@ button[data-icon]::before,
 	text-align: center;
 	font-size: 18px;
 	margin: 0 10px 0 -20px;
+}
+
+#empty-state
+{
+	text-align: center;
+}
+
+#station-details
+{
+	display: none;
 }
 
 
@@ -566,7 +606,7 @@ footer li {
 	}
 
 	#carousel {
-		background: url('img/slides/quais.jpg') center / cover;
+		background: url('/img/slides/quais.jpg') center / cover;
 	}
 
 	#carousel h2 {

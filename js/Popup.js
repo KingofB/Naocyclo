@@ -1,4 +1,12 @@
-export function Popup(canvas) {
+/**
+ * Module de gestion de la popup
+ *
+ * @param {Canvas} canvas
+ *
+ * @constructor
+ */
+export function Popup(canvas)
+{
 	/**
 	 * Popup
 	 *
@@ -6,13 +14,32 @@ export function Popup(canvas) {
 	 *
 	 * @type {HTMLElement}
 	 */
-	const container = document.getElementById("canvas-container");
+	const _container = document.getElementById('canvas-container');
 
-	const bookingBtn = document.getElementById("sub-btn");
-	const submitDiv = document.getElementById("submit-div");
-	const bookingSection = document.getElementById("booking");
+	/**
+	 * Callback à appeler lorsqu'on sauvegarde la popup
+	 *
+	 * @type {Function}
+	 *
+	 * @private
+	 */
+	let _saveCallback = null;
 
 
+
+
+
+	/**
+	 * Met à jour le callback lorsqu'on enregistre le contenu de la popup
+	 *
+	 * @public
+	 *
+	 * @param {Function} cb
+	 */
+	this.setSaveCallback = function(cb)
+	{
+		_saveCallback = cb;
+	};
 
 	/**
 	 * Afficher la popup
@@ -21,7 +48,8 @@ export function Popup(canvas) {
 	 */
 	this.showPopup = function()
 	{
-		container.style.display = 'flex';
+		_container.style.display = 'flex';
+		canvas.storeImage();
 	};
 
 	/**
@@ -29,9 +57,9 @@ export function Popup(canvas) {
 	 *
 	 * @private
 	 */
-	const hidePopup = function()
+	const _hidePopup = function()
 	{
-		container.style.display = 'none';
+		_container.style.display = 'none';
 	};
 
 	/**
@@ -39,14 +67,28 @@ export function Popup(canvas) {
 	 *
 	 * @private
 	 */
-	const validate = function()
+	const _onValidate = function()
 	{
-		// FIXME
+		canvas.storeImage();
+		_hidePopup();
+
+		if (_saveCallback)
+			_saveCallback();
+	};
+
+	/**
+	 * Clic sur le bouton "annuler" de la popup
+	 *
+	 * @private
+	 */
+	const _onCancel = () => {
+		canvas.restoreImage();
+		_hidePopup();
 	};
 
 
 
-	document.getElementById('validate-btn').addEventListener('click', validate);
-	document.getElementById('cancel-btn').addEventListener("click", hidePopup);
+	document.getElementById('validate-btn').addEventListener('click', _onValidate);
+	document.getElementById('cancel-btn').addEventListener("click", _onCancel);
 	document.getElementById('clear-btn').addEventListener("click", canvas.clear);
 }
