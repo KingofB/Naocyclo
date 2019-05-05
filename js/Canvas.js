@@ -1,3 +1,7 @@
+/**
+ *
+ * @constructor
+ */
 export function Canvas()
 {
 	/**
@@ -63,8 +67,47 @@ export function Canvas()
 	 */
 	let _signature = null;
 
+	/**
+	 * Dessine-t-on en mode tactile ?
+	 *
+	 * @type {boolean}
+	 *
+	 * @private
+	 */
+	let _isTouch = false;
+
+	/**
+	 * Surface de dessin
+	 *
+	 * @type {DOMRect | ClientRect}
+	 *
+	 * @private
+	 */
+	let _canvasRect = null;
 
 
+
+
+
+	/**
+	 * Callback quand on relâche la pression
+	 *
+	 * @param {MouseEvent|TouchEvent} e
+	 *
+	 * @private
+	 */
+	function _tryStopDraw(e)
+	{
+		// Le bouton principal est relâché, on arrête le dessin
+		// Ici on utiliser un opérateur "ET binaire" (en anglais : "binary AND operator")
+		if ((_isTouch && e.touches.length == 0) || (!_isTouch && (e.buttons & 1) == 0))
+		{
+			e.preventDefault();
+			e.stopPropagation();
+
+			_stopDraw();
+		}
+	}
 
 	/**
 	 * Arrêter de dessiner
@@ -77,7 +120,10 @@ export function Canvas()
 		{
 			_bDrawing = false;
 			_ctx.closePath();
-			_canvas.removeEventListener('mousemove', _draw);
+			if (_isTouch)
+				_canvas.removeEventListener('touchmove', _drawTouch);
+			else
+				_canvas.removeEventListener('mousemove', _draw);
 		}
 	}
 
@@ -86,15 +132,22 @@ export function Canvas()
 	 *
 	 * @private
 	 *
-	 * @param {MouseEvent} e
+	 * @param {MouseEvent|TouchEvent} e
 	 */
 	function _beginDraw(e) {
-		if ((e.buttons & 1) && !_bDrawing)
+		_isTouch = e.type == 'touchstart';
+
+		if (!_bDrawing && ((_isTouch && e.touches.length > 0) || (!_isTouch && (e.buttons & 1))))
 		{
+			e.preventDefault();
+			e.stopPropagation();
+
 			// Mettre à jour le scale à chaque nouveau tracé
-			const rect = _canvas.getBoundingClientRect();
-			_scale.x = _canvas.width / rect.width;
-			_scale.y = _canvas.height / rect.height;
+			// (normalement ça ne devrait pas changer, mais mieux vaut être + strict
+			// et ne pas laisser de place à l'erreur)
+			_canvasRect = _canvas.getBoundingClientRect();
+			_scale.x = _canvas.width / _canvasRect.width;
+			_scale.y = _canvas.height / _canvasRect.height;
 
 			_bDrawing = true;
 			_ctx.beginPath();
@@ -102,8 +155,11 @@ export function Canvas()
 			_ctx.strokeStyle = LINE_COLOR;
 
 			// Utilisation du scale
-			_ctx.moveTo(e.offsetX * _scale.x, e.offsetY * _scale.y);
-			_canvas.addEventListener('mousemove', _draw);
+			_ctx.moveTo((_isTouch ? e.touches[0].clientX - _canvasRect.left : e.offsetX) * _scale.x, (_isTouch ? e.touches[0].clientY - _canvasRect.top : e.offsetY) * _scale.y);
+			if (_isTouch)
+				_canvas.addEventListener('touchmove', _drawTouch);
+			else
+				_canvas.addEventListener('mousemove', _draw);
 		}
 	}
 
@@ -119,11 +175,48 @@ export function Canvas()
 		if (!_bDrawing)
 			return;
 
+		e.preventDefault();
+		e.stopPropagation();
+
 		if ((e.buttons & 1) == 0)
 			return _stopDraw();
 
+		_actualDraw(e.offsetX, e.offsetY);
+	}
+
+	/**
+	 * Dessiner (tactile)
+	 *
+	 * @private
+	 *
+	 * @param {TouchEvent} e
+	 */
+	function _drawTouch(e)
+	{
+		if (!_bDrawing)
+			return;
+
+		e.preventDefault();
+		e.stopPropagation();
+
+		if (e.touches.length == 0)
+			return _stopDraw();
+
+		_actualDraw(e.touches[0].clientX - _canvasRect.left, e.touches[0].clientY - _canvasRect.top);
+	}
+
+	/**
+	 * Fonction de dessin aux coordonnées choisies
+	 *
+	 * @param {number} x
+	 * @param {number} y
+	 *
+	 * @private
+	 */
+	function _actualDraw(x, y)
+	{
 		// Utilisation du scale
-		_ctx.lineTo(e.offsetX * _scale.x, e.offsetY * _scale.y);
+		_ctx.lineTo(x * _scale.x, y * _scale.y);
 		_ctx.stroke();
 	}
 
@@ -207,13 +300,11 @@ export function Canvas()
 	 */
 	function _init()
 	{
-		_canvas.addEventListener('mousedown', _beginDraw);
-		_canvas.addEventListener('mouseup', e => {
-			// Le bouton principal est relâché, on arrête le dessin
-			// Ici on utiliser un opérateur "ET binaire" (en anglais : "binary AND operator")
-			if ((e.buttons & 1) == 0)
-				_stopDraw();
-		});
+		_canvas.addEventListener('touchstart', _beginDraw);//_touchDevice ? 'touchstart' : 'mousedown'
+		_canvas.addEventListener('mousedown', _beginDraw);//_touchDevice ? 'touchstart' : 'mousedown'
+		_canvas.addEventListener('touchend', _tryStopDraw);
+		_canvas.addEventListener('touchcancel', _tryStopDraw);
+		_canvas.addEventListener('mouseup', _tryStopDraw);
 
 		// Peut-être que de continuer à dessiner si on sort du cadre et qu'on revient est une bonne idée en fait...
 		// _canvas.addEventListener('mouseout', _stopDraw);
