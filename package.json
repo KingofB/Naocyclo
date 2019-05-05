@@ -21,7 +21,7 @@
   "scripts": {
     "concat-css": "cat icomoon/style.css css/style.css > css/app.bundle.v%npm_package_version%.css",
     "lint": "eslint js/",
-    "watch-css": "nodemon --watch icomoon/style.css --watch css/style.css -x \"npm run concat-css\"",
+    "watch-css": "nodemon -e css -w icomoon/style.css -w css/style.css -x \"npm run concat-css\"",
     "dev": "webpack-dev-server",
     "build": "webpack"
   },
