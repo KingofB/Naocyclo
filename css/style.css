@@ -433,12 +433,12 @@ legend {
 #station-details label {
 	font-weight: bold;
 	left: 0;
-	width: 22%;
+	width: 25%;
 }
 
 #station-details label + *
 {
-	width: 76%;
+	width: 73%;
 }
 
 input {
