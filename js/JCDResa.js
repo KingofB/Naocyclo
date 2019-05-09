@@ -1,3 +1,5 @@
+import { resolveAny } from "dns";
+
 /**
  * Module du formulaire de réservation
  *
@@ -26,7 +28,6 @@ export function JCDResa(popup, canvas)
 	 */
 	const MIN_NAME_LENGTH = 2;
 
-
 	/**
 	 * Contenu du formulaire
 	 *
@@ -54,8 +55,17 @@ export function JCDResa(popup, canvas)
 	 */
 	const _$lastN = $('#lastname', _$details);
 
-
-
+	/**
+	 * Reservation
+	 * 
+	 * @type {Object}
+	 * 
+	 * @private
+	 */
+	const _resa = {
+		station: null,
+		time: null
+	};
 
 	/**
 	 * Mettre à jour le formulaire avec les données issues de la station choisie
@@ -86,6 +96,16 @@ export function JCDResa(popup, canvas)
 		_$details[0].querySelector('#station-id').value = station.id;
 	};
 
+
+
+
+
+	function _cancelReservation() { 
+		// FIXME
+	}
+
+
+
 	/**
 	 * Effectuer la réservation
 	 *
@@ -97,8 +117,16 @@ export function JCDResa(popup, canvas)
 		// Etape 2 : vérifications
 		// Etape 3 : mises à jour
 
+		// FIXME : vérifier s'il y a déjà une réservation en cours
+		_resa.station = document.getElementById('station-id').value;
+		_resa.time = Date.now();
 
+		const DURATION = 1200;
 
+		sessionStorage.setItem('reservation', _resa);
+
+		setTimeout(_cancelReservation, DURATION * 1000);
+			
 
 		// FIXME : vérifier que tout est bien défini dans le formulaire
 		// FIXME       (normalement c'est déjà fait en amont... mais on n'est jamais trop prudents !)
@@ -111,18 +139,17 @@ export function JCDResa(popup, canvas)
 
 
 		// FIXME : enregistrer prénom et nom dans localStorage
-		// localStorage.setItem('lastname', _$lastN.val().trim());
-		// localStorage.setItem('firstname', _$firstN.val().trim());
+		localStorage.setItem('lastname', _$lastN.val().trim());
+		localStorage.setItem('firstname', _$firstN.val().trim());
 
 		// FIXME : enregistrer la signature... où ça ? Que disent les specs ??
-
+		sessionStorage.setItem('signature', canvas.saveCanvas());
 		// FIXME : enregistrer la réservation ! (appeler la station, et lui dire de décrémenter les vélos dispos)
 		// FIXME : peut-être avoir un objet global de réservations stocké dans sessionStorage/localStorage
 
 		// Je remets ton ancien code ici. A voir où il faut le mettre exactement, et vérifier qu'il est correct (pas regardé encore)
 		/**
-		 // 	const canvasImg = canvas.saveCanvas();
-		 // 	sessionStorage.setItem("canvasImg", canvasImg);
+		 // 	
 		 // 	const bookingConfirm = document.createElement("p");
 		 // 	bookingConfirm.textContent = "Votre réservation est validée. Elle expirera dans 20 minutes.";
 		 // 	mapDiv.appendChild(bookingConfirm);
@@ -146,6 +173,8 @@ export function JCDResa(popup, canvas)
 	 */
 	const _updateReservationBtn = () => {
 		let ok = true;
+
+		// FIXME : faire fonction de vérification + aboutie des champs nom et prénom
 
 		// Attention aux leading/trailing spaces, on utilise trim() pour les enlever
 		const firstN = _$firstN.val().trim();
@@ -178,7 +207,7 @@ export function JCDResa(popup, canvas)
 		popup.setSaveCallback(_onSignatureUpdated);
 
 		// On désactive le bouton de réservation dès le début
-		$('#btn-reserve', _$details).attr('disabled', true)
+		$('#btn-reserve', _$details).attr('disabled', true);
 
 		// Quelques listeners...
 		$('body')
