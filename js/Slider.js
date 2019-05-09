@@ -272,9 +272,9 @@ export function Slider(container, slides)
 			// Au clic sur nav-next, on affiche le slide suivant
 			.on('click', '.nav-next', _nextSlide)
 			// Au clic sur nav-prev, on affiche le slide précédent
-			.on('click', '.nav-nav-prev', _prevSlide)
+			.on('click', '.nav-prev', _prevSlide)
 			// Au clic sur bouton pause, on arrête le carousel auto
-			.on('click', '.nav-nav-pause', playPause)
+			.on('click', '.nav-pause', playPause)
 			// Vérification que la cible est bien sur le body, et pas sur un input par exemple
 			.on('keyup', e => {
 				if (e.target != document.body) {
