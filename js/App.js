@@ -1,3 +1,4 @@
+
 import { Slider } from './Slider.js';
 import { Map } from './Map.js';
 import { JCDManager } from './JCDManager.js';
@@ -9,6 +10,8 @@ import { Popup } from './Popup.js';
 
 // Fonction d'initialisation du programme :
 const init = function () {
+
+	console.log(data);
 	// Ne sera pas utilisé ailleurs, pas besoin de le sauvegarder dans une variable
 	new Slider(document.getElementById('slider'), '/js/diaporama.json');
 
