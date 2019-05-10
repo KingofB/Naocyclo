@@ -4,7 +4,7 @@ import { JCDStation } from './JCDStation.js';
 /**
  * Classe de gestion JC Decaux
  *
- * @param {Function} cbStationsLoaded
+ * @param {Function} cbStationsLoaded Fonction de callback appelée lorsque toutes les stations auront été récupérées depuis JCDecaux
  *
  * @constructor
  */
