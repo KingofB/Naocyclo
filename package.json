@@ -26,5 +26,8 @@
     "build": "webpack"
   },
   "author": "David Blanchet",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "copy-webpack-plugin": "^5.0.3"
+  }
 }

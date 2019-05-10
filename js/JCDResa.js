@@ -1,4 +1,3 @@
-import { resolveAny } from "dns";
 
 /**
  * Module du formulaire de réservation
