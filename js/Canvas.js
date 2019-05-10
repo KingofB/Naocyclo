@@ -1,8 +1,10 @@
 /**
  *
+ * @param {HTMLCanvasElement} canvas
+ *
  * @constructor
  */
-export function Canvas()
+export function Canvas(canvas)
 {
 	/**
 	 * Epaisseur du trait de signature
@@ -29,7 +31,7 @@ export function Canvas()
 	 *
 	 * @type {HTMLCanvasElement}
 	 */
-	const _canvas = document.querySelector('canvas');
+	const _canvas = canvas;
 
 	/**
 	 * Le contexte de dessin (peut être 2D ou 3D, mais ici on utilisera la 2D)

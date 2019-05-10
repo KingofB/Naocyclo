@@ -3,7 +3,7 @@
  *
  * @param {HTMLElement} container
  * @param {Object} options
- * 
+ *
  * @constructor
  */
 export function Popup(container, options)
@@ -18,9 +18,9 @@ export function Popup(container, options)
 	const _container = container;
 
 	/**
-	 * 
+	 *
 	 * @private
-	 * 
+	 *
 	 * @type {Object}
 	 */
 	const _options = options || {};
@@ -28,7 +28,7 @@ export function Popup(container, options)
 
 
 
-	
+
 
 	/**
 	 * Afficher la popup
@@ -38,9 +38,19 @@ export function Popup(container, options)
 	this.showPopup = function()
 	{
 		_container.style.display = 'flex';
-		
+
+		// On vérifie s'il y a un callback "onOpen" dans les options fournies
 		if (typeof _options.onOpen === 'function')
 			_options.onOpen();
+
+		// TODO Peut aussi s'écrire en une seule ligne -- appelé "one-liner" -- mais potentiellement moins lisible :
+		// (
+		//     pas besoin de parenthèses autour de "typeof _options.onOpen === 'function'" car :
+		//     @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
+		//     i.e. : "typeof" sera évalué avant "===", qui sera lui-même évalué avant "&&".
+		// )
+		// Car l'appel à "_options.onOpen()" ne sera exécuté que si "typeof _options.onOpen === 'function'" est vrai (grâce à "&&")
+		// typeof _options.onOpen === 'function' && _options.onOpen();
 	};
 
 	/**

@@ -4,12 +4,12 @@ import { JCDStation } from './JCDStation.js';
 /**
  * Classe de gestion JC Decaux
  *
- * @param {Map} map
- * @param {Canvas} canvas
- * @param {JCDResa} resa
+ * @param {Function} cbStationsLoaded
+ *
  * @constructor
  */
-export function JCDManager(map, canvas, resa) {
+export function JCDManager(cbStationsLoaded)
+{
 	/**
 	 * Variable pour la clé de l'API JC Decaux :
 	 *
@@ -41,6 +41,14 @@ export function JCDManager(map, canvas, resa) {
 
 
 
+
+
+
+
+
+
+
+
 	/**
 	 * Fonction centralisée permettant d'appeler l'API JCDecaux :
 	 *
@@ -64,11 +72,19 @@ export function JCDManager(map, canvas, resa) {
 	 *
 	 * @private
 	 *
-	 * @param {Event} e
+	 * @param {MouseEvent} e
 	 */
-	const _onChooseStation = e => {
-		resa.updateFormForStation(_stations[e.target.options.stationId]);
-	};
+	const _onChooseStation = e => window.app.resa.updateFormForStation(_stations[e.target.options.stationId]);
+
+
+
+
+	//
+	// FIXME : il manque une fonction pour récupérer une station par son ID !
+	//          (sera utilisé dans JCDResa)
+	//
+
+
 
 
 	/**
@@ -77,19 +93,24 @@ export function JCDManager(map, canvas, resa) {
 	 *
 	 * @private
 	 */
-	function _init() {
+	function _init()
+	{
 		_getCallApi('stations', {contract: JCD_CONTRACT}, response => {
-			// Récup des 10 premières stations seulement
-			response = response.slice(0, 10);
+			// // Récup des 10 premières stations seulement
+			// response = response.slice(0, 10);
 
-			// Récup de la liste des stations et leur affichage sur la carte (méthode forEach)
+			// Récup de la liste des stations et leur affichage sur la carte (méthode forEach, synchrone)
 			response.forEach(function(station) {
 				const obj = new JCDStation(station);
 				_stations[station.number] = obj;
 
 				// Ajouter un marqueur sur la carte
-				map.addMarker(obj.gps, {stationId: obj.id, title: obj.name}, _onChooseStation);
+				window.app.map.addMarker(obj.gps, {stationId: obj.id, title: obj.name}, _onChooseStation);
 			});
+
+			// Si quelqu'un souhaite être prévenu que toutes les stations sont chargées, on le prévient
+			if (typeof cbStationsLoaded === 'function')
+				cbStationsLoaded();
 		});
 	}
 
