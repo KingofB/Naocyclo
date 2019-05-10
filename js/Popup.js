@@ -1,11 +1,12 @@
 /**
  * Module de gestion de la popup
  *
- * @param {Canvas} canvas
- *
+ * @param {HTMLElement} container
+ * @param {Object} options
+ * 
  * @constructor
  */
-export function Popup(canvas)
+export function Popup(container, options)
 {
 	/**
 	 * Popup
@@ -14,32 +15,20 @@ export function Popup(canvas)
 	 *
 	 * @type {HTMLElement}
 	 */
-	const _container = document.getElementById('canvas-container');
+	const _container = container;
 
 	/**
-	 * Callback à appeler lorsqu'on sauvegarde la popup
-	 *
-	 * @type {Function}
-	 *
+	 * 
 	 * @private
+	 * 
+	 * @type {Object}
 	 */
-	let _saveCallback = null;
+	const _options = options || {};
 
 
 
 
-
-	/**
-	 * Met à jour le callback lorsqu'on enregistre le contenu de la popup
-	 *
-	 * @public
-	 *
-	 * @param {Function} cb
-	 */
-	this.setSaveCallback = function(cb)
-	{
-		_saveCallback = cb;
-	};
+	
 
 	/**
 	 * Afficher la popup
@@ -49,7 +38,9 @@ export function Popup(canvas)
 	this.showPopup = function()
 	{
 		_container.style.display = 'flex';
-		canvas.storeImage();
+		
+		if (typeof _options.onOpen === 'function')
+			_options.onOpen();
 	};
 
 	/**
@@ -69,11 +60,10 @@ export function Popup(canvas)
 	 */
 	const _onValidate = function()
 	{
-		canvas.storeImage();
 		_hidePopup();
 
-		if (_saveCallback)
-			_saveCallback();
+		if (typeof _options.onValidate === 'function')
+			_options.onValidate();
 	};
 
 	/**
@@ -82,13 +72,17 @@ export function Popup(canvas)
 	 * @private
 	 */
 	const _onCancel = () => {
-		canvas.restoreImage();
 		_hidePopup();
+
+		if (typeof _options.onCancel === 'function')
+			_options.onCancel();
 	};
 
 
 
 	document.getElementById('validate-btn').addEventListener('click', _onValidate);
 	document.getElementById('cancel-btn').addEventListener("click", _onCancel);
-	document.getElementById('clear-btn').addEventListener("click", canvas.clear);
+
+	if (typeof _options.onInit === 'function')
+		_options.onInit();
 }

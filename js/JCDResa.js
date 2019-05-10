@@ -1,14 +1,13 @@
-
+import { Popup } from './Popup.js';
 
 /**
  * Module du formulaire de réservation
  *
- * @param {Popup} popup
- * @param {Canvas} canvas
+ * 
  *
  * @constructor
  */
-export function JCDResa(popup, canvas)
+export function JCDResa()
 {
 	/**
 	 * Pourcentage minimum de remplissage de la zone par la signature
@@ -66,6 +65,20 @@ export function JCDResa(popup, canvas)
 		station: null,
 		time: null
 	};
+
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	const _popup = new Popup(document.getElementById('canvas-container'), {
+		onValidate: () => app.canvas.storeImage(),
+		onCancel: () => app.canvas.restoreImage(),
+		onOpen: () => app.canvas.storeImage(),
+		onInit: () => document.getElementById('clear-btn').addEventListener("click", app.canvas.clear)
+	});
+
+
 
 	/**
 	 * Mettre à jour le formulaire avec les données issues de la station choisie
