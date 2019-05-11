@@ -5,10 +5,11 @@ import { JCDStation } from './JCDStation.js';
  * Classe de gestion JC Decaux
  *
  * @param {Function} cbStationsLoaded Fonction de callback appelée lorsque toutes les stations auront été récupérées depuis JCDecaux
+ * @param {Function} cbOnChooseStation Fonction de callback appelée lorsqu'on choisit une station JCDecaux sur la map
  *
  * @constructor
  */
-export function JCDManager(cbStationsLoaded)
+export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 {
 	/**
 	 * Variable pour la clé de l'API JC Decaux :
@@ -74,7 +75,7 @@ export function JCDManager(cbStationsLoaded)
 	 *
 	 * @param {MouseEvent} e
 	 */
-	const _onChooseStation = e => window.app.resa.updateFormForStation(_stations[e.target.options.stationId]);
+	const _onChooseStation = e => typeof cbStationsLoaded === 'function' && cbOnChooseStation(_stations[e.target.options.stationId]);
 
 
 
@@ -96,8 +97,8 @@ export function JCDManager(cbStationsLoaded)
 	function _init()
 	{
 		_getCallApi('stations', {contract: JCD_CONTRACT}, response => {
-			// // Récup des 10 premières stations seulement
-			// response = response.slice(0, 10);
+			// Récup des 10 premières stations seulement
+			response = response.slice(0, 10);
 
 			// Récup de la liste des stations et leur affichage sur la carte (méthode forEach, synchrone)
 			response.forEach(function(station) {

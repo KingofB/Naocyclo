@@ -52,7 +52,7 @@ const App = function ()
 	 *
 	 * @public
 	 */
-	this.manager = new JCDManager(_resa.onAllStationsLoaded);
+	this.manager = new JCDManager(_resa.onAllStationsLoaded, _resa.updateFormForStation);
 };
 
 
