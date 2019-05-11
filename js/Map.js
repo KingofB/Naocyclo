@@ -56,9 +56,11 @@ export function Map() {
 	function _init()
 	{
 		// Code issu de l'API Mapbox permettant d'afficher la carte sur le site :
+		// @see https://leafletjs.com/reference-1.5.0.html#map-option
 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + MAP_BOX_TOKEN, {
 			attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 			maxZoom: 18,
+			minZoom: 12,
 			id: 'mapbox.streets',
 			accessToken: MAP_BOX_TOKEN
 		}).addTo(_nantesMap);
