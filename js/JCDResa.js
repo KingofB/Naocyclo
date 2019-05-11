@@ -125,6 +125,13 @@ export function JCDResa()
 		_currentStation = station;
 
 
+		// FIXME : récupérer la valeur (trimmée) de prénom puis nom
+		//			et pour chacun, si c'est vide, récupérer les valeurs
+		//			dans localStorage (si elles existent) et les foutre
+		//			dans les champs avant d'afficher le formulaire
+
+
+
 		// Masquer l'empty state
 		_$details.show();
 		$('#empty-state').hide();

@@ -21,11 +21,24 @@ export function Map() {
 	const MAP_BOX_TOKEN = 'pk.eyJ1Ijoia2luZ29mYiIsImEiOiJjanRibzJ2b2MwaWtpNGJ0ZmZhYW9xbnB0In0.vWz6FyOCW94ScDgQt4CddQ';
 
 	/**
+	 * Variable pour le réglage du zoom de la map
+	 * 
+	 * @private
+	 * 
+	 * @type {Object}
+	 */
+	const ZOOM = {
+		default: 14,
+		min: 12,
+		max: 18
+	};
+
+	/**
 	 * Variable pour la map de la ville de Nantes
 	 *
 	 * @private
 	 */
-	const _nantesMap = L.map('map').setView([47.2175, -1.5577], 14);
+	const _nantesMap = L.map('map').setView([47.2175, -1.5577], ZOOM.default);
 
 
 
@@ -59,8 +72,8 @@ export function Map() {
 		// @see https://leafletjs.com/reference-1.5.0.html#map-option
 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + MAP_BOX_TOKEN, {
 			attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-			maxZoom: 18,
-			minZoom: 12,
+			maxZoom: ZOOM.max,
+			minZoom: ZOOM.min,
 			id: 'mapbox.streets',
 			accessToken: MAP_BOX_TOKEN
 		}).addTo(_nantesMap);

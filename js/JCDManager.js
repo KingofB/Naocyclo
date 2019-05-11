@@ -78,12 +78,23 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 	const _onChooseStation = e => typeof cbOnChooseStation === 'function' && cbOnChooseStation(_stations[e.target.options.stationId]);
 
 
+	/**
+	 * Fonction pour récupérer une station par son id
+	 * 
+	 * @public
+	 * 
+	 * @param {number} id
+	 * 
+	 * @returns {JCDStation} 
+	 */
+	this.getStation = function(id) {
+		if (!_stations.hasOwnProperty(id))
+			throw 'ID non trouvé';
 
+		return _stations[id];
+	};
 
-	//
-	// FIXME : il manque une fonction pour récupérer une station par son ID !
-	//          (sera utilisé dans JCDResa)
-	//
+	
 
 
 
