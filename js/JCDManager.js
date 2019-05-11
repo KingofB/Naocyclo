@@ -75,7 +75,7 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 	 *
 	 * @param {MouseEvent} e
 	 */
-	const _onChooseStation = e => typeof cbStationsLoaded === 'function' && cbOnChooseStation(_stations[e.target.options.stationId]);
+	const _onChooseStation = e => typeof cbOnChooseStation === 'function' && cbOnChooseStation(_stations[e.target.options.stationId]);
 
 
 
