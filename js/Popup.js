@@ -43,7 +43,7 @@ export function Popup(container, options)
 		if (typeof _options.onOpen === 'function')
 			_options.onOpen();
 
-		// TODO Peut aussi s'écrire en une seule ligne -- appelé "one-liner" -- mais potentiellement moins lisible :
+		// NB : Peut aussi s'écrire en une seule ligne -- appelé "one-liner" -- mais potentiellement moins lisible :
 		// (
 		//     pas besoin de parenthèses autour de "typeof _options.onOpen === 'function'" car :
 		//     @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence

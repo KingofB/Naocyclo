@@ -105,10 +105,21 @@ export function JCDResa()
 	 */
 	let _currentStation = null;
 
+	/**
+	 * 
+	 * @type {number}
+	 * 
+	 * @private
+	 */
+	let _resaTimer = null;
 
-
-
-
+	/**
+	 * 
+	 * @type {number}
+	 * 
+	 * @private
+	 */
+	let _clockTimer = null;
 
 
 
@@ -125,13 +136,20 @@ export function JCDResa()
 		_currentStation = station;
 
 
-		// FIXME : récupérer la valeur (trimmée) de prénom puis nom
-		//			et pour chacun, si c'est vide, récupérer les valeurs
-		//			dans localStorage (si elles existent) et les foutre
-		//			dans les champs avant d'afficher le formulaire
+		// récupérer la valeur (trimmée) de prénom puis nom
+		//	et pour chacun, si c'est vide, récupérer les valeurs
+		//	dans localStorage (si elles existent) et les foutre
+		//	dans les champs avant d'afficher le formulaire
+		if (!_$lastN.val().trim())
+			_$lastN.val(localStorage.getItem('lastname'));
 
-
-
+		if (!_$firstN.val().trim())
+			_$firstN.val(localStorage.getItem('firstname'));
+		
+		// Au changement de station, vérifier que le bouton "réserver" est actif ou non.
+		_updateReservationBtn();
+		
+		
 		// Masquer l'empty state
 		_$details.show();
 		$('#empty-state').hide();
@@ -170,10 +188,11 @@ export function JCDResa()
 		//          4. nettoyer le sessionStorage
 		//          5. vider la zone HTML de description de la station en cours
 		//          6. éventuellement stopper le setTimeout le cas échéant (!!)
+		clearTimeout(_resaTimer);
 		//          7. éventuellement stopper le setInterval le cas échéant (!!)
-		//
+		clearInterval(-_clockTimer);
 
-		// FIXME : attention, l'annulation peut être automatique (délai dépassé) ou manuelle (même si à priori ce n'est pas demandé dans les specs)
+		// FIXME : attention, l'annulation est automatique (délai dépassé de 20 minutes)
 	}
 
 
@@ -185,13 +204,18 @@ export function JCDResa()
 	 */
 	function _makeReservation()
 	{
-
-
-		//
-		// FIXME : vérifier s'il y a déjà une réservation en cours, si oui l'annuler ! (après un confirm() bien sûr)
+		
+		// vérifier s'il y a déjà une réservation en cours, si oui l'annuler ! (après un confirm() bien sûr)
 		//        (pour annuler une réservation : récupérer la station d'une manière ou d'une autre, et appeler cancelResa() dessus)
 		//
-
+		if (_resa.station) {
+			
+			if (confirm('Vous avez déjà une réservation en cours, souhaitez-vous la conserver ?')) {
+				return;
+			}
+			
+			_cancelReservation();
+		}
 
 
 		//
@@ -217,10 +241,13 @@ export function JCDResa()
 
 
 		//
-		// FIXME : faire une tentative de réservation sur la station avec _currentStation.reserveBike();
+		//  faire une tentative de réservation sur la station avec _currentStation.reserveBike();
 		//        Si le résultat est false, c'est que la réservation a échoué !!
 		//
-
+		if (!_currentStation.reserveBike()) {
+			alert('Réservation impossible, pas de vélo disponible');
+			return;
+		}
 
 
 
@@ -252,9 +279,9 @@ export function JCDResa()
 		sessionStorage.setItem('signature', _canvas.saveCanvas());
 
 		// On déclenche le compte à rebours de la validité de la réservation...
-		// FIXME : garder une référence au timeoutID retourné par setTimeout afin de pouvoir appeler clearTimeout
+		// garder une référence au timeoutID retourné par setTimeout afin de pouvoir appeler clearTimeout
 		//          si on annule la réservation !!
-		setTimeout(_cancelReservation, DURATION * 1000);
+		_resaTimer = setTimeout(_cancelReservation, DURATION * 1000);
 
 
 		//
@@ -263,14 +290,25 @@ export function JCDResa()
 
 
 		//
-		// FIXME : utiliser un setInterval() pour le compte à rebours
+		// Utiliser un setInterval() pour le compte à rebours
 		//
+		_clockTimer = setInterval(_updateResaClock, 50);
 
-
 		//
-		// FIXME : repasser la zone de formulaire en "empty state" !!! (et remettre _currentStation à vide, etc.)
+		// Repasser le bouton "réserver" en disabled
 		//
+		_updateReservationBtn();
 	}
+
+	/**
+	 * Met à jour le timer dans la div
+	 * 
+	 * @private
+	 */
+	function _updateResaClock() {
+		// FIXME : mettre à jour le timer dans la div
+	}
+
 
 	/**
 	 * Callback appelé lorsqu'on enregistre le contenu de la popup de signature
@@ -290,6 +328,13 @@ export function JCDResa()
 	 * @private
 	 */
 	const _updateReservationBtn = () => {
+		const $btn = $('#btn-reserve', _$details);
+
+		if (_currentStation && _resa.station == _currentStation.id) {
+			$btn.attr('disabled', true);
+			return;
+		}
+
 		/**
 		 * On utilise l'opérateur "not" pour convertir en boolean le résultat de l'appel à la fonction _checkReservationInfo().
 		 * Si la valeur est "truthy" (par exemple un tableau contenant prénom et nom),
@@ -303,7 +348,7 @@ export function JCDResa()
 		 *
 		 * Perso j'aime l'efficacité et "l'expressiveness" comme on dit en anglais
 		 */
-		$('#btn-reserve', _$details).attr('disabled', !_checkReservationInfo());
+		$btn.attr('disabled', !_checkReservationInfo());
 	};
 
 	/**

@@ -6,7 +6,7 @@ export class JCDStation
 	//
 	// FIXME : en option, stocker si on a une réservation en cours ici ou non. Ca fait double-sécurité quoi.
 	//
-
+	
 
 	/**
 	 *
@@ -16,7 +16,7 @@ export class JCDStation
 	 */
 	constructor(data)
 	{
-		if(data === undefined)
+		if (data === undefined)
 			throw new Error("data need to be defined !");
 
 		this.id = data.number;
