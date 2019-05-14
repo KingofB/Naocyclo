@@ -3,9 +3,6 @@
  */
 export class JCDStation
 {
-	//
-	// FIXME : en option, stocker si on a une réservation en cours ici ou non. Ca fait double-sécurité quoi.
-	//
 	
 
 	/**
@@ -35,14 +32,11 @@ export class JCDStation
 	 * @returns {boolean}
 	 */
 	reserveBike() {
-
-		//
-		// FIXME : pour plus de sécurité, vérifier si on a déjà une réservation en cours ici
-		//
-
 		if (this.freeBikes <= 0) {
 			return false;
 		}
+
+		// FIXME : mettre à jour l'icône sur la map
 
 		this.freeBikes--;
 		return true;
@@ -52,12 +46,9 @@ export class JCDStation
 	 * Fonction d'ajustement du nombre de vélos disponibles lors d'une annulation de réservation
 	 */
 	cancelResa() {
-
-		//
-		// FIXME : pour + de sécurité, vérifier qu'on a bien une réservation en cours ici (le stocker, donc)
-		//
-
 		this.freeBikes++;
+
+		// FIXME : mettre à jour l'icône sur la map
 	}
 }
 

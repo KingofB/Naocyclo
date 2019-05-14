@@ -10,6 +10,16 @@ import {Canvas} from "./Canvas";
  */
 export function JCDResa()
 {
+
+	/**
+	 * Clef de réservation dans le sessionStorage
+	 * 
+	 * @private
+	 * 
+	 * @type {string}
+	 */
+	const SESSION_RESA = 'reservation';
+
 	/**
 	 * Pourcentage minimum de remplissage de la zone par la signature
 	 *
@@ -43,6 +53,14 @@ export function JCDResa()
 	 * @private
 	 */
 	const _$details = $('#station-details');
+
+	/**
+	 * Contenu de la section "#reservation-details" 
+	 * @private
+	 * 
+	 * @type {jQuery}
+	 */
+	const _$sectionDetails = $('#reservation-details').hide();
 
 	/**
 	 * Prénom (jQuery)
@@ -114,7 +132,8 @@ export function JCDResa()
 	let _resaTimer = null;
 
 	/**
-	 * 
+	 * Compte à rebours (setInterval)
+	 *  
 	 * @type {number}
 	 * 
 	 * @private
@@ -181,18 +200,23 @@ export function JCDResa()
 	 */
 	function _cancelReservation() {
 		//
-		// FIXME : annuler la réservation !
-		//          1. vérifier s'il y a une réservation en cours
-		//          2. récupérer (d'une manière ou d'une autre, genre via window.app.manager...) la station liée à la réservation en cours
-		//          3. appeler la fonction d'annulation sur la station
-		//          4. nettoyer le sessionStorage
-		//          5. vider la zone HTML de description de la station en cours
-		//          6. éventuellement stopper le setTimeout le cas échéant (!!)
-		clearTimeout(_resaTimer);
-		//          7. éventuellement stopper le setInterval le cas échéant (!!)
-		clearInterval(-_clockTimer);
+		// annuler la réservation !
+		// 1. vérifier s'il y a une réservation en cours
+		if (!_resa.station) return;
 
-		// FIXME : attention, l'annulation est automatique (délai dépassé de 20 minutes)
+		// 2. récupérer la station liée à la réservation en cours
+		const station = window.app.manager.getStation(_resa.station);
+		// 3. appeler la fonction d'annulation sur la station
+		station.cancelResa();
+		// 4. nettoyer le sessionStorage
+		sessionStorage.removeItem(SESSION_RESA);
+		// 5. vider la zone HTML de description de la station en cours
+		_$sectionDetails.find('> div').clear();
+		_$sectionDetails.hide();
+		// 6. stopper le setTimeout
+		clearTimeout(_resaTimer);
+		// 7. stopper le setInterval
+		clearInterval(_clockTimer);
 	}
 
 
@@ -269,7 +293,7 @@ export function JCDResa()
 		// Attention, la fonction setItem() prend en paramètre deux strings !!
 		// @see https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem
 		// On enregistre dans sessionStorage car la réservation est annulée si on ferme le navigateur.
-		sessionStorage.setItem('reservation', JSON.stringify(_resa));
+		sessionStorage.setItem(SESSION_RESA, JSON.stringify(_resa));
 
 		// On enregistre le prénom et le nom pour plus tard (pas perdus si fermeture navigateur)
 		localStorage.setItem('lastname', firstN);
@@ -285,8 +309,17 @@ export function JCDResa()
 
 
 		//
-		// FIXME : afficher les détails de la réservation dans la DIV prévue à cet effet
+		// Afficher les détails de la réservation dans la DIV prévue à cet effet
 		//
+		// FIXME : faire en sorte que le nom de la station soit un lien cliquable qui, lorsque cliqué, sélectionne (et centre) sur la map le marqueur correspondant
+		_$sectionDetails.find('> div')[0].innerHTML = `<p>Votre vélo dans la station ${_currentStation.name} est réservé ! Votre réservation expirera dans <span></span></p>`;
+		_updateResaClock();
+		// On affiche la section
+		_$sectionDetails.show();
+
+		//const pShowResa = document.createElement('p');
+		//pShowResa.textContent = 'Votre vélo dans la station ' + _resa.station.name + ' est réservé ! Celle-ci expirera dans ' + (_resaTimer / 60000) + 'minutes';
+		//_$sectionDetails.appendChild(pShowResa);
 
 
 		//
@@ -301,12 +334,27 @@ export function JCDResa()
 	}
 
 	/**
-	 * Met à jour le timer dans la div
+	 * Met à jour le temps restant dans la section "#reservation-details"
 	 * 
 	 * @private
 	 */
 	function _updateResaClock() {
-		// FIXME : mettre à jour le timer dans la div
+		// S'il n'y a pas de réservation, on sort   
+		if (!_resa.station) return;
+
+		// Sécurité pour s'assurer que le temps ne soit pas déjà écoulé
+		const remainingTime = Date.now() - _resa.time;
+		if (remainingTime <= 0)
+		{
+			_cancelReservation();
+			return;
+		}
+
+		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
+		const clock = new Intl.DateTimeFormat('fr-FR', {minute: '2-digit', second: '2-digit'}).format(new Date(remainingTime));
+
+		// Mettre à jour le span dans les details, avec "clock"
+		_$sectionDetails.find('span').text(clock);
 	}
 
 
@@ -405,7 +453,7 @@ export function JCDResa()
 		name = name.trim();
 
 		//
-		// FIXME : faire d'autres nettoyages, par exemple n'accepter que lettres, apostrophe, trait d'union, point, espace.
+		// TODO : faire d'autres nettoyages, par exemple n'accepter que lettres, apostrophe, trait d'union, point, espace.
 		//          utiliser pour cela une RegExp (@see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
 		// Par exemple (doit toujours commencer par une lettre) :
 		//       /^[A-Za-z][A-Za-z\.'- ]+$/.test(name)
@@ -414,12 +462,19 @@ export function JCDResa()
 		if (name.length < MIN_NAME_LENGTH)
 			return false;
 
-		//
-		// FIXME : peut-être qu'on veut aussi transformer la première lettre de chaque mot en majuscule pour homogénéiser
-		//          et faire joli ?
-		//       @see https://stackoverflow.com/a/18546504 (attention cette solution ne gère pas les noms avec des espaces,
-		//                                                  ça ne met que la 1ère lettre en majuscule c'est tout)
-		//
+		// 1. Remplacer les tirets par des espaces (ex: "Charles-Henri")
+		// 2. Splitter la string (en tableau) par rapport au caractère "espace"
+		// 3. Parcourir la string (forEach par exemple) et mettre la 1ère lettre en majuscule
+		// 4. Joindre le tableau grâce au caractère "espace"
+		// FIN
+		name = name
+				.replace('-', ' ')
+				.split(' ')
+				//.map(element => element.charAt(0).toUpperCase() + element.slice(1))
+				//.join(' ')
+				.reduce((prev, cur) => prev + (!prev ? '' : ' ') + cur, '');
+		// Pour l'exercice : faire les étapes 3 et 4 en un seul coup grâce à Array.reduce()
+		
 
 		// Tout va bien, on retourne le nom "nettoyé"
 		return name;

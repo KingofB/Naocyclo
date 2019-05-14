@@ -57,6 +57,8 @@ export function Map() {
 	 * @param {Function} callback
 	 */
 	this.addMarker = function(gps, options, callback) {
+		// FIXME : pouvoir customiser l'icône (ex: rouge si pas de vélo, bleu si yen a, vert si résa)
+		/* @see https://leafletjs.com/reference-1.5.0.html#marker */
 		L.marker(gps, options).addTo(_nantesMap).on('click', callback);
 	};
 
