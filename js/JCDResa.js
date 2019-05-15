@@ -400,7 +400,7 @@ export function JCDResa()
 	};
 
 	/**
-	 * Vérifie si les infos de la réservation sont valides. Si oui retourne le prénom et nom nettoyés, sinon retourne false.
+	 * Vérifie si les infos de la réservation sont valides. Si oui retourne le prénom et nom, sinon retourne false.
 	 *
 	 * @returns {boolean|string[]}
 	 *
@@ -432,7 +432,7 @@ export function JCDResa()
 	};
 
 	/**
-	 * Vérifie si un nom est valide
+	 * Vérifie si un nom est valide et le modifie sa présentation si nécessaire
 	 *
 	 * @param {string} name
 	 *
@@ -441,15 +441,11 @@ export function JCDResa()
 	 * @private
 	 */
 	const _checkName = name => {
-		// Première vérification basique...
+		// Vérification que name comporte une valeur ou qu'elle soit bien une string, si ce n'est psa le cas, on sort
 		if (typeof name !== 'string' || !name)
 			return false;
 
-		/**
-		 * Attention aux leading/trailing spaces, on utilise trim() pour les enlever
-		 *
-		 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
- 		 */
+		// On utilise trim() pour enlever les éventuels espaces avant et après les noms saisis par l'utilisateur
 		name = name.trim();
 
 		//
@@ -459,24 +455,21 @@ export function JCDResa()
 		//       /^[A-Za-z][A-Za-z\.'- ]+$/.test(name)
 		//
 
+		// Vérifier si la taille du nom correspond au moins à la taille minimale exigée
 		if (name.length < MIN_NAME_LENGTH)
 			return false;
 
-		// 1. Remplacer les tirets par des espaces (ex: "Charles-Henri")
-		// 2. Splitter la string (en tableau) par rapport au caractère "espace"
-		// 3. Parcourir la string (forEach par exemple) et mettre la 1ère lettre en majuscule
-		// 4. Joindre le tableau grâce au caractère "espace"
-		// FIN
+		// 1. Remplacer d'éventuels tirets par des espaces (ex: "Charles-Henri") (String.replace())
+		// 2. Découper la string en tableau par rapport au caractère "espace" (String.split())
+		// 3. Parcourir la string et mettre la 1ère lettre en majuscule (Array.reduce())
 		name = name
 				.replace('-', ' ')
 				.split(' ')
 				//.map(element => element.charAt(0).toUpperCase() + element.slice(1))
 				//.join(' ')
 				.reduce((prev, cur) => prev + (!prev ? '' : ' ') + cur, '');
-		// Pour l'exercice : faire les étapes 3 et 4 en un seul coup grâce à Array.reduce()
-		
 
-		// Tout va bien, on retourne le nom "nettoyé"
+		// Pour finir, on retourne le nom ainsi préparé
 		return name;
 	};
 
