@@ -40,6 +40,14 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 	 */
 	const _stations = {};
 
+	/**
+	 * Station actuellement sélectionnée
+	 *
+	 * @private
+	 *
+	 * @type {JCDStation}
+	 */
+	let _currentStation = null;
 
 
 
@@ -75,17 +83,26 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 	 *
 	 * @param {MouseEvent} e
 	 */
-	const _onChooseStation = e => typeof cbOnChooseStation === 'function' && cbOnChooseStation(_stations[e.target.options.stationId]);
+	const _onChooseStation = e => {
+		if (_currentStation) {
+			_currentStation.setSelected(false);
+		}
+
+		_currentStation = _stations[e.target.options.stationId];
+		_currentStation.setSelected(true);
+
+		typeof cbOnChooseStation === 'function' && cbOnChooseStation(_currentStation);
+	};
 
 
 	/**
 	 * Fonction pour récupérer une station par son id
-	 * 
+	 *
 	 * @public
-	 * 
+	 *
 	 * @param {number} id
-	 * 
-	 * @returns {JCDStation} 
+	 *
+	 * @returns {JCDStation}
 	 */
 	this.getStation = function(id) {
 		if (!_stations.hasOwnProperty(id))
@@ -94,7 +111,7 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 		return _stations[id];
 	};
 
-	
+
 
 
 
@@ -114,10 +131,12 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 			// Récup de la liste des stations et leur affichage sur la carte (méthode forEach, synchrone)
 			response.forEach(function(station) {
 				const obj = new JCDStation(station);
-				_stations[station.number] = obj;
 
 				// Ajouter un marqueur sur la carte
-				window.app.map.addMarker(obj.gps, {stationId: obj.id, title: obj.name}, _onChooseStation);
+				obj.marker = window.app.map.addMarker(obj.gps, {stationId: obj.id, title: obj.name}, _onChooseStation);
+				obj.updateIcon();
+
+				_stations[station.number] = obj;
 			});
 
 			// Si quelqu'un souhaite être prévenu que toutes les stations sont chargées, on le prévient

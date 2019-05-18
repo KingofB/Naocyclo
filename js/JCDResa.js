@@ -13,9 +13,9 @@ export function JCDResa()
 
 	/**
 	 * Clef de réservation dans le sessionStorage
-	 * 
+	 *
 	 * @private
-	 * 
+	 *
 	 * @type {string}
 	 */
 	const SESSION_RESA = 'reservation';
@@ -55,9 +55,9 @@ export function JCDResa()
 	const _$details = $('#station-details');
 
 	/**
-	 * Contenu de la section "#reservation-details" 
+	 * Contenu de la section "#reservation-details"
 	 * @private
-	 * 
+	 *
 	 * @type {jQuery}
 	 */
 	const _$sectionDetails = $('#reservation-details').hide();
@@ -124,21 +124,23 @@ export function JCDResa()
 	let _currentStation = null;
 
 	/**
-	 * 
+	 *
 	 * @type {number}
-	 * 
+	 *
 	 * @private
 	 */
 	let _resaTimer = null;
 
 	/**
 	 * Compte à rebours (setInterval)
-	 *  
+	 *
 	 * @type {number}
-	 * 
+	 *
 	 * @private
 	 */
 	let _clockTimer = null;
+
+
 
 
 
@@ -164,11 +166,11 @@ export function JCDResa()
 
 		if (!_$firstN.val().trim())
 			_$firstN.val(localStorage.getItem('firstname'));
-		
+
 		// Au changement de station, vérifier que le bouton "réserver" est actif ou non.
 		_updateReservationBtn();
-		
-		
+
+
 		// Masquer l'empty state
 		_$details.show();
 		$('#empty-state').hide();
@@ -228,16 +230,16 @@ export function JCDResa()
 	 */
 	function _makeReservation()
 	{
-		
+
 		// vérifier s'il y a déjà une réservation en cours, si oui l'annuler ! (après un confirm() bien sûr)
 		//        (pour annuler une réservation : récupérer la station d'une manière ou d'une autre, et appeler cancelResa() dessus)
 		//
 		if (_resa.station) {
-			
+
 			if (confirm('Vous avez déjà une réservation en cours, souhaitez-vous la conserver ?')) {
 				return;
 			}
-			
+
 			_cancelReservation();
 		}
 
@@ -255,7 +257,7 @@ export function JCDResa()
 		// On vérifie une nouvelle fois que tout est bien défini dans le formulaire, et ça nous permet aussi
 		// de récupérer par la même occasion le prénom et le nom (nettoyés) de l'utilisateur.
 		// (sinon on serait obligés de le refaire ici, à moins de le stocker entre-temps...)
-		const res = _checkReservationInfo();
+		const res = _checkReservationInfo(true);
 		if (!res)
 		{
 			console.error('Les infos de réservation ne sont pas bonnes, cela ne devrait pas arriver !');
@@ -335,11 +337,11 @@ export function JCDResa()
 
 	/**
 	 * Met à jour le temps restant dans la section "#reservation-details"
-	 * 
+	 *
 	 * @private
 	 */
 	function _updateResaClock() {
-		// S'il n'y a pas de réservation, on sort   
+		// S'il n'y a pas de réservation, on sort
 		if (!_resa.station) return;
 
 		// Sécurité pour s'assurer que le temps ne soit pas déjà écoulé
@@ -396,17 +398,19 @@ export function JCDResa()
 		 *
 		 * Perso j'aime l'efficacité et "l'expressiveness" comme on dit en anglais
 		 */
-		$btn.attr('disabled', !_checkReservationInfo());
+		$btn.attr('disabled', !_checkReservationInfo(false));
 	};
 
 	/**
 	 * Vérifie si les infos de la réservation sont valides. Si oui retourne le prénom et nom, sinon retourne false.
 	 *
+	 * @param {boolean} showAlert
+	 *
 	 * @returns {boolean|string[]}
 	 *
 	 * @private
 	 */
-	const _checkReservationInfo = () => {
+	const _checkReservationInfo = showAlert => {
 		let ok = true;
 
 		// On vérifie que les prénom et nom sont valides
@@ -420,7 +424,9 @@ export function JCDResa()
 		if (_canvas.getImageFilledPercent() < MIN_SIGNATURE_PERCENT_FILLED)
 		{
 			ok = false;
-			alert('Votre signature est trop petite');
+			if (showAlert) {
+				alert('Votre signature est trop petite');
+			}
 		}
 
 		// S'il y a un problème, on retourne false
