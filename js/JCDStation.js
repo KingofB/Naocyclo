@@ -85,7 +85,7 @@ export class JCDStation
 	 *
 	 */
 	updateIcon() {
-		// FIXME : dépend des statuts : réservé ou non, sélectionné ou non, vélos libres ou non
+		// Dépend des statuts : réservé ou non, sélectionné ou non, vélos libres ou non
 		if (this.reserved) {
 			this.marker.setIcon(window.app.map.orangeIcon);
 			return;

@@ -219,8 +219,72 @@ export function JCDResa()
 		clearTimeout(_resaTimer);
 		// 7. stopper le setInterval
 		clearInterval(_clockTimer);
+		// 8- remettre à vide la resa
+		_clearResa();
 	}
 
+	/**
+	 * Fonction permettant de remettre à null les données de la résa locale
+	 *
+	 * @private
+	 */
+	function _clearResa() {
+		_resa.station = null;
+		_resa.time = null;
+	}
+
+
+	/**
+	 * Fonction qui lance tout ce dont il y a besoin pour une résa lorsque celle-ci est détectée
+	 *
+	 * @param {boolean} pShouldReserveBike Indique si l'on doit effectuer la réservation de vélo sur la station ou pas.
+	 *
+	 * @private
+	 */
+	function _onResa(pShouldReserveBike) {
+		const station = window.app.manager.getStation(_resa.station);
+
+		//
+		//  faire une tentative de réservation sur la station avec _currentStation.reserveBike();
+		//        Si le résultat est false, c'est que la réservation a échoué !!
+		//
+		if (pShouldReserveBike && !station.reserveBike()) {
+			sessionStorage.removeItem(SESSION_RESA);
+			_clearResa();
+			alert('Réservation impossible, pas de vélo disponible');
+			return;
+		}
+
+		// On déclenche le compte à rebours de la validité de la réservation...
+		// garder une référence au timeoutID retourné par setTimeout afin de pouvoir appeler clearTimeout
+		//          si on annule la réservation !!
+		_resaTimer = setTimeout(_cancelReservation, DURATION * 1000 - (Date.now() - _resa.time));
+
+
+		//
+		// Afficher les détails de la réservation dans la DIV prévue à cet effet
+		//
+		// TODO : faire en sorte que le nom de la station soit un lien cliquable qui, lorsque cliqué, sélectionne (et centre) sur la map le marqueur correspondant
+		_$sectionDetails.find('> div')[0].innerHTML = `<p>Votre vélo dans la station ${station.name} est réservé ! Votre réservation expirera dans <span></span></p>`;
+		_updateResaClock();
+		// On affiche la section
+		_$sectionDetails.show();
+
+		//const pShowResa = document.createElement('p');
+		//pShowResa.textContent = 'Votre vélo dans la station ' + _resa.station.name + ' est réservé ! Celle-ci expirera dans ' + (_resaTimer / 60000) + 'minutes';
+		//_$sectionDetails.appendChild(pShowResa);
+
+
+		//
+		// Utiliser un setInterval() pour le compte à rebours
+		//
+		_clockTimer = setInterval(_updateResaClock, 50);
+
+		//
+		// Repasser le bouton "réserver" en disabled
+		//
+		_updateReservationBtn();
+	}
 
 
 	/**
@@ -304,35 +368,8 @@ export function JCDResa()
 		// Les specs demandent d'enregistrer la signature en session
 		sessionStorage.setItem('signature', _canvas.saveCanvas());
 
-		// On déclenche le compte à rebours de la validité de la réservation...
-		// garder une référence au timeoutID retourné par setTimeout afin de pouvoir appeler clearTimeout
-		//          si on annule la réservation !!
-		_resaTimer = setTimeout(_cancelReservation, DURATION * 1000);
 
-
-		//
-		// Afficher les détails de la réservation dans la DIV prévue à cet effet
-		//
-		// FIXME : faire en sorte que le nom de la station soit un lien cliquable qui, lorsque cliqué, sélectionne (et centre) sur la map le marqueur correspondant
-		_$sectionDetails.find('> div')[0].innerHTML = `<p>Votre vélo dans la station ${_currentStation.name} est réservé ! Votre réservation expirera dans <span></span></p>`;
-		_updateResaClock();
-		// On affiche la section
-		_$sectionDetails.show();
-
-		//const pShowResa = document.createElement('p');
-		//pShowResa.textContent = 'Votre vélo dans la station ' + _resa.station.name + ' est réservé ! Celle-ci expirera dans ' + (_resaTimer / 60000) + 'minutes';
-		//_$sectionDetails.appendChild(pShowResa);
-
-
-		//
-		// Utiliser un setInterval() pour le compte à rebours
-		//
-		_clockTimer = setInterval(_updateResaClock, 50);
-
-		//
-		// Repasser le bouton "réserver" en disabled
-		//
-		_updateReservationBtn();
+		_onResa(false);
 	}
 
 	/**
@@ -345,7 +382,8 @@ export function JCDResa()
 		if (!_resa.station) return;
 
 		// Sécurité pour s'assurer que le temps ne soit pas déjà écoulé
-		const remainingTime = Date.now() - _resa.time;
+		const elapsedTime = Date.now() - _resa.time;
+		const remainingTime = DURATION * 1000 - elapsedTime;
 		if (remainingTime <= 0)
 		{
 			_cancelReservation();
@@ -488,11 +526,25 @@ export function JCDResa()
 	this.onAllStationsLoaded = function()
 	{
 		//
-		// FIXME : détecter s'il y a une réservation en session (et si toutes les données de session sont valides).
+		//          Détecter s'il y a une réservation en session (et si toutes les données de session sont valides).
 		//          Si oui, mettre à jour tout ce qu'il faut (zone HTML de détail de la réservation, setTimeout, setInterval, etc.
 		//          SURTOUT (!!!) essayer de factoriser le code entre une réservation manuelle et une "réservation" ici.
 		//
+		const storedResa = sessionStorage.getItem(SESSION_RESA);
+		if (!storedResa) return;
+
+		const resaObj = JSON.parse(storedResa);
+		if (Date.now() - resaObj.time >= DURATION * 1000) {
+			sessionStorage.removeItem(SESSION_RESA);
+			return;
+		}
+
+		_resa.station = resaObj.station;
+		_resa.time = resaObj.time;
+
+		_onResa(true);
 	};
+
 
 
 	/**

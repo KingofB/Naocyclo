@@ -1,4 +1,3 @@
-
 import { Slider } from './Slider.js';
 import { Map } from './Map.js';
 import { JCDManager } from './JCDManager.js';
@@ -25,7 +24,7 @@ const App = function ()
 
 	/**
 	 * La map (avec LeafLet)
-	 * (sera utilisée par JCDManager pour ajouter les stations)
+	 * (sera utilisée par JCDManager pour ajouter les marqueurs des stations)
 	 *
 	 * @type {Map}
 	 *
@@ -61,7 +60,8 @@ const App = function ()
 
 
 // Pour s'assurer du chargement du doc avant la lecture du JS :
-// On passe en paramètre à la fonction ready, une référence vers la fonction init du namespace App.
+// Création d'une nouvelle instance d'App stockée dans le namespace global (window)
+// pour pouvoir y accéder plus facilement
 $(document).ready(() => {
 	window.app = new App();
 });
