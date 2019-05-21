@@ -262,10 +262,16 @@ export function JCDResa()
 
 
 		//
-		// FIXME : mettre à jour la zone de détails de la station (seulement si elle correspond à la station réservée !!)
+		// Mettre à jour la zone de détails de la station (seulement si elle correspond à la station réservée !!)
 		//          et diminuer de 1 le nombre de vélos disponibles
-		//
-
+		// Tester _currentStation et mettre à jour le champ dans le formulaire via son ID
+		if (_currentStation && _currentStation.id == _resa.station) {
+			/**
+			 * @var {jQuery} $nbFreeBikes
+			 */
+			const $nbFreeBikes = $('#station-freeBikes');
+			$nbFreeBikes.text(Number($nbFreeBikes.text()) - 1);
+		}
 
 		//
 		// Afficher les détails de la réservation dans la DIV prévue à cet effet

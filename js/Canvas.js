@@ -307,7 +307,6 @@ export function Canvas(canvas)
 	 * @public
 	 */
 	this.clear = function() {
-		// FIXME : vérifier s'il faut utiliser le "_scale" ici
 		_ctx.clearRect(0, 0, _canvas.width, _canvas.height);
 	};
 
@@ -317,7 +316,6 @@ export function Canvas(canvas)
 	 * @public
 	 */
 	this.storeImage = () => {
-		// FIXME : vérifier s'il faut utiliser le "_scale" ici
 		_signature = _ctx.getImageData(0, 0, _canvas.width, _canvas.height);
 	};
 
