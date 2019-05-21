@@ -213,7 +213,7 @@ export function JCDResa()
 		// 4. nettoyer le sessionStorage
 		sessionStorage.removeItem(SESSION_RESA);
 		// 5. vider la zone HTML de description de la station en cours
-		_$sectionDetails.find('> div').clear();
+		_$sectionDetails.find('> div').empty();
 		_$sectionDetails.hide();
 		// 6. stopper le setTimeout
 		clearTimeout(_resaTimer);
@@ -259,6 +259,12 @@ export function JCDResa()
 		// garder une référence au timeoutID retourné par setTimeout afin de pouvoir appeler clearTimeout
 		//          si on annule la réservation !!
 		_resaTimer = setTimeout(_cancelReservation, DURATION * 1000 - (Date.now() - _resa.time));
+
+
+		//
+		// FIXME : mettre à jour la zone de détails de la station (seulement si elle correspond à la station réservée !!)
+		//          et diminuer de 1 le nombre de vélos disponibles
+		//
 
 
 		//
@@ -321,12 +327,17 @@ export function JCDResa()
 		// On vérifie une nouvelle fois que tout est bien défini dans le formulaire, et ça nous permet aussi
 		// de récupérer par la même occasion le prénom et le nom (nettoyés) de l'utilisateur.
 		// (sinon on serait obligés de le refaire ici, à moins de le stocker entre-temps...)
-		const res = _checkReservationInfo(true);
+		const res = _checkReservationInfo();
 		if (!res)
 		{
 			console.error('Les infos de réservation ne sont pas bonnes, cela ne devrait pas arriver !');
 			return;
 		}
+
+
+		// On vérifie la signature
+		if (!_checkSignature())
+			return;
 
 
 
@@ -407,7 +418,29 @@ export function JCDResa()
 	{
 		_canvas.storeImage();
 
-		_updateReservationBtn();
+		// On n'a plus besoin de mettre à jour le bouton de réservation, car il ne dépend plus de la signature
+		//_updateReservationBtn();
+
+		// A la place, on affiche une alerte si la signature est trop petite
+		_checkSignature();
+	}
+
+	/**
+	 * Vérifie si la signature couvre suffisamment d'espace sur la zone de dessin
+	 *
+	 * @returns {boolean}
+	 *
+	 * @private
+	 */
+	function _checkSignature() {
+		// La signature doit couvrir au moins 2% (cf constante) de la surface de dessin
+		if (_canvas.getImageFilledPercent() < MIN_SIGNATURE_PERCENT_FILLED)
+		{
+			alert('Votre signature est trop petite');
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -436,19 +469,18 @@ export function JCDResa()
 		 *
 		 * Perso j'aime l'efficacité et "l'expressiveness" comme on dit en anglais
 		 */
-		$btn.attr('disabled', !_checkReservationInfo(false));
+		$btn.attr('disabled', !_checkReservationInfo());
 	};
 
 	/**
-	 * Vérifie si les infos de la réservation sont valides. Si oui retourne le prénom et nom, sinon retourne false.
-	 *
-	 * @param {boolean} showAlert
+	 * Vérifie si les infos de la réservation sont valides (nom et prénom seulement, car la signature est vérifiée plus tard).
+	 * Si oui retourne le prénom et nom, sinon retourne false.
 	 *
 	 * @returns {boolean|string[]}
 	 *
 	 * @private
 	 */
-	const _checkReservationInfo = showAlert => {
+	const _checkReservationInfo = () => {
 		let ok = true;
 
 		// On vérifie que les prénom et nom sont valides
@@ -457,15 +489,6 @@ export function JCDResa()
 
 		if (!firstN || !lastN)
 			ok = false;
-
-		// La signature doit couvrir au moins 2% (cf constante) de la surface de dessin
-		if (_canvas.getImageFilledPercent() < MIN_SIGNATURE_PERCENT_FILLED)
-		{
-			ok = false;
-			if (showAlert) {
-				alert('Votre signature est trop petite');
-			}
-		}
 
 		// S'il y a un problème, on retourne false
 		if (!ok)
