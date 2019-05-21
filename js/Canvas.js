@@ -1,4 +1,5 @@
 /**
+ * Classe utilitaire pour gérer le canvas
  *
  * @param {HTMLCanvasElement} canvas
  *
@@ -44,6 +45,8 @@ export function Canvas(canvas)
 
 	/**
 	 * Utilisé si jamais le canvas a un boundingClientRect différent de sa taille "pseudo-réelle"
+	 * c'est-à-dire si jamais la zone de dessin du context a une dimension différente de celle du canvas
+	 * afin de permettre de dessiner au bon endroit en appliquant le "_scale" aux positions des events.
 	 *
 	 * @private
 	 *
@@ -58,7 +61,7 @@ export function Canvas(canvas)
 	 *
 	 * @type {boolean}
 	 */
-	let _bDrawing = false;
+	let _isDrawing = false;
 
 	/**
 	 * La signature (format ImageData)
@@ -80,6 +83,8 @@ export function Canvas(canvas)
 
 	/**
 	 * Surface de dessin
+	 * TODO : amélioration possible : détecter le redimensionnement de la page, et mettre
+	 * 			cette valeur à jour lors de cet event.
 	 *
 	 * @type {DOMRect | ClientRect}
 	 *
@@ -104,9 +109,11 @@ export function Canvas(canvas)
 		// Ici on utiliser un opérateur "ET binaire" (en anglais : "binary AND operator")
 		if ((_isTouch && e.touches.length == 0) || (!_isTouch && (e.buttons & 1) == 0))
 		{
+			// On capture l'événement
 			e.preventDefault();
 			e.stopPropagation();
 
+			// On stoppe le dessin
 			_stopDraw();
 		}
 	}
@@ -118,15 +125,15 @@ export function Canvas(canvas)
 	 */
 	function _stopDraw()
 	{
-		if (_bDrawing)
-		{
-			_bDrawing = false;
-			_ctx.closePath();
-			if (_isTouch)
-				_canvas.removeEventListener('touchmove', _drawTouch);
-			else
-				_canvas.removeEventListener('mousemove', _draw);
-		}
+		if (!_isDrawing) return;
+
+		_isDrawing = false;
+		_ctx.closePath();
+
+		if (_isTouch)
+			_canvas.removeEventListener('touchmove', _drawTouch);
+		else
+			_canvas.removeEventListener('mousemove', _drawMouse);
 	}
 
 	/**
@@ -137,44 +144,54 @@ export function Canvas(canvas)
 	 * @param {MouseEvent|TouchEvent} e
 	 */
 	function _beginDraw(e) {
+		if (_isDrawing) return;
+
+		// _isTouch est égal à : oui ou non e.type est égal à 'touchstart' (résultat (boolean) de la comparaison entre les deux)
+		// @see https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
+		// @see https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent
 		_isTouch = e.type == 'touchstart';
 
-		if (!_bDrawing && ((_isTouch && e.touches.length > 0) || (!_isTouch && (e.buttons & 1))))
+		// @see https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent/touches
+		// @see https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons
+		// @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators
+		// e.buttons contient la sommes des puissances de 2 qui représentent chaque bouton (ex: bouton1 = 1 et bouton3 = 4)
+		if ((_isTouch && e.touches.length > 0) || (!_isTouch && (e.buttons & 1)))
 		{
 			e.preventDefault();
 			e.stopPropagation();
 
-			// Mettre à jour le scale à chaque nouveau tracé
-			// (normalement ça ne devrait pas changer, mais mieux vaut être + strict
-			// et ne pas laisser de place à l'erreur)
+			// Variable pour récupérer la taille de la zone de dessin du canvas
 			_canvasRect = _canvas.getBoundingClientRect();
+			// Mise à jour de l'echelle x-y sur la zone de dessin et sur le canvas
 			_scale.x = _canvas.width / _canvasRect.width;
 			_scale.y = _canvas.height / _canvasRect.height;
 
-			_bDrawing = true;
+			_isDrawing = true;
 			_ctx.beginPath();
 			_ctx.lineWidth = LINE_WIDTH;
 			_ctx.strokeStyle = LINE_COLOR;
 
-			// Utilisation du scale
+			// Utilisation du scale pour transformer les coordonnées de la position sur le canvas (récupérées via l'event "e")
+			// en coordonnées sur la zone de dessin (qui n'a pas forcément la même taille que le canvas, d'où le scale).
 			_ctx.moveTo((_isTouch ? e.touches[0].clientX - _canvasRect.left : e.offsetX) * _scale.x, (_isTouch ? e.touches[0].clientY - _canvasRect.top : e.offsetY) * _scale.y);
+
 			if (_isTouch)
 				_canvas.addEventListener('touchmove', _drawTouch);
 			else
-				_canvas.addEventListener('mousemove', _draw);
+				_canvas.addEventListener('mousemove', _drawMouse);
 		}
 	}
 
 	/**
-	 * Dessiner
+	 * Dessiner (souris)
 	 *
 	 * @private
 	 *
 	 * @param {MouseEvent} e
 	 */
-	function _draw(e)
+	function _drawMouse(e)
 	{
-		if (!_bDrawing)
+		if (!_isDrawing)
 			return;
 
 		e.preventDefault();
@@ -195,7 +212,7 @@ export function Canvas(canvas)
 	 */
 	function _drawTouch(e)
 	{
-		if (!_bDrawing)
+		if (!_isDrawing)
 			return;
 
 		e.preventDefault();
@@ -244,16 +261,35 @@ export function Canvas(canvas)
 	{
 		if (!_signature) return 0;
 
+		// _signature.data contient tous les pixels de la zone de dessin.
+		// Un pixel est représenté par 4 valeurs : RGBA (chaque valeur vaut de 0 à 255).
+		// Donc une zone de dessin de 100x50 contiendra 5.000 pixels, et donc 20.000 valeurs dans _signature.data.
 		const len = _signature.data.length;
-		let i = 0, nb = 0, total = 0;
+		// On définit 4 variables dans la même instruction.
+		let i = 0, nbColoredPixels = 0, nbPixels = len / 4, rgba = [];
+
+		if (nbPixels <= 0)
+			return 0;
 
 		// const t1 = performance.now();
 		while (true)
 		{
-			if (_signature.data.slice(i, i + 4).reduce((r, c) => r + c, 0) > 0)
-				nb++;
-			total++;
+			// TODO Le code pourrait être amélioré ici :
+			//		==> Si l'alpha est complètement transparent (4ème valeur du sous-tableau = 0), il ne faut pas prendre en compte ce pixel.
+			//		==> Si c'est du blanc (peu importe l'opacité) ==> on ne prend pas ce pixel en compte
+			// Noir opaque 100% :
+			// [0, 0, 0, 255]
+			// Rouge opaque 100% :
+			// [255, 0, 0, 255]
+			// Blanc (peu importe l'opacité) :
+			// [255, 255, 255, ???]
+			rgba = _signature.data.slice(i, i + 4);
+			if ((rgba[3] > 0) && (rgba[0] + rgba[1] + rgba[2] < 765)) {
+				nbColoredPixels++;
+			}
+
 			i += 4;
+
 			if (i >= len)
 				break;
 		}
@@ -261,10 +297,8 @@ export function Canvas(canvas)
 
 		// console.warn('nb', nb, total, t2 - t1);
 
-		if (total <= 0)
-			return 0;
-
-		return (nb / total) * 100;
+		// Retourne le pourcentage de pixels colorés sur la zone de dessin
+		return (nbColoredPixels / nbPixels) * 100;
 	};
 
 	/**
@@ -273,6 +307,7 @@ export function Canvas(canvas)
 	 * @public
 	 */
 	this.clear = function() {
+		// FIXME : vérifier s'il faut utiliser le "_scale" ici
 		_ctx.clearRect(0, 0, _canvas.width, _canvas.height);
 	};
 
@@ -282,6 +317,7 @@ export function Canvas(canvas)
 	 * @public
 	 */
 	this.storeImage = () => {
+		// FIXME : vérifier s'il faut utiliser le "_scale" ici
 		_signature = _ctx.getImageData(0, 0, _canvas.width, _canvas.height);
 	};
 
@@ -304,17 +340,15 @@ export function Canvas(canvas)
 	 */
 	function _init()
 	{
-		_canvas.addEventListener('touchstart', _beginDraw);//_touchDevice ? 'touchstart' : 'mousedown'
-		_canvas.addEventListener('mousedown', _beginDraw);//_touchDevice ? 'touchstart' : 'mousedown'
+		// Listeners tactiles
+		_canvas.addEventListener('touchstart', _beginDraw);
 		_canvas.addEventListener('touchend', _tryStopDraw);
 		_canvas.addEventListener('touchcancel', _tryStopDraw);
+
+		// Listeners souris
+		_canvas.addEventListener('mousedown', _beginDraw);
 		_canvas.addEventListener('mouseup', _tryStopDraw);
-
-		// Peut-être que de continuer à dessiner si on sort du cadre et qu'on revient est une bonne idée en fait...
-		// _canvas.addEventListener('mouseout', _stopDraw);
 	}
-
-
 
 
 	_init();
