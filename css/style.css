@@ -637,7 +637,7 @@ footer li {
 	}
 
 	#carousel {
-		background: url('/img/slides/quais.jpg') center / cover;
+		background: url('../img/slides/quais.jpg') center / cover;
 	}
 
 	#carousel h2 {
