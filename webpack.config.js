@@ -3,7 +3,6 @@ const VERSION = process.env.npm_package_version;
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    plugins: [new CleanWebpackPlugin()],
     entry: './js/App.js',
     output: {
         filename: 'app.bundle.v' + VERSION + '.js'
@@ -34,13 +33,12 @@ module.exports = {
         colors: true
     },
     devtool: 'eval-source-map',
-    plugins: [
+    plugins: [new CleanWebpackPlugin(),
         new CopyPlugin([
             {from: 'img/**/*', to: '.'},
             {from: 'icomoon/**/*', to: '.'},
             {from: 'css/**/*', to: '.'},
             {from: 'jquery/**/*', to: '.'},
-            {from: 'index.html', to: 'index.html'}
             {from: 'index.html', to: 'index.html'}
         ]),
     ],
