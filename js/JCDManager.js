@@ -4,12 +4,13 @@ import { JCDStation } from './JCDStation.js';
 /**
  * Classe de gestion JC Decaux
  *
- * @param {Map} map
- * @param {Canvas} canvas
- * @param {JCDResa} resa
+ * @param {Function} cbStationsLoaded Fonction de callback (cb) appelée lorsque toutes les stations auront été récupérées depuis JCDecaux
+ * @param {Function} cbOnChooseStation Fonction de callback (cb) appelée lorsqu'on choisit une station JCDecaux sur la map
+ *
  * @constructor
  */
-export function JCDManager(map, canvas, resa) {
+export function JCDManager(cbStationsLoaded, cbOnChooseStation)
+{
 	/**
 	 * Variable pour la clé de l'API JC Decaux :
 	 *
@@ -39,22 +40,40 @@ export function JCDManager(map, canvas, resa) {
 	 */
 	const _stations = {};
 
-
-
 	/**
-	 * Fonction centralisée permettant d'appeler l'API JCDecaux :
+	 * Station actuellement sélectionnée
 	 *
 	 * @private
 	 *
-	 * @param {string} action
-	 * @param {Object} data
-	 * @param {Function} callback
+	 * @type {JCDStation}
+	 */
+	let _currentStation = null;
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * Fonction centralisée permettant d'appeler l'API JCDecaux (utilisation de jquery):
+	 *
+	 * @private
+	 *
+	 * @param {string} action String représentant l'API JCDecaux à appeler (par exemple "stations" pour récupérer toutes les stations)
+	 * @param {Object} data Paramètres à fournir lors de l'appel à l'API JCDecaux
+	 * @param {Function} callback Fonction de rappel lorsque le serveur JCDecaux a répondu à notre requête
 	 *
 	 */
 	const _getCallApi = function(action, data, callback) {
+		// Vérification si data est falsy et si oui, on le remplace par un objet vide
 		data = data || {};
 		data.apiKey = JCD_API_KEY;
 
+		// Ici on utilise jquery, mais on pourrait utiliser l'Api Fetch en JS
 		$.get('https://api.jcdecaux.com/vls/v1/' + action, data, callback);
 	};
 
@@ -64,11 +83,55 @@ export function JCDManager(map, canvas, resa) {
 	 *
 	 * @private
 	 *
-	 * @param {Event} e
+	 * @param {TouchEvent|MouseEvent} e
 	 */
 	const _onChooseStation = e => {
-		resa.updateFormForStation(_stations[e.target.options.stationId]);
+		// Vérification s'il existait déjà une station sélectionnée
+		if (_currentStation) {
+			// S'il y en a une, on la déselectionne
+			_currentStation.setSelected(false);
+		}
+
+		// Dans tous les cas, on garde la station et on l'informe comme étant sélectionnée
+		_currentStation = _stations[e.target.options.stationId];
+		_currentStation.setSelected(true);
+
+		// Vérification qu'on a bien un callback à appeler lorqu'on choisit une station
+		// (cb passé au constructeur)
+		// Un enchaînement de "ET" logiques est une autre manière d'écrire une imbrication de "if"
+		typeof cbOnChooseStation === 'function' && cbOnChooseStation(_currentStation);
+		//if (typeof cbOnChooseStation === 'function') {
+		//	cbOnChooseStation(_currentStation);
+		//}
 	};
+
+
+	/**
+	 * Fonction pour récupérer une station par son id
+	 *
+	 * @public
+	 *
+	 * @param {number} id
+	 *
+	 * @returns {JCDStation}
+	 */
+	this.getStation = function(id) {
+		// On vérifie si l'ID est une clef de notre Object "_stations".
+		// Ici on utilise la manière la + rigoureuse qui est la méthode Object.hasOwnProperty().
+		// Il y a 2 autres manières usuelles de le faire :
+		// * if (!_stations[id]) // On regarde si la clef "id" existe ET que sa valeur n'est pas falsy
+		// * if (!(id in _stations)) // On regarde si la clef "id" (qui est une variable) est dans "_stations"
+		if (!_stations.hasOwnProperty(id))
+			throw 'ID non trouvé';
+
+		// On retourne la valeur dans "_stations" correspondant à l'id de station représenté par la variable "id".
+		// On retourne donc une instance de type JCDStation
+		return _stations[id];
+	};
+
+
+
+
 
 
 	/**
@@ -77,19 +140,32 @@ export function JCDManager(map, canvas, resa) {
 	 *
 	 * @private
 	 */
-	function _init() {
+	function _init()
+	{
+		// @see : https://developer.jcdecaux.com/#/opendata/vls?page=dynamic
 		_getCallApi('stations', {contract: JCD_CONTRACT}, response => {
-			// Récup des 10 premières stations seulement
+			// Récup des 10 premières stations seulement car c'est pour l'exemple
+			// @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
 			response = response.slice(0, 10);
 
-			// Récup de la liste des stations et leur affichage sur la carte (méthode forEach)
+			// Récup de la liste des stations et leur affichage sur la carte (méthode forEach, synchrone)
 			response.forEach(function(station) {
+				// TODO : optimisation : ne conserver de "station" que les clefs dont on aura besoin ensuite
 				const obj = new JCDStation(station);
-				_stations[station.number] = obj;
 
 				// Ajouter un marqueur sur la carte
-				map.addMarker(obj.gps, {stationId: obj.id, title: obj.name}, _onChooseStation);
+				obj.marker = window.app.map.addMarker(obj.gps, {stationId: obj.id, title: obj.name}, _onChooseStation);
+				obj.updateIcon();
+
+				// "_stations" est un Object (donc clef => valeur)
+				// On stocke à la clef correspondant à l'id (appelé ici "number") de la station la valeur qui est l'instance JCDStation créée ci-dessus
+				// Notre Object "_stations" liste toutes les stations et fait correspondre à l'ID l'instance de type JCDStation
+				_stations[station.number] = obj;
 			});
+
+			// Si quelqu'un souhaite être prévenu que toutes les stations sont chargées, on le prévient
+			if (typeof cbStationsLoaded === 'function')
+				cbStationsLoaded();
 		});
 	}
 
@@ -97,3 +173,11 @@ export function JCDManager(map, canvas, resa) {
 
 	_init();
 }
+
+
+// Une fonction (méthode) affectée au prototype est définie (et donc occupe de l'espace mémoire) qu'une seule fois,
+// au contraire d'une fonction/méthode définie à l'intérieur de la fonction constructeur.
+// Une méthode affectée au prototype sera toujours publique.
+//JCDManager.prototype.getStation = function(id) {
+//	return this._stations[id];
+//};

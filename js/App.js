@@ -2,36 +2,69 @@ import { Slider } from './Slider.js';
 import { Map } from './Map.js';
 import { JCDManager } from './JCDManager.js';
 import { JCDResa } from './JCDResa.js';
-import { Canvas } from './Canvas.js';
-import { Popup } from './Popup.js';
 
 
 
-// Fonction d'initialisation du programme :
-const init = function () {
-	// Ne sera pas utilisé ailleurs, pas besoin de le sauvegarder dans une variable
+
+/**
+ * Notre programme principal ! :)
+ *
+ * @constructor
+ */
+const App = function ()
+{
+	/**
+	 * Slider, utilisé nulle part ailleurs (donc privé et même sans besoin de variable/constante)
+	 *
+	 * @type {Slider}
+	 *
+	 * @private
+	 */
 	new Slider(document.getElementById('slider'), '/js/diaporama.json');
 
-	const map = new Map();
-	const canvas = new Canvas();
+	/**
+	 * La map (avec LeafLet)
+	 * (sera utilisée par JCDManager pour ajouter les marqueurs des stations)
+	 *
+	 * @type {Map}
+	 *
+	 * @public
+	 */
+	this.map = new Map();
 
-	// Notre popup a besoin d'accéder au canvas
-	const popup = new Popup(canvas);
 
-	// Notre JCDResa a besoin de la popup
-	const resa = new JCDResa(popup, canvas);
+	/**
+	 * Notre JCDResa
+	 *
+	 * @type {JCDResa}
+	 *
+	 * @private
+	 */
+	const _resa = new JCDResa();
 
-	// Notre gestionnaire JCDecaux a besoin d'avoir accès à la map et au canvas
-	new JCDManager(map, canvas, resa);
-	// totoxsdsdsdsd
+
+	/**
+	 * Notre gestionnaire JCDecaux
+	 * (sera utilisé par JCDResa pour accéder aux stations)
+	 *
+	 * @type {JCDManager}
+	 *
+	 * @public
+	 */
+	this.manager = new JCDManager(_resa.onAllStationsLoaded, _resa.updateFormForStation);
 };
 
 
 
 
+
+
 // Pour s'assurer du chargement du doc avant la lecture du JS :
-// On passe en paramètre à la fonction ready, une référence vers la fonction init du namespace App.
-$(document).ready(init);
+// Création d'une nouvelle instance d'App stockée dans le namespace global (window)
+// pour pouvoir y accéder plus facilement
+$(document).ready(() => {
+	window.app = new App();
+});
 
 
 
