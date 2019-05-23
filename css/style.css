@@ -157,85 +157,6 @@ nav a:hover {
 
 
 
-/***********************
-
-      POPUP CANVAS
-
-************************/
-
-/**
- * Overlay de notre popup
- */
-#canvas-container {
-	position: fixed;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	display: none;
-	align-items: center;
-	justify-content: center;
-	z-index: 2500;
-	background: rgba(0, 0, 0, 0.8);
-}
-
-/**
- * La popup en elle-même
- */
-#canvas-container > div {
-	border: 2px solid teal;
-	border-radius: 2px;
-	text-align: center;
-	padding: 10px 10px;
-	background: #fff;
-	z-index: 2500;
-
-	/* Pour les petits écrans */
-	max-width: 100%;
-}
-
-/**
- * Titre de la popup
- */
-#canvas-container h4 {
-	display: block;
-	color: teal;
-	font-weight: bold;
-	font-size: 20px;
-	margin: 5px 0 5px 0;
-}
-
-canvas {
-	/**
-	 * Ici on reset le box-sizing, juste pour être + rigoureux,
-	 * pour ne pas que le padding/border viennent empiéter sur les
-	 * dimensions que l'on définit pour le canvas.
-	 */
-	box-sizing: content-box;
-	width: 320px;
-
-	/* Pour les petits écrans */
-	max-width: 100%;
-
-	height: 160px;
-	border: 1px solid teal;
-	border-radius: 2px;
-	background: #fcfacf;
-	margin: 10px auto;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 /************************
 
   CAROUSEL ET SLIDES
@@ -376,6 +297,34 @@ canvas {
 #slider.paused .nav-pause::before {
 	content: "\ea1c";
 }
+
+
+
+
+
+
+
+
+
+
+/***********************
+
+      RESERVATION
+
+***********************/
+
+#reservation-details {
+	text-align: center;
+	color: teal;
+	border-bottom: 2px solid teal;
+}
+
+#reservation-details h2 {
+	margin: 0;
+	padding-top: 10px;
+}
+
+
 
 
 
@@ -558,6 +507,80 @@ button[data-icon]::before,
 }
 
 
+
+
+
+
+
+
+
+
+/***********************
+
+      POPUP CANVAS
+
+************************/
+
+/**
+ * Overlay de notre popup
+ */
+ #canvas-container {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	z-index: 2500;
+	background: rgba(0, 0, 0, 0.8);
+}
+
+/**
+ * La popup en elle-même
+ */
+#canvas-container > div {
+	border: 2px solid teal;
+	border-radius: 2px;
+	text-align: center;
+	padding: 10px 10px;
+	background: #fff;
+	z-index: 2500;
+
+	/* Pour les petits écrans */
+	max-width: 100%;
+}
+
+/**
+ * Titre de la popup
+ */
+#canvas-container h4 {
+	display: block;
+	color: teal;
+	font-weight: bold;
+	font-size: 20px;
+	margin: 5px 0 5px 0;
+}
+
+canvas {
+	/**
+	 * Ici on reset le box-sizing, juste pour être + rigoureux,
+	 * pour ne pas que le padding/border viennent empiéter sur les
+	 * dimensions que l'on définit pour le canvas.
+	 */
+	box-sizing: content-box;
+	width: 320px;
+
+	/* Pour les petits écrans */
+	max-width: 100%;
+
+	height: 160px;
+	border: 1px solid teal;
+	border-radius: 2px;
+	background: #fcfacf;
+	margin: 10px auto;
+}
 
 
 
