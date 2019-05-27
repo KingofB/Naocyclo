@@ -39,7 +39,8 @@ module.exports = {
             {from: 'icomoon/**/*', to: '.'},
             {from: 'css/**/*', to: '.'},
             {from: 'jquery/**/*', to: '.'},
-            {from: 'index.html', to: 'index.html'}
+            {from: 'index.html', to: 'index.html'},
+            {from: 'js/diaporama.json', to: 'js'}
         ]),
     ],
 };

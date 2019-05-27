@@ -206,6 +206,15 @@ export function JCDResa()
 		// 1. vérifier s'il y a une réservation en cours
 		if (!_resa.station) return;
 
+		// Mettre à jour le nbre de vélos si la station est sélecionnée
+		if (_currentStation && _currentStation.id == _resa.station) {
+			/**
+			 * @var {jQuery} $nbFreeBikes
+			 */
+			const $nbFreeBikes = $('#station-freeBikes');
+			$nbFreeBikes.text(Number($nbFreeBikes.text()) + 1);
+		}
+
 		// 2. récupérer la station liée à la réservation en cours
 		const station = window.app.manager.getStation(_resa.station);
 		// 3. appeler la fonction d'annulation sur la station
@@ -221,6 +230,8 @@ export function JCDResa()
 		clearInterval(_clockTimer);
 		// 8- remettre à vide la resa
 		_clearResa();
+		// 9- mise à jour du bouton au cas où la station réservée était déjà sélectionnée
+		_updateReservationBtn();
 	}
 
 	/**
@@ -277,7 +288,8 @@ export function JCDResa()
 		// Afficher les détails de la réservation dans la DIV prévue à cet effet
 		//
 		// TODO : faire en sorte que le nom de la station soit un lien cliquable qui, lorsque cliqué, sélectionne (et centre) sur la map le marqueur correspondant
-		_$sectionDetails.find('> div')[0].innerHTML = `<p>Votre vélo dans la station ${station.name} est réservé ! Votre réservation expirera dans <span></span></p>`;
+		_$sectionDetails.find('> div')[0].innerHTML = `<p>Votre vélo dans la station ${station.name} est réservé ! Votre réservation expirera dans <span class="clock"></span></p>
+		<p><span class="btn btn-cancel-resa">Annuler</span></p>`;
 		_updateResaClock();
 		// On affiche la section
 		_$sectionDetails.show();
@@ -411,7 +423,7 @@ export function JCDResa()
 		const clock = new Intl.DateTimeFormat('fr-FR', {minute: '2-digit', second: '2-digit'}).format(new Date(remainingTime));
 
 		// Mettre à jour le span dans les details, avec "clock"
-		_$sectionDetails.find('span').text(clock);
+		_$sectionDetails.find('.clock').text(clock);
 	}
 
 
@@ -462,19 +474,7 @@ export function JCDResa()
 			return;
 		}
 
-		/**
-		 * On utilise l'opérateur "not" pour convertir en boolean le résultat de l'appel à la fonction _checkReservationInfo().
-		 * Si la valeur est "truthy" (par exemple un tableau contenant prénom et nom),
-		 *         alors le "not" transformera la valeur en boolean false.
-		 * Si la valeur est "falsy",
-		 *         alors le "not" transformera la valeur en boolean true.
-		 *
-		 * @see https://stackoverflow.com/a/784946
-		 *
-		 * On pourrait aussi utiliser "Boolean(_checkReservationInfo())" qui est plus long mais "théoriquement" moins error-prone que "!!_checkReservationInfo()".
-		 *
-		 * Perso j'aime l'efficacité et "l'expressiveness" comme on dit en anglais
-		 */
+		// On utilise l'opérateur "not" pour convertir en boolean le résultat de l'appel à la fonction _checkReservationInfo().
 		$btn.attr('disabled', !_checkReservationInfo());
 	};
 
@@ -538,8 +538,6 @@ export function JCDResa()
 		name = name
 				.replace('-', ' ')
 				.split(' ')
-				//.map(element => element.charAt(0).toUpperCase() + element.slice(1))
-				//.join(' ')
 				.reduce((prev, cur) => prev + (!prev ? '' : ' ') + cur, '');
 
 		// Pour finir, on retourne le nom ainsi préparé
@@ -554,11 +552,8 @@ export function JCDResa()
 	 */
 	this.onAllStationsLoaded = function()
 	{
-		//
-		//          Détecter s'il y a une réservation en session (et si toutes les données de session sont valides).
-		//          Si oui, mettre à jour tout ce qu'il faut (zone HTML de détail de la réservation, setTimeout, setInterval, etc.
-		//          SURTOUT (!!!) essayer de factoriser le code entre une réservation manuelle et une "réservation" ici.
-		//
+		// Détecter s'il y a une réservation en session (et si toutes les données de session sont valides).
+		// Si oui, mettre à jour tout ce qu'il faut (zone HTML de détail de la réservation, setTimeout, setInterval, etc.
 		const storedResa = sessionStorage.getItem(SESSION_RESA);
 		if (!storedResa) return;
 
@@ -571,9 +566,12 @@ export function JCDResa()
 		_resa.station = resaObj.station;
 		_resa.time = resaObj.time;
 
+		// S'assurer qu'une station soit sélectionnée
+		window.app.manager.setStation(_resa.station);
+
+
 		_onResa(true);
 	};
-
 
 
 	/**
@@ -590,11 +588,9 @@ export function JCDResa()
 		$('body')
 			.on('click', '#signature .btn', _popup.showPopup)
 			.on('click', '#btn-reserve', _makeReservation)
-			.on('input', '#firstname, #lastname', _updateReservationBtn)
-		;
+			.on('click', '.btn-cancel-resa', _cancelReservation)
+			.on('input', '#firstname, #lastname', _updateReservationBtn);
 	}
-
-
 
 	_init();
 }

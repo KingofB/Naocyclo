@@ -86,6 +86,17 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 	 * @param {TouchEvent|MouseEvent} e
 	 */
 	const _onChooseStation = e => {
+		this.setStation(e.target.options.stationId);
+	};
+
+	/**
+	 * Fonction qui définit la station qui est sélectionnée
+	 *
+	 * @public
+	 *
+	 * @param {number} id
+	 */
+	this.setStation = function(id) {
 		// Vérification s'il existait déjà une station sélectionnée
 		if (_currentStation) {
 			// S'il y en a une, on la déselectionne
@@ -93,7 +104,7 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 		}
 
 		// Dans tous les cas, on garde la station et on l'informe comme étant sélectionnée
-		_currentStation = _stations[e.target.options.stationId];
+		_currentStation = this.getStation(id);
 		_currentStation.setSelected(true);
 
 		// Vérification qu'on a bien un callback à appeler lorqu'on choisit une station
@@ -103,8 +114,7 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 		//if (typeof cbOnChooseStation === 'function') {
 		//	cbOnChooseStation(_currentStation);
 		//}
-	};
-
+	}
 
 	/**
 	 * Fonction pour récupérer une station par son id
