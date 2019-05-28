@@ -7,7 +7,7 @@ import { JCDResa } from './JCDResa.js';
 
 
 /**
- * Notre programme principal ! :)
+ * Programme principal qui instancie les autres les rendant publics ou non
  *
  * @constructor
  */
@@ -53,10 +53,6 @@ const App = function ()
 	 */
 	this.manager = new JCDManager(_resa.onAllStationsLoaded, _resa.updateFormForStation);
 };
-
-
-
-
 
 
 // Pour s'assurer du chargement du doc avant la lecture du JS :

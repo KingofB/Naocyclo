@@ -46,11 +46,10 @@ li
 	font-size: 20px;
 }
 
+/* Héritage de la famille de police pour les input, select, texte-area et boutons */
 input, select, textarea, button {
 	font-family: inherit;
 }
-
-
 
 
 
@@ -67,7 +66,7 @@ input, select, textarea, button {
 
 ***********************/
 
-/*Règles de style Icomoon remises sur ma classe d'icônes*/
+/*Règles de style Icomoon remises sur la classe d'icônes*/
 .icomoon, [data-icon]::before {
 	/* use !important to prevent issues with browser extensions that change fonts */
 	font-family: 'icomoon' !important;
@@ -178,7 +177,7 @@ nav a:hover {
 	border-bottom: 2px solid teal;
 }
 
-/*Marges et hauteur du h2 (à revoir)*/
+/*Marges et hauteur du h2*/
 #carousel h2 {
 	position: absolute;
 	left: 0;
@@ -312,13 +311,14 @@ nav a:hover {
       RESERVATION
 
 ***********************/
-
+/*Couleur de police, alignement du texte et bordure de l'information de réservation*/
 #reservation-details {
 	text-align: center;
 	color: teal;
 	border-bottom: 2px solid teal;
 }
 
+/*Style du titre de la partie réervation*/
 #reservation-details h2 {
 	margin: 0;
 	padding-top: 10px;
@@ -341,22 +341,26 @@ nav a:hover {
 
 **********************/
 
+/*Position et hauteur de la carte*/
 #map {
 	position: relative;
 	height: 280px;
 }
 
+/*Marge haute, largeur et couleur de police du formulaire*/
 form {
 	margin-top: 15px;
 	width: 100%;
 	color: teal;
 }
 
+/* Bordure et marge basse du fieldset */
 fieldset {
 	border: 2px solid teal;
 	margin-bottom: 5px;
 }
 
+/* Style et alignement de la police de la legend */
 legend {
 	color: teal;
 	font-weight: bold;
@@ -364,39 +368,59 @@ legend {
 	text-align: center;
 }
 
+/* Marge basse de toutes les divs enfants de la div réservation */
 #station-details > div {
 	margin-bottom: 15px;
 }
 
+/* display et alignement vertical de tous les enfants de toutes les div enfants de la div réservation */
 #station-details > div > *
 {
 	display: inline-block;
 	vertical-align: middle;
 }
 
+/* Marge haute de la 1ère div de la div de réservation */
 #station-details div:nth-of-type(1) {
 	margin-top: 20px;
 }
 
+/* Marge basse de la 3ème div de la div de réservation */
 #station-details div:nth-of-type(3) {
 	margin-bottom: 35px;
 }
 
+/* Marge haute de la 6ème div de la div de réservation */
 #station-details div:nth-of-type(6) {
 	margin-top: 25px;
 }
 
+/* Largeur, position et police en gras des labels */
 #station-details label {
 	font-weight: bold;
 	left: 0;
 	width: 25%;
 }
 
+/* Largeur des labels et de leurs éléments */
 #station-details label + *
 {
 	width: 73%;
 }
 
+/* Au départ, on n'affiche pas la div de réservation afin d'afficher celle de l'empty-space */
+#station-details
+{
+	display: none;
+}
+
+/*Alignement du texte dans l'empty-space*/
+#empty-state
+{
+	text-align: center;
+}
+
+/* display en ligne, largeur et style des input du formulaire */
 input {
 	display: inline-block;
 	width: 70%;
@@ -406,6 +430,7 @@ input {
 	padding: 6px 10px;
 }
 
+/*Style et display des boutons et de la classe .btn*/
 button,
 .btn
 {
@@ -422,15 +447,14 @@ button,
 	cursor: pointer;
 }
 
-/**
- * Type de bouton alternatif, moins visible
- */
+ /* Type de bouton alternatif, moins visible */
 .btn-light
 {
 	background: #fcfacf;
 	color: teal;
 }
 
+/* Changement du style d'un bouton lorsqu'il a l'attribut disabled */
 button[disabled],
 .btn[disabled]
 {
@@ -441,6 +465,7 @@ button[disabled],
 	pointer-events: none;
 }
 
+/* Réglages des boutons à icônes */
 button.ico-btn,
 .btn.ico-btn
 {
@@ -448,6 +473,7 @@ button.ico-btn,
 	padding: 5px 0 !important;
 }
 
+/* Réglages des before des boutons à icônes */
 button.ico-btn::before,
 .btn.ico-btn::before
 {
@@ -455,17 +481,13 @@ button.ico-btn::before,
 	margin: 0 !important;
 }
 
-/**
- * Conteneur de boutons, permet de les centrer et faire joliment
- */
+/*Alignement central du texte des boutons*/
 .buttons
 {
 	text-align: center
 }
 
-/**
- * Positionnement des boutons les uns par rapport aux autres dans leur conteneur
- */
+/* Positionnement des boutons les uns par rapport aux autres dans leur conteneur*/
 .buttons button,
 .buttons .btn
 {
@@ -473,19 +495,15 @@ button.ico-btn::before,
 	margin: 5px 10px;
 }
 
-/**
- * Les boutons avec icône ont un padding-left pour permettre d'y afficher l'icône
- */
+ /* Les boutons avec icône ont un padding-left pour permettre d'y afficher l'icône*/
 button[data-icon],
 .btn[data-icon]
 {
 	padding-left: 25px;
 }
 
-/**
- * Ici j'ai rajouté le sélecteur d'attribut (qui s'assure qu'un attribut "data-icon" soit défini)
- * afin de n'appliquer ce style qu'aux boutons qui en ont réellement besoin
- */
+/* Rajout du sélecteur d'attribut (qui s'assure qu'un attribut "data-icon" soit défini)
+ * afin de n'appliquer ce style qu'aux boutons qui en ont réellement besoin */
 button[data-icon]::before,
 .btn[data-icon]::before
 {
@@ -494,16 +512,6 @@ button[data-icon]::before,
 	text-align: center;
 	font-size: 18px;
 	margin: 0 10px 0 -20px;
-}
-
-#empty-state
-{
-	text-align: center;
-}
-
-#station-details
-{
-	display: none;
 }
 
 
@@ -517,13 +525,11 @@ button[data-icon]::before,
 
 /***********************
 
-      POPUP CANVAS
+    POPUP ET CANVAS
 
 ************************/
 
-/**
- * Overlay de notre popup
- */
+ /* Overlay de la popup */
  #canvas-container {
 	position: fixed;
 	left: 0;
@@ -537,9 +543,7 @@ button[data-icon]::before,
 	background: rgba(0, 0, 0, 0.8);
 }
 
-/**
- * La popup en elle-même
- */
+ /* La popup en elle-même */
 #canvas-container > div {
 	border: 2px solid teal;
 	border-radius: 2px;
@@ -552,9 +556,7 @@ button[data-icon]::before,
 	max-width: 100%;
 }
 
-/**
- * Titre de la popup
- */
+/* Titre de la popup */
 #canvas-container h4 {
 	display: block;
 	color: teal;
@@ -564,11 +566,9 @@ button[data-icon]::before,
 }
 
 canvas {
-	/**
-	 * Ici on reset le box-sizing, juste pour être + rigoureux,
+	/* Reset du box-sizing,
 	 * pour ne pas que le padding/border viennent empiéter sur les
-	 * dimensions que l'on définit pour le canvas.
-	 */
+	 * dimensions définies pour le canvas */
 	box-sizing: content-box;
 	width: 320px;
 
@@ -628,22 +628,29 @@ footer li {
 
       MEDIAQUERIES
 
+    Pour grands écrans :
+	  1024 px et +
+
 ***********************/
 
 @media all and (min-width: 1024px)
 {
+	/*Augmentation de la taille de police du h1*/
 	h1 {
 		font-size: 3.5em;
 	}
 
+	/*image de fond derrière le slider*/
 	#carousel {
 		background: url('../img/slides/quais.jpg') center / cover;
 	}
 
+	/*Augmentation de la taille de police du h2*/
 	#carousel h2 {
 		font-size: 2em;
 	}
 
+	/*Style des images des div du slider*/
 	#slider > div > img {
 		position: relative;
 		display: inline-block;
@@ -653,17 +660,20 @@ footer li {
 		border: 2px solid gold;
 	}
 
+	/*Position et réglage du top du ul*/
 	#carousel ul {
 		position: relative;
 		top: -10px;
 	}
 
+	/*Hauteur, largeur et bordure des LI*/
 	#carousel li {
 		height: 24px;
 		width: 24px;
 		border: 2px solid gold;
 	}
 
+	/*Position, display et style de la partie texte du carrousel*/
 	#carousel p {
 		position: relative;
 		display: inline-block;
@@ -680,10 +690,12 @@ footer li {
 		line-height: 26px;
 	}
 
+	/*Réglage bottom de l'ul*/
 	#carousel ul {
 		bottom: 0;
 	}
 
+	/*Style des icônes du slider*/
 	.nav-next, .nav-prev, .nav-pause {
 		height: 30px;
 		width: 30px;
@@ -699,6 +711,7 @@ footer li {
 		left: 20px;
 	}
 
+	/*Position et style de la carte pour grands écrans*/
 	#map {
 		display: inline-block;
 		width: 60%;
@@ -709,6 +722,7 @@ footer li {
 		border: 2px solid teal;
 	}
 
+	/*Position et style du formulaire pour grands écrans*/
 	form {
 		position: relative;
 		display: inline-block;
@@ -719,17 +733,9 @@ footer li {
 		margin-left: 15px;
 	}
 
+	/*Style et padding du fieldset du formulaire*/
 	fieldset {
 		border: 2px solid teal;
 		padding: 0 20px;
 	}
-
 }
-
-
-
-
-
-
-
-

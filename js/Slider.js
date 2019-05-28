@@ -1,15 +1,3 @@
-/*****************************************
-
- CARROUSEL
-
- *****************************************/
-
-
-
-/*******************************************
- Fonction de changement de diapo
- ********************************************/
-
 /**
  * Carrousel réutilisable
  *
@@ -21,13 +9,24 @@
 export function Slider(container, slides)
 {
 	/**
-	 * Variable JS de la div slider
+	 * Variable JS du container
 	 *
 	 * @private
 	 *
 	 * @type {HTMLElement}
 	 */
 	const _slider = container;
+
+	/**
+	 * Variable jquery de la div slider
+	 *
+	 * @private
+	 *
+	 * @type {jQuery}
+	 */
+	const _$slider = $(_slider);
+
+
 
 	/**
 	 * Variable JS des divs enfants de la div slider
@@ -47,16 +46,6 @@ export function Slider(container, slides)
 	 */
 	let _nbSlides = 0;
 
-
-	/**
-	 * Variable jquery de la div slider
-	 *
-	 * @private
-	 *
-	 * @type {jQuery}
-	 */
-	const _$slider = $(_slider);
-
 	/**
 	 * Variable jquery de toutes les divs enfants de la div slider
 	 *
@@ -74,7 +63,6 @@ export function Slider(container, slides)
 	 * @type {jQuery|null}
 	 */
 	let _$lis = null;
-
 
 	/**
 	 * Variable du timeout
@@ -121,21 +109,13 @@ export function Slider(container, slides)
 		 * Ici attention : puisqu'on a choisi de ne pas attribuer une taille au slider lui-même,
 		 * sa taille est donc définie par son contenu. Or, si on cache la slide courante avant d'afficher la suivante,
 		 * le slide occupe alors 0px de hauteur, et cause un "saut" du scroll du body.
-		 *
-		 * Deux solutions donc :
-		 * 1. D'abord afficher la prochaine slide, puis masquer l'ancienne
-		 * 2. Donner une hauteur au slider (mais attention au redimensionnement etc.)
-		 */
+		 * Donc : d'abord afficher la prochaine slide, puis masquer l'ancienne */
 		// On récupère la slide sélectionnée par son index grâce à "eq"
 		_$slides.eq(_currentSlide).show();
 		// On cache toutes les slides
 		_$slides.not(':eq(' + _currentSlide + ')').hide();
 		// Changement du LI actif
 		_$lis.removeClass('active').eq(_currentSlide).addClass('active');
-
-
-
-
 
 		// Démarrage du diaporama auto :
 		if (_$slider.hasClass('paused')) {
@@ -144,16 +124,6 @@ export function Slider(container, slides)
 		else {
 			_startShow();
 		}
-
-		/**
-		 * Pour faire le kéké, on pourrait écrire les lignes ci-dessus en "one-liner" de plusieurs manières :
-		 *
-		 * 1. toggleShow(_$slider.hasClass('paused')); // Il faudrait alors créer cette fonction (meilleure solution)
-		 *
-		 * 2. [_startShow, _stopShow][+_$slider.hasClass('paused')](); // Relativement illisible, mais correct
-		 *
-		 * 3. return _$slider.hasClass('paused') ? _stopShow() : _startShow(); // Solution intermédiaire
-		 */
 	};
 
 	/**
@@ -182,7 +152,7 @@ export function Slider(container, slides)
 	const _startShow = () => {
 		if (_nbSlides <= 1)
 			return;
-
+		// On stoppe d'abord le diaporama afin de relancer son timer
 		_stopShow();
 		_timeoutId = setTimeout(_nextSlide, 5000);
 	};
@@ -199,6 +169,7 @@ export function Slider(container, slides)
 
 	/**
 	 * Fonction ajustant la lecture ou la pause du carrousel en fonction de son état (sa classe "paused" ou pas)
+	 * Nécessaire pour utiliser le bouton pause
 	 *
 	 * @private
 	 */
@@ -214,8 +185,6 @@ export function Slider(container, slides)
 			_startShow();
 		}
 	};
-
-
 
 
 	/**
@@ -275,13 +244,14 @@ export function Slider(container, slides)
 			.on('click', '.nav-prev', _prevSlide)
 			// Au clic sur bouton pause, on arrête le carousel auto
 			.on('click', '.nav-pause', playPause)
-			// Vérification que la cible est bien sur le body, et pas sur un input par exemple
+			// Changement de slide par les touches flèches du clavier
 			.on('keyup', e => {
+				// Vérification que la cible est bien sur le body, et pas sur un input par exemple
 				if (e.target != document.body) {
 					return;
 				}
 
-				// Switch des différentes touches utilisées :
+				// Switch des deux touches flèche utilisées :
 				switch (e.keyCode) {
 					case 37:
 						_prevSlide();
@@ -301,10 +271,7 @@ export function Slider(container, slides)
 				if (e.keyCode == 32) {
 					playPause();
 				}
-			})
-		;
-
-
+			});
 
 		// Appel de la fonction de démarrage du carrousel auto
 		_startShow();
@@ -336,7 +303,6 @@ export function Slider(container, slides)
 		{
 			// Ici "slides" est une string, c'est donc l'URL d'un fichier JSON qui contient les slides à importer.
 			// On va utiliser l'API Fetch pour récupérer ce JSON.
-			/** @see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API */
 			fetch(slides)
 				.then(response => {
 					// Fonction de callback appelée lorsque l'appel AJAX est terminé.
@@ -348,7 +314,7 @@ export function Slider(container, slides)
 					// transformer le corps de la réponse en objet JSON.
 					return response.json();
 				})
-				.then(json => _initSlides(json)) // Si tout s'est bien passé, on peut initialiser notre module
+				.then(json => _initSlides(json)) // Si tout s'est bien passé, on peut initialiser le module
 				.catch(e => {
 					// S'il y a une erreur, on l'affiche dans la console
 					console.warn(e);
@@ -361,8 +327,6 @@ export function Slider(container, slides)
 			_initSlides([]);
 		}
 	};
-
-
 
 	// Appel de la fonction d'initialisation de la gestion de la navigation du carrousel
 	_init();

@@ -1,12 +1,6 @@
-/******************************
-
-      AFFICHAGE DE LA MAP
-     API LEAFLET ET MAPBOX
-
-******************************/
-
 /**
  * Classe d'affichage de la carte et des marqueurs
+ * Utilisation de l'API Leaflet et de Mapbox
  *
  * @constructor
  */
@@ -34,14 +28,14 @@ export function Map() {
 	};
 
 	/**
-	 * Variable pour la map de la ville de Nantes
+	 * Variable pour la carte de la ville de Nantes (contract de JCDecaux)
 	 *
 	 * @private
 	 */
 	const _nantesMap = L.map('map').setView([47.2175, -1.5577], ZOOM.default);
 
 
-	/* @see https://github.com/pointhi/leaflet-color-markers */
+
 	/**
 	 * Variable d'icone verte pour la station sélectionnée
 	 *
@@ -100,6 +94,8 @@ export function Map() {
 
 
 
+
+
 	/**
 	 * Ajouter un marqueur sur la carte
 	 *
@@ -114,21 +110,8 @@ export function Map() {
 	this.addMarker = function(gps, options, callback) {
 		// Pouvoir customiser l'icône
 		/* @see https://leafletjs.com/reference-1.5.0.html#marker */
-
-
-		//options = options || {};
-		//options.icon = options.icon || _greenIcon;
-		// /!\ Peut aussi se faire plus simplement :
-		// @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
-		//options = Object.assign({icon: this.blueIcon}, options);
-
-		// 1. Si on veut obligatoirement avoir une icône par défaut, même si l'icône passée en paramètre
-		//    est nulle ou undefined ou falsy (car dans ce cas, LeafLet crash) :
-		//if (options && (!options.hasOwnProperty('icon') || !options.icon))
-		//	options.icon = this.blueIcon;
-
-		// 2. Si l'icône passée en paramètre est nulle ou undefined ou falsy (car dans ce cas, LeafLet crash),
-		//    et qu'on veut utiliser l'icône par défaut de LeafLeft, on supprime la clef "icon" dans "options"
+		// Si l'icône passée en paramètre est nulle ou undefined ou falsy (car dans ce cas, LeafLet crash),
+		// et qu'on veut utiliser l'icône par défaut de LeafLeft, on supprime la clef "icon" dans "options"
 		if (options && options.hasOwnProperty('icon') && !options.icon)
 			delete options.icon;
 
@@ -156,8 +139,6 @@ export function Map() {
 			accessToken: MAP_BOX_TOKEN
 		}).addTo(_nantesMap);
 	}
-
-
 
 	_init();
 }

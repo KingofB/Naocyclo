@@ -1,16 +1,12 @@
 import { Popup } from './Popup.js';
 import {Canvas} from "./Canvas";
 
-
-
 /**
  * Module du formulaire de réservation
  *
  * @constructor
  */
-export function JCDResa()
-{
-
+export function JCDResa() {
 	/**
 	 * Clef de réservation dans le sessionStorage
 	 *
@@ -115,6 +111,7 @@ export function JCDResa()
 		onInit: () => document.getElementById('clear-btn').addEventListener("click", _canvas.clear)
 	});
 
+
 	/**
 	 *
 	 * @type {JCDStation}
@@ -143,7 +140,6 @@ export function JCDResa()
 
 
 
-
 	/**
 	 * Mettre à jour le formulaire avec les données issues de la station choisie
 	 *
@@ -151,16 +147,13 @@ export function JCDResa()
 	 *
 	 * @param {JCDStation} station
 	 */
-	this.updateFormForStation = function(station)
-	{
+	this.updateFormForStation = function(station) {
 		// On stocke la station actuellement cliquée par l'utilisateur
 		_currentStation = station;
 
-
-		// récupérer la valeur (trimmée) de prénom puis nom
-		//	et pour chacun, si c'est vide, récupérer les valeurs
-		//	dans localStorage (si elles existent) et les foutre
-		//	dans les champs avant d'afficher le formulaire
+		// récupérer la valeur (trimmée) de prénom puis nom,
+		// et pour chacun, si c'est vide, récupérer les valeurs dans localStorage (si elles existent)
+		// et les mettre dans les champs avant d'afficher le formulaire
 		if (!_$lastN.val().trim())
 			_$lastN.val(localStorage.getItem('lastname'));
 
@@ -170,29 +163,17 @@ export function JCDResa()
 		// Au changement de station, vérifier que le bouton "réserver" est actif ou non.
 		_updateReservationBtn();
 
-
 		// Masquer l'empty state
 		_$details.show();
 		$('#empty-state').hide();
 
-
-		/**
-		 * Encore + optimisé : combinaison de Object.entries() et de for...of
-		 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries
-		 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of
-		 */
-		//for (const [key, type] of Object.entries({name: 1, address: 1, freeBikes: 1, id: 0}))
-		//	document.getElementById('station-' + key)[type ? 'innerHTML' : 'value'] = station[key];
-
+		// Mise à jour des données du formulaire concernant la station (nom, adresse et vélos libres)
 		for (const property of ['name', 'address', 'freeBikes']) {
 			_$details[0].querySelector('#station-' + property).innerHTML = _currentStation[property];
 		}
-
+		// Mise à jour de l'id de la station
 		_$details[0].querySelector('#station-id').value = _currentStation.id;
 	};
-
-
-
 
 
 	/**
@@ -201,16 +182,11 @@ export function JCDResa()
 	 * @private
 	 */
 	function _cancelReservation() {
-		//
-		// annuler la réservation !
-		// 1. vérifier s'il y a une réservation en cours
+		// Vérifier s'il y a une réservation en cours et si non, sortir de la fonction
 		if (!_resa.station) return;
 
 		// Mettre à jour le nbre de vélos si la station est sélecionnée
 		if (_currentStation && _currentStation.id == _resa.station) {
-			/**
-			 * @var {jQuery} $nbFreeBikes
-			 */
 			const $nbFreeBikes = $('#station-freeBikes');
 			$nbFreeBikes.text(Number($nbFreeBikes.text()) + 1);
 		}
@@ -228,14 +204,14 @@ export function JCDResa()
 		clearTimeout(_resaTimer);
 		// 7. stopper le setInterval
 		clearInterval(_clockTimer);
-		// 8- remettre à vide la resa
+		// 8- remettre à vide la réservation
 		_clearResa();
 		// 9- mise à jour du bouton au cas où la station réservée était déjà sélectionnée
 		_updateReservationBtn();
 	}
 
 	/**
-	 * Fonction permettant de remettre à null les données de la résa locale
+	 * Fonction permettant de remettre à null les données de la réservation en local
 	 *
 	 * @private
 	 */
@@ -246,7 +222,7 @@ export function JCDResa()
 
 
 	/**
-	 * Fonction qui lance tout ce dont il y a besoin pour une résa lorsque celle-ci est détectée
+	 * Fonction qui lance tout ce dont il y a besoin pour une réservation lorsque celle-ci est détectée
 	 *
 	 * @param {boolean} pShouldReserveBike Indique si l'on doit effectuer la réservation de vélo sur la station ou pas.
 	 *
@@ -254,11 +230,8 @@ export function JCDResa()
 	 */
 	function _onResa(pShouldReserveBike) {
 		const station = window.app.manager.getStation(_resa.station);
-
-		//
-		//  faire une tentative de réservation sur la station avec _currentStation.reserveBike();
-		//        Si le résultat est false, c'est que la réservation a échoué !!
-		//
+		// Faire une tentative de réservation de vélo sur la station avec _currentStation.reserveBike();
+		// si le résultat est false, c'est que la réservation a échoué !!
 		if (pShouldReserveBike && !station.reserveBike()) {
 			sessionStorage.removeItem(SESSION_RESA);
 			_clearResa();
@@ -266,47 +239,28 @@ export function JCDResa()
 			return;
 		}
 
-		// On déclenche le compte à rebours de la validité de la réservation...
-		// garder une référence au timeoutID retourné par setTimeout afin de pouvoir appeler clearTimeout
-		//          si on annule la réservation !!
+		// Déclenchement du compte à rebours de la réservation
+		// garder une référence au timeoutID retourné par setTimeout afin de pouvoir appeler clearTimeout, si on annule la réservation
 		_resaTimer = setTimeout(_cancelReservation, DURATION * 1000 - (Date.now() - _resa.time));
 
-
-		//
 		// Mettre à jour la zone de détails de la station (seulement si elle correspond à la station réservée !!)
 		//          et diminuer de 1 le nombre de vélos disponibles
 		// Tester _currentStation et mettre à jour le champ dans le formulaire via son ID
 		if (_currentStation && _currentStation.id == _resa.station) {
-			/**
-			 * @var {jQuery} $nbFreeBikes
-			 */
 			const $nbFreeBikes = $('#station-freeBikes');
 			$nbFreeBikes.text(Number($nbFreeBikes.text()) - 1);
 		}
 
-		//
 		// Afficher les détails de la réservation dans la DIV prévue à cet effet
-		//
-		// TODO : faire en sorte que le nom de la station soit un lien cliquable qui, lorsque cliqué, sélectionne (et centre) sur la map le marqueur correspondant
 		_$sectionDetails.find('> div')[0].innerHTML = `<p>Votre vélo dans la station ${station.name} est réservé ! Votre réservation expirera dans <span class="clock"></span></p>
 		<p><span class="btn btn-cancel-resa">Annuler</span></p>`;
-		_updateResaClock();
 		// On affiche la section
 		_$sectionDetails.show();
-
-		//const pShowResa = document.createElement('p');
-		//pShowResa.textContent = 'Votre vélo dans la station ' + _resa.station.name + ' est réservé ! Celle-ci expirera dans ' + (_resaTimer / 60000) + 'minutes';
-		//_$sectionDetails.appendChild(pShowResa);
-
-
-		//
+		// On réinitialise le temps de la réservation
+		_updateResaClock();
 		// Utiliser un setInterval() pour le compte à rebours
-		//
 		_clockTimer = setInterval(_updateResaClock, 50);
-
-		//
 		// Repasser le bouton "réserver" en disabled
-		//
 		_updateReservationBtn();
 	}
 
@@ -316,12 +270,8 @@ export function JCDResa()
 	 *
 	 * @private
 	 */
-	function _makeReservation()
-	{
-
-		// vérifier s'il y a déjà une réservation en cours, si oui l'annuler ! (après un confirm() bien sûr)
-		//        (pour annuler une réservation : récupérer la station d'une manière ou d'une autre, et appeler cancelResa() dessus)
-		//
+	function _makeReservation() {
+		// Vérifier s'il y a déjà une réservation en cours, si oui l'annuler
 		if (_resa.station) {
 
 			if (confirm('Vous avez déjà une réservation en cours, souhaitez-vous la conserver ?')) {
@@ -331,20 +281,14 @@ export function JCDResa()
 			_cancelReservation();
 		}
 
-
-		//
 		// On vérifie qu'une station est bien définie
-		//
 		if (!_currentStation)
 		{
 			console.error('La station n\'est pas définie, cela ne devrait pas arriver');
 			return;
 		}
 
-
-		// On vérifie une nouvelle fois que tout est bien défini dans le formulaire, et ça nous permet aussi
-		// de récupérer par la même occasion le prénom et le nom (nettoyés) de l'utilisateur.
-		// (sinon on serait obligés de le refaire ici, à moins de le stocker entre-temps...)
+		// Vérifier que tout est bien défini dans le formulaire, et récupérer le prénom et le nom (nettoyés) de l'utilisateur.
 		const res = _checkReservationInfo();
 		if (!res)
 		{
@@ -352,51 +296,33 @@ export function JCDResa()
 			return;
 		}
 
-
-		// On vérifie la signature
+		// Vérifier la signature
 		if (!_checkSignature())
 			return;
 
-
-
-		//
-		//  faire une tentative de réservation sur la station avec _currentStation.reserveBike();
-		//        Si le résultat est false, c'est que la réservation a échoué !!
-		//
+		//  Faire une tentative de réservation sur la station
 		if (!_currentStation.reserveBike()) {
 			alert('Réservation impossible, pas de vélo disponible');
 			return;
 		}
 
-
-
-		// Puisque les infos sont bonnes, on a donc en retour de la fonction _checkReservationInfo un tableau
-		// contenant deux éléments : le prénom et le nom.
-		// On utilise donc ici la technique dite de "destructuring" pour récupérer le prénom et le nom dans deux
-		// variables distinctes.
-		// @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+		// Puisque les infos sont bonnes, on a donc en retour de la fonction _checkReservationInfo un tableau contenant deux éléments : le prénom et le nom.
+		// On utilise donc ici la technique dite de "destructuring" pour récupérer le prénom et le nom dans deux variables distinctes.
 		const [firstN, lastN] = res;
 
-
-
-		//
-		// On enregistre la réservation
-		//
+		// Enregistrer la réservation
 		_resa.station = _currentStation.id;
 		_resa.time = Date.now();
 
-		// Attention, la fonction setItem() prend en paramètre deux strings !!
-		// @see https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem
-		// On enregistre dans sessionStorage car la réservation est annulée si on ferme le navigateur.
+		// Enregistrement de la réservation dans sessionStorage
 		sessionStorage.setItem(SESSION_RESA, JSON.stringify(_resa));
 
-		// On enregistre le prénom et le nom pour plus tard (pas perdus si fermeture navigateur)
+		// Enregistrer le prénom et le nom
 		localStorage.setItem('lastname', firstN);
 		localStorage.setItem('firstname', lastN);
 
-		// Les specs demandent d'enregistrer la signature en session
+		// Enregistrer la signature en session
 		sessionStorage.setItem('signature', _canvas.saveCanvas());
-
 
 		_onResa(false);
 	}
@@ -410,7 +336,7 @@ export function JCDResa()
 		// S'il n'y a pas de réservation, on sort
 		if (!_resa.station) return;
 
-		// Sécurité pour s'assurer que le temps ne soit pas déjà écoulé
+		// S'assurer que le temps ne soit pas déjà écoulé
 		const elapsedTime = Date.now() - _resa.time;
 		const remainingTime = DURATION * 1000 - elapsedTime;
 		if (remainingTime <= 0)
@@ -436,22 +362,19 @@ export function JCDResa()
 	{
 		_canvas.storeImage();
 
-		// On n'a plus besoin de mettre à jour le bouton de réservation, car il ne dépend plus de la signature
-		//_updateReservationBtn();
-
-		// A la place, on affiche une alerte si la signature est trop petite
+		// Afficher une alerte si la signature est trop petite
 		_checkSignature();
 	}
 
 	/**
-	 * Vérifie si la signature couvre suffisamment d'espace sur la zone de dessin
+	 * Vérifier si la signature couvre suffisamment d'espace sur la zone de dessin
 	 *
 	 * @returns {boolean}
 	 *
 	 * @private
 	 */
 	function _checkSignature() {
-		// La signature doit couvrir au moins 2% (cf constante) de la surface de dessin
+		// La signature doit couvrir au moins 2% de la surface de dessin
 		if (_canvas.getImageFilledPercent() < MIN_SIGNATURE_PERCENT_FILLED)
 		{
 			alert('Votre signature est trop petite');
@@ -474,12 +397,12 @@ export function JCDResa()
 			return;
 		}
 
-		// On utilise l'opérateur "not" pour convertir en boolean le résultat de l'appel à la fonction _checkReservationInfo().
+		// Utiliser l'opérateur "not" pour convertir en boolean le résultat de l'appel à la fonction _checkReservationInfo().
 		$btn.attr('disabled', !_checkReservationInfo());
 	};
 
 	/**
-	 * Vérifie si les infos de la réservation sont valides (nom et prénom seulement, car la signature est vérifiée plus tard).
+	 * Vérifier si les infos de la réservation sont valides (nom et prénom seulement, car la signature est vérifiée plus tard).
 	 * Si oui retourne le prénom et nom, sinon retourne false.
 	 *
 	 * @returns {boolean|string[]}
@@ -489,7 +412,7 @@ export function JCDResa()
 	const _checkReservationInfo = () => {
 		let ok = true;
 
-		// On vérifie que les prénom et nom sont valides
+		// Vérifier que les prénom et nom sont valides
 		const firstN = _checkName(_$firstN.val());
 		const lastN = _checkName(_$lastN.val());
 
@@ -505,7 +428,7 @@ export function JCDResa()
 	};
 
 	/**
-	 * Vérifie si un nom est valide et le modifie sa présentation si nécessaire
+	 * Vérifier si un nom est valide et modifier sa présentation si nécessaire
 	 *
 	 * @param {string} name
 	 *
@@ -514,21 +437,14 @@ export function JCDResa()
 	 * @private
 	 */
 	const _checkName = name => {
-		// Vérification que name comporte une valeur ou qu'elle soit bien une string, si ce n'est psa le cas, on sort
+		// Vérifier que name comporte une valeur ou qu'elle soit bien une string, si ce n'est psa le cas, on sort
 		if (typeof name !== 'string' || !name)
 			return false;
 
 		// On utilise trim() pour enlever les éventuels espaces avant et après les noms saisis par l'utilisateur
 		name = name.trim();
 
-		//
-		// TODO : faire d'autres nettoyages, par exemple n'accepter que lettres, apostrophe, trait d'union, point, espace.
-		//          utiliser pour cela une RegExp (@see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
-		// Par exemple (doit toujours commencer par une lettre) :
-		//       /^[A-Za-z][A-Za-z\.'- ]+$/.test(name)
-		//
-
-		// Vérifier si la taille du nom correspond au moins à la taille minimale exigée
+		// Vérifier si la taille du nom correspond à la taille minimale exigée
 		if (name.length < MIN_NAME_LENGTH)
 			return false;
 
@@ -569,7 +485,6 @@ export function JCDResa()
 		// S'assurer qu'une station soit sélectionnée
 		window.app.manager.setStation(_resa.station);
 
-
 		_onResa(true);
 	};
 
@@ -581,10 +496,10 @@ export function JCDResa()
 	 */
 	function _init()
 	{
-		// On désactive le bouton de réservation dès le début
+		// Désactiver le bouton de réservation dès le début
 		$('#btn-reserve', _$details).attr('disabled', true);
 
-		// Quelques listeners...
+		// Les listeners...
 		$('body')
 			.on('click', '#signature .btn', _popup.showPopup)
 			.on('click', '#btn-reserve', _makeReservation)
