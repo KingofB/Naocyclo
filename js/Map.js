@@ -95,7 +95,6 @@ export function Map() {
 
 
 
-
 	/**
 	 * Ajouter un marqueur sur la carte
 	 *

@@ -3,9 +3,6 @@ import { Map } from './Map.js';
 import { JCDManager } from './JCDManager.js';
 import { JCDResa } from './JCDResa.js';
 
-
-
-
 /**
  * Programme principal qui instancie les autres les rendant publics ou non
  *
@@ -54,13 +51,9 @@ const App = function ()
 	this.manager = new JCDManager(_resa.onAllStationsLoaded, _resa.updateFormForStation);
 };
 
-
 // Pour s'assurer du chargement du doc avant la lecture du JS :
 // Création d'une nouvelle instance d'App stockée dans le namespace global (window)
 // pour pouvoir y accéder plus facilement
 $(document).ready(() => {
 	window.app = new App();
 });
-
-
-

@@ -6,8 +6,7 @@
  *
  * @constructor
  */
-export function Popup(container, options)
-{
+export function Popup(container, options) {
 	/**
 	 * Popup
 	 *
@@ -26,31 +25,17 @@ export function Popup(container, options)
 	const _options = options || {};
 
 
-
-
-
-
 	/**
 	 * Afficher la popup
 	 *
 	 * @public
 	 */
-	this.showPopup = function()
-	{
+	this.showPopup = function() {
+		// Changer le display du container pour afficher la popup
 		_container.style.display = 'flex';
-
-		// On vérifie s'il y a un callback "onOpen" dans les options fournies
+		// Vérifier s'il y a un callback "onOpen" dans les options fournies
 		if (typeof _options.onOpen === 'function')
 			_options.onOpen();
-
-		// NB : Peut aussi s'écrire en une seule ligne -- appelé "one-liner" -- mais potentiellement moins lisible :
-		// (
-		//     pas besoin de parenthèses autour de "typeof _options.onOpen === 'function'" car :
-		//     @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
-		//     i.e. : "typeof" sera évalué avant "===", qui sera lui-même évalué avant "&&".
-		// )
-		// Car l'appel à "_options.onOpen()" ne sera exécuté que si "typeof _options.onOpen === 'function'" est vrai (grâce à "&&")
-		// typeof _options.onOpen === 'function' && _options.onOpen();
 	};
 
 	/**
@@ -58,8 +43,7 @@ export function Popup(container, options)
 	 *
 	 * @private
 	 */
-	const _hidePopup = function()
-	{
+	const _hidePopup = function() {
 		_container.style.display = 'none';
 	};
 
@@ -68,8 +52,7 @@ export function Popup(container, options)
 	 *
 	 * @private
 	 */
-	const _onValidate = function()
-	{
+	const _onValidate = function() {
 		_hidePopup();
 
 		if (typeof _options.onValidate === 'function')
@@ -88,8 +71,7 @@ export function Popup(container, options)
 			_options.onCancel();
 	};
 
-
-
+	// Listeners sur les boutons valider et annuler de la popup
 	document.getElementById('validate-btn').addEventListener('click', _onValidate);
 	document.getElementById('cancel-btn').addEventListener("click", _onCancel);
 

@@ -1,18 +1,13 @@
 /**
  * Classe des stations
+ *
+ * @param {Object} data
+ *
+ * @class
  */
-export class JCDStation
-{
+export class JCDStation {
+	constructor(data) {
 
-
-	/**
-	 *
-	 * @param {Object} data
-	 *
-	 * @constructor
-	 */
-	constructor(data)
-	{
 		if (data === undefined)
 			throw new Error("data need to be defined !");
 
@@ -29,16 +24,15 @@ export class JCDStation
 
 
 
-
 	/**
+	 * Fonction qui établit une station comme sélectionnée afin de changer son marqueur
 	 *
 	 * @param {boolean} selected
 	 */
 	setSelected(selected) {
 		// Le double point d'exclamation sert a transformer une valeur en boolean :
-		// - une valeur "truthy" deviendra (boolean)true
-		// - une valeur "falsy" deviendra (boolean)false
 		this.selected = !!selected;
+		// Mise à jour de l'icône sur la carte
 		this.updateIcon();
 	}
 
@@ -54,7 +48,7 @@ export class JCDStation
 
 		this.reserved = true;
 		this.freeBikes--;
-		// Mettre à jour l'icône sur la map
+
 		this.updateIcon();
 
 		return true;
@@ -66,7 +60,7 @@ export class JCDStation
 	cancelResa() {
 		this.reserved = false;
 		this.freeBikes++;
-		// Mettre à jour l'icône sur la map
+
 		this.updateIcon();
 	}
 
@@ -85,17 +79,18 @@ export class JCDStation
 	 *
 	 */
 	updateIcon() {
-		// Dépend des statuts : réservé ou non, sélectionné ou non, vélos libres ou non
+		// Attribuer le marqueur orange à une station réservée
 		if (this.reserved) {
 			this.marker.setIcon(window.app.map.orangeIcon);
 			return;
 		}
 
+		// Attribuer le marqueur vert à une station sélectionnée
 		if (this.selected) {
 			this.marker.setIcon(window.app.map.greenIcon);
 			return;
 		}
-
+		// Attribuer aux stations le maraueur bleu (par défaut) ou gris pour celles qui n'ont plus de vélos disponibles
 		this.marker.setIcon(this.freeBikes > 0 ? window.app.map.blueIcon : window.app.map.greyIcon);
 	}
 }

@@ -1,6 +1,5 @@
 import { JCDStation } from './JCDStation.js';
 
-
 /**
  * Classe de gestion JC Decaux
  *
@@ -179,15 +178,5 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 		});
 	}
 
-
-
 	_init();
 }
-
-
-// Une fonction (méthode) affectée au prototype est définie (et donc occupe de l'espace mémoire) qu'une seule fois,
-// au contraire d'une fonction/méthode définie à l'intérieur de la fonction constructeur.
-// Une méthode affectée au prototype sera toujours publique.
-//JCDManager.prototype.getStation = function(id) {
-//	return this._stations[id];
-//};
