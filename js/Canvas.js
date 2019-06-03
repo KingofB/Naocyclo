@@ -5,8 +5,7 @@
  *
  * @constructor
  */
-export function Canvas(canvas)
-{
+export function Canvas(canvas) {
 	/**
 	 * Epaisseur du trait de signature
 	 *
@@ -35,7 +34,7 @@ export function Canvas(canvas)
 	const _canvas = canvas;
 
 	/**
-	 * Le contexte de dessin (peut être 2D ou 3D, mais ici on utilisera la 2D)
+	 * Le contexte de dessin
 	 *
 	 * @private
 	 *
@@ -44,8 +43,7 @@ export function Canvas(canvas)
 	const _ctx = _canvas.getContext('2d');
 
 	/**
-	 * Utilisé si jamais le canvas a un boundingClientRect différent de sa taille "pseudo-réelle"
-	 * c'est-à-dire si jamais la zone de dessin du context a une dimension différente de celle du canvas
+	 * Utilisé si jamais la zone de dessin du context a une dimension différente de celle du canvas
 	 * afin de permettre de dessiner au bon endroit en appliquant le "_scale" aux positions des events.
 	 *
 	 * @private
@@ -83,8 +81,6 @@ export function Canvas(canvas)
 
 	/**
 	 * Surface de dessin
-	 * TODO : amélioration possible : détecter le redimensionnement de la page, et mettre
-	 * 			cette valeur à jour lors de cet event.
 	 *
 	 * @type {DOMRect | ClientRect}
 	 *
@@ -103,8 +99,7 @@ export function Canvas(canvas)
 	 *
 	 * @private
 	 */
-	function _tryStopDraw(e)
-	{
+	function _tryStopDraw(e) {
 		// Le bouton principal est relâché, on arrête le dessin
 		// Ici on utiliser un opérateur "ET binaire" (en anglais : "binary AND operator")
 		if ((_isTouch && e.touches.length == 0) || (!_isTouch && (e.buttons & 1) == 0))
@@ -147,11 +142,8 @@ export function Canvas(canvas)
 		if (_isDrawing) return;
 
 		// _isTouch est égal à : oui ou non e.type est égal à 'touchstart' (résultat (boolean) de la comparaison entre les deux)
-		// @see https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
-		// @see https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent
 		_isTouch = e.type == 'touchstart';
 
-		// @see https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent/touches
 		// @see https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons
 		// @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators
 		// e.buttons contient la sommes des puissances de 2 qui représentent chaque bouton (ex: bouton1 = 1 et bouton3 = 4)
@@ -171,8 +163,8 @@ export function Canvas(canvas)
 			_ctx.lineWidth = LINE_WIDTH;
 			_ctx.strokeStyle = LINE_COLOR;
 
-			// Utilisation du scale pour transformer les coordonnées de la position sur le canvas (récupérées via l'event "e")
-			// en coordonnées sur la zone de dessin (qui n'a pas forcément la même taille que le canvas, d'où le scale).
+			// Utiliser l'échelle pour transformer les coordonnées de la position sur le canvas (récupérées via l'event "e")
+			// en coordonnées sur la zone de dessin (qui n'a pas forcément la même taille que le canvas).
 			_ctx.moveTo((_isTouch ? e.touches[0].clientX - _canvasRect.left : e.offsetX) * _scale.x, (_isTouch ? e.touches[0].clientY - _canvasRect.top : e.offsetY) * _scale.y);
 
 			if (_isTouch)
@@ -271,18 +263,8 @@ export function Canvas(canvas)
 		if (nbPixels <= 0)
 			return 0;
 
-		// const t1 = performance.now();
 		while (true)
 		{
-			// TODO Le code pourrait être amélioré ici :
-			//		==> Si l'alpha est complètement transparent (4ème valeur du sous-tableau = 0), il ne faut pas prendre en compte ce pixel.
-			//		==> Si c'est du blanc (peu importe l'opacité) ==> on ne prend pas ce pixel en compte
-			// Noir opaque 100% :
-			// [0, 0, 0, 255]
-			// Rouge opaque 100% :
-			// [255, 0, 0, 255]
-			// Blanc (peu importe l'opacité) :
-			// [255, 255, 255, ???]
 			rgba = _signature.data.slice(i, i + 4);
 			if ((rgba[3] > 0) && (rgba[0] + rgba[1] + rgba[2] < 765)) {
 				nbColoredPixels++;
@@ -293,11 +275,8 @@ export function Canvas(canvas)
 			if (i >= len)
 				break;
 		}
-		// const t2 = performance.now();
 
-		// console.warn('nb', nb, total, t2 - t1);
-
-		// Retourne le pourcentage de pixels colorés sur la zone de dessin
+		// Retourner le pourcentage de pixels colorés sur la zone de dessin
 		return (nbColoredPixels / nbPixels) * 100;
 	};
 

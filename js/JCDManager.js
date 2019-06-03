@@ -52,11 +52,6 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 
 
 
-
-
-
-
-
 	/**
 	 * Fonction centralisée permettant d'appeler l'API JCDecaux (utilisation de jquery):
 	 *
@@ -125,16 +120,11 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 	 * @returns {JCDStation}
 	 */
 	this.getStation = function(id) {
-		// On vérifie si l'ID est une clef de notre Object "_stations".
-		// Ici on utilise la manière la + rigoureuse qui est la méthode Object.hasOwnProperty().
-		// Il y a 2 autres manières usuelles de le faire :
-		// * if (!_stations[id]) // On regarde si la clef "id" existe ET que sa valeur n'est pas falsy
-		// * if (!(id in _stations)) // On regarde si la clef "id" (qui est une variable) est dans "_stations"
+		// Vérifier si l'ID est une clef de notre Object "_stations".
 		if (!_stations.hasOwnProperty(id))
 			throw 'ID non trouvé';
 
-		// On retourne la valeur dans "_stations" correspondant à l'id de station représenté par la variable "id".
-		// On retourne donc une instance de type JCDStation
+		// Retourne la valeur dans "_stations" correspondant à l'id de station.
 		return _stations[id];
 	};
 
@@ -157,18 +147,14 @@ export function JCDManager(cbStationsLoaded, cbOnChooseStation)
 			// @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
 			response = response.slice(0, 10);
 
-			// Récup de la liste des stations et leur affichage sur la carte (méthode forEach, synchrone)
+			// Récup de la liste des stations et leur affichage sur la carte
 			response.forEach(function(station) {
-				// TODO : optimisation : ne conserver de "station" que les clefs dont on aura besoin ensuite
 				const obj = new JCDStation(station);
-
 				// Ajouter un marqueur sur la carte
 				obj.marker = window.app.map.addMarker(obj.gps, {stationId: obj.id, title: obj.name}, _onChooseStation);
 				obj.updateIcon();
-
-				// "_stations" est un Object (donc clef => valeur)
-				// On stocke à la clef correspondant à l'id (appelé ici "number") de la station la valeur qui est l'instance JCDStation créée ci-dessus
-				// Notre Object "_stations" liste toutes les stations et fait correspondre à l'ID l'instance de type JCDStation
+				// Stocker à la clef correspondant à l'id de la station, la valeur qui est l'instance JCDStation créée ci-dessus
+				// Lister toutes les stations et faire correspondre à l'ID l'instance de type JCDStation
 				_stations[station.number] = obj;
 			});
 
