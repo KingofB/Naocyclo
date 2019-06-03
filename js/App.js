@@ -8,8 +8,7 @@ import { JCDResa } from './JCDResa.js';
  *
  * @constructor
  */
-const App = function ()
-{
+const App = function () {
 	/**
 	 * Slider, utilisé nulle part ailleurs (donc privé et même sans besoin de variable/constante)
 	 *
