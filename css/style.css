@@ -441,8 +441,7 @@ button,
 	line-height: 16px;
 	color: #fcfacf;
 	margin-top: 10px;
-	padding: 5px 10px;
-	border: 2px solid teal;
+	padding: 7px 12px;
 	border-radius: 3px;
 	cursor: pointer;
 }
@@ -452,6 +451,8 @@ button,
 {
 	background: #fcfacf;
 	color: teal;
+	padding: 5px 10px !important;
+	border: 2px solid teal;
 }
 
 /* Changement du style d'un bouton lorsqu'il a l'attribut disabled */
@@ -459,7 +460,6 @@ button[disabled],
 .btn[disabled]
 {
 	background: #777;
-	border-color: #777;
 	color: #DDD;
 	cursor: default;
 	pointer-events: none;

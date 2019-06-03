@@ -328,6 +328,6 @@ export function Slider(container, slides)
 		}
 	};
 
-	// Appel de la fonction d'initialisation de la gestion de la navigation du carrousel
+	// Appel de la fonction d'initialisation du carrousel
 	_init();
 }
